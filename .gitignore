@@ -3,9 +3,6 @@
 *.exe
 *.txt
 *.log
-application.yml
-
-.air.conf
 
 views/
 tmp/
