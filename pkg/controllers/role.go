@@ -1,14 +1,14 @@
 package controllers
 
 import (
+	"github.com/aaronchen2k/openstc/pkg/libs"
+	"github.com/aaronchen2k/openstc/pkg/models"
+	"github.com/aaronchen2k/openstc/pkg/transformer"
+	"github.com/aaronchen2k/openstc/pkg/validates"
 	"time"
 
 	"github.com/go-playground/validator/v10"
 	"github.com/kataras/iris/v12"
-	"github.com/snowlyg/IrisAdminApi/libs"
-	"github.com/snowlyg/IrisAdminApi/models"
-	"github.com/snowlyg/IrisAdminApi/transformer"
-	"github.com/snowlyg/IrisAdminApi/validates"
 	gf "github.com/snowlyg/gotransformer"
 )
 

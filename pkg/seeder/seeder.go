@@ -2,15 +2,15 @@ package seeder
 
 import (
 	"fmt"
+	"github.com/aaronchen2k/openstc/pkg/libs"
+	"github.com/aaronchen2k/openstc/pkg/models"
 	logger "github.com/sirupsen/logrus"
-	"github.com/snowlyg/IrisAdminApi/libs"
 	"math/rand"
 	"path/filepath"
 	"time"
 
 	"github.com/azumads/faker"
 	"github.com/jinzhu/configor"
-	"github.com/snowlyg/IrisAdminApi/models"
 	"gorm.io/gorm"
 )
 

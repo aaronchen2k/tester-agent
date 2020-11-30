@@ -7,7 +7,7 @@ import (
 	"github.com/bxcodec/faker/v3"
 	"github.com/fatih/color"
 	"github.com/kataras/iris/v12"
-	"github.com/snowlyg/IrisAdminApi/tests/mock"
+	"github.com/aaronchen2k/openstc/tests/mock"
 	"testing"
 )
 

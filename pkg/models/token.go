@@ -2,9 +2,9 @@ package models
 
 import (
 	"fmt"
+	"github.com/aaronchen2k/openstc/pkg/libs"
 	"github.com/gomodule/redigo/redis"
 	"github.com/pkg/errors"
-	"github.com/snowlyg/IrisAdminApi/libs"
 	"strings"
 	"time"
 )

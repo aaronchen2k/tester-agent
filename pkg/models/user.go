@@ -3,13 +3,13 @@ package models
 import (
 	"errors"
 	"fmt"
+	"github.com/aaronchen2k/openstc/pkg/libs"
 	"strconv"
 	"time"
 
 	"github.com/fatih/color"
 	"github.com/iris-contrib/middleware/jwt"
 	"github.com/jameskeane/bcrypt"
-	"github.com/snowlyg/IrisAdminApi/libs"
 	"gorm.io/gorm"
 )
 

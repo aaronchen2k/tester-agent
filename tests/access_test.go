@@ -6,7 +6,7 @@ import (
 	"github.com/kataras/iris/v12"
 	"testing"
 
-	"github.com/snowlyg/IrisAdminApi/libs"
+	"github.com/aaronchen2k/openstc/libs"
 )
 
 // 登陆成功

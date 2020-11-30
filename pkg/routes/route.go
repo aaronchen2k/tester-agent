@@ -1,10 +1,10 @@
 package routes
 
 import (
+	"github.com/aaronchen2k/openstc/pkg/controllers"
+	"github.com/aaronchen2k/openstc/pkg/libs"
+	"github.com/aaronchen2k/openstc/pkg/middleware"
 	"github.com/kataras/iris/v12"
-	"github.com/snowlyg/IrisAdminApi/controllers"
-	"github.com/snowlyg/IrisAdminApi/libs"
-	"github.com/snowlyg/IrisAdminApi/middleware"
 )
 
 func App(api *iris.Application) {

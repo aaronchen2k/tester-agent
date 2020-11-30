@@ -2,15 +2,15 @@ package web_server
 
 import (
 	"fmt"
+	"github.com/aaronchen2k/openstc/pkg/libs"
+	"github.com/aaronchen2k/openstc/pkg/models"
+	"github.com/aaronchen2k/openstc/pkg/routes"
 	"github.com/kataras/iris/v12"
-	"github.com/snowlyg/IrisAdminApi/libs"
 	"net/http"
 	"strings"
 	"time"
 
 	"github.com/kataras/iris/v12/context"
-	"github.com/snowlyg/IrisAdminApi/models"
-	"github.com/snowlyg/IrisAdminApi/routes"
 )
 
 type Server struct {

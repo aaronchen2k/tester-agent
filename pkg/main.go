@@ -4,12 +4,11 @@ package main
 import (
 	"flag"
 	"fmt"
+	"github.com/aaronchen2k/openstc/pkg/libs"
+	"github.com/aaronchen2k/openstc/pkg/seeder"
+	"github.com/aaronchen2k/openstc/pkg/web_server"
 	"log"
 	"os"
-
-	"github.com/snowlyg/IrisAdminApi/libs"
-	"github.com/snowlyg/IrisAdminApi/seeder"
-	"github.com/snowlyg/IrisAdminApi/web_server"
 )
 
 var ConfigPath = flag.String("c", "", "配置路径")

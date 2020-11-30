@@ -1,12 +1,12 @@
 package controllers
 
 import (
+	"github.com/aaronchen2k/openstc/pkg/libs"
+	"github.com/aaronchen2k/openstc/pkg/models"
+	"github.com/aaronchen2k/openstc/pkg/validates"
 	"github.com/go-playground/validator/v10"
 	"github.com/iris-contrib/middleware/jwt"
 	"github.com/kataras/iris/v12"
-	"github.com/snowlyg/IrisAdminApi/libs"
-	"github.com/snowlyg/IrisAdminApi/models"
-	"github.com/snowlyg/IrisAdminApi/validates"
 )
 
 /**

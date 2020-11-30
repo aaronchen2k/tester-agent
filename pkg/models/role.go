@@ -2,11 +2,11 @@ package models
 
 import (
 	"fmt"
+	"github.com/aaronchen2k/openstc/pkg/libs"
 	"strconv"
 	"time"
 
 	"github.com/fatih/color"
-	"github.com/snowlyg/IrisAdminApi/libs"
 	"gorm.io/gorm"
 )
 

@@ -3,9 +3,9 @@ package models
 import (
 	"errors"
 	"fmt"
+	"github.com/aaronchen2k/openstc/pkg/libs"
 	gormadapter "github.com/casbin/gorm-adapter/v2"
 	"github.com/fatih/color"
-	"github.com/snowlyg/IrisAdminApi/libs"
 	"gorm.io/gorm"
 	"strconv"
 	"strings"

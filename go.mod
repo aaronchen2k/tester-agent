@@ -1,4 +1,4 @@
-module github.com/snowlyg/IrisAdminApi
+module github.com/aaronchen2k/openstc
 
 go 1.14
 
