@@ -4,10 +4,6 @@ Run web and windows application testing on on-demand virtual machines and contai
 
 Vue.js, Golang, MySQL
 
-## Related projects
-- https://github.com/aaronchen2k/testfarm-web
-- https://github.com/aaronchen2k/testfarm-client
-
 ## Quick start
 TODO
 
