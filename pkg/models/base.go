@@ -249,6 +249,7 @@ func DropTables() {
 		"casbin_rule")
 }
 
+
 // Migrate 迁移数据表
 func Migrate() {
 	err := libs.Db.AutoMigrate(
