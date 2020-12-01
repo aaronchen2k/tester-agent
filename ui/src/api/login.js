@@ -1,7 +1,9 @@
 import request from '@/utils/request'
 
+const prefix = '/v1/admin'
+
 const userApi = {
-  Login: '/auth/login',
+  Login: `${prefix}/login`,
   Logout: '/auth/logout',
   ForgePassword: '/auth/forge-password',
   Register: '/auth/register',

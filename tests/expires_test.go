@@ -1,4 +1,4 @@
-// +build test expire api
+// +build test perm api
 
 package tests
 

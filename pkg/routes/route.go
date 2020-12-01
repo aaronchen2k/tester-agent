@@ -9,7 +9,7 @@ import (
 
 func App(api *iris.Application) {
 	api.UseRouter(middleware.CrsAuth())
-	app := api.Party("/").AllowMethods(iris.MethodOptions)
+	app := api.Party("/api").AllowMethods(iris.MethodOptions)
 	{
 		// 二进制模式 ， 启用项目入口
 		if libs.Config.Bindata {

@@ -3,10 +3,10 @@
 package tests
 
 import (
+	"github.com/aaronchen2k/openstc/pkg/libs"
 	"github.com/kataras/iris/v12"
 	"testing"
 
-	"github.com/aaronchen2k/openstc/libs"
 )
 
 // 登陆成功

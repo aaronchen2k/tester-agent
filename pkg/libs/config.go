@@ -20,9 +20,9 @@ var Config = struct {
 	Port     int    `default:"8085" env:"PORT"`
 	Host     string `default:"127.0.0.1" env:"Host"`
 	Admin    struct {
-		UserName        string `env:"AdminUserName" default:"username"`
-		Name            string `env:"AdminName" default:"name"`
-		Pwd             string `env:"AdminPwd" default:"123456"`
+		UserName        string `env:"AdminUserName" default:"admin"`
+		Name            string `env:"AdminName" default:"admin"`
+		Pwd             string `env:"AdminPwd" default:"P2ssw0rd"`
 		RoleName        string `env:"AdminRoleName" default:"admin"`
 		RoleDisplayName string `env:"TenantRoleDisplayName" default:"超级管理员"`
 	}
