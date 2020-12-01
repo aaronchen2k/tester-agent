@@ -1,7 +1,9 @@
 import request from '@/utils/request'
 
+const prefix = '/v1/admin'
+
 const api = {
-  user: '/user',
+  user: `${prefix}/user`,
   role: '/role',
   service: '/service',
   permission: '/permission',

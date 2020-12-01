@@ -26,6 +26,7 @@ router.beforeEach((to, from, next) => {
       // check login user.roles is null
       if (store.getters.roles.length === 0) {
         // request login userInfo
+        console.log('request login userInfo')
         store
           .dispatch('GetInfo')
           .then(res => {
@@ -46,7 +47,8 @@ router.beforeEach((to, from, next) => {
               }
             })
           })
-          .catch(() => {
+          .catch((e) => {
+            console.log('GetInfo', e)
             notification.error({
               message: '错误',
               description: '请求用户信息失败，请重试'
