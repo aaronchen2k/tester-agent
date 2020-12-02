@@ -21,7 +21,7 @@
     -->
     <template v-slot:menuHeaderRender>
       <div>
-        <logo-svg />
+        <!--<logo-svg />-->
         <h1>{{ title }}</h1>
       </div>
     </template>
@@ -47,7 +47,7 @@ import defaultSettings from '@/config/defaultSettings'
 import RightContent from '@/components/GlobalHeader/RightContent'
 import GlobalFooter from '@/components/GlobalFooter'
 import Ads from '@/components/Other/CarbonAds'
-import LogoSvg from '../assets/logo.svg?inline'
+// import LogoSvg from '../assets/logo.svg?inline'
 
 import { asyncRouterMap } from '@/config/router.config.js'
 
@@ -57,7 +57,7 @@ export default {
     SettingDrawer,
     RightContent,
     GlobalFooter,
-    LogoSvg,
+    // LogoSvg,
     Ads
   },
   data () {
