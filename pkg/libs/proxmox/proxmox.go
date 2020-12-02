@@ -16,6 +16,10 @@ import (
 	"time"
 )
 
+var (
+	Proxmox *ProxMox
+)
+
 type ProxMox struct {
 	Hostname                      string
 	Username                      string
@@ -98,6 +102,8 @@ func NewProxMox(HostName string, UserName string, Password string) (*ProxMox, er
 			return nil, err
 		}
 		proxmox.Client.Jar.SetCookies(cookieURL, cookies)
+
+    Proxmox = proxmox
 
 		return proxmox, nil
 	}

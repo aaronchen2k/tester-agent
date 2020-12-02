@@ -6,6 +6,10 @@ import (
 	"strconv"
 )
 
+var (
+  Nodes *QemuList
+)
+
 type Node struct {
 	Mem      float64 `json:"mem"`
 	MaxDisk  float64 `json:"maxdisk"`
@@ -83,6 +87,8 @@ func (node Node) Qemu() (QemuList, error) {
 
 		list[strconv.FormatFloat(vm.VMId, 'f', 0, 64)] = vm
 	}
+
+  Nodes = &list
 
 	return list, nil
 }
