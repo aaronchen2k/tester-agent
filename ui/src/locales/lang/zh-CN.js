@@ -10,6 +10,14 @@ const components = {
 const locale = {
   'message': '-',
   'menu.home': '主页',
+
+  'menu.task': '测试任务',
+  'menu.execution': '执行',
+  'menu.history': '历史',
+  'menu.res': '测试资源',
+  'menu.node': '节点',
+  'menu.vm': '虚拟机',
+
   'menu.dashboard': '仪表盘',
   'menu.dashboard.analysis': '分析页',
   'menu.dashboard.monitor': '监控页',

@@ -14,21 +14,66 @@ export const asyncRouterMap = [
     name: 'index',
     component: BasicLayout,
     meta: { title: 'menu.home' },
-    redirect: '/dashboard/workplace',
+    redirect: '/task',
     children: [
+
+      // home
+      {
+        path: '/task',
+        name: 'task',
+        redirect: '/task/execution/list',
+        component: RouteView,
+        meta: { title: 'menu.task', keepAlive: true, icon: bxAnaalyse, permission: [ 'task' ] },
+        children: [
+          {
+            path: '/task/execution/list',
+            name: 'execution-list',
+            component: () => import('@/views/task/execution/List'),
+            meta: { title: 'menu.execution', keepAlive: true, permission: [ 'task' ] }
+          },
+          {
+            path: '/task/history/list',
+            name: 'history-list',
+            component: () => import('@/views/task/history/List'),
+            meta: { title: 'menu.history', permission: [ 'task' ] }
+          }
+        ]
+      },
+      {
+        path: '/资源',
+        name: 'res',
+        redirect: '/res/node/list',
+        component: RouteView,
+        meta: { title: 'menu.res', icon: bxAnaalyse, permission: [ 'task' ] },
+        children: [
+          {
+            path: '/res/node/list',
+            name: 'node-list',
+            component: () => import('@/views/res/node/List'),
+            meta: { title: 'menu.node', permission: [ 'task' ] }
+          },
+          {
+            path: '/task/vm/list',
+            name: 'vm-list',
+            component: () => import('@/views/res/vm/List'),
+            meta: { title: 'menu.vm', permission: [ 'task' ] }
+          }
+        ]
+      },
+
       // dashboard
       {
         path: '/dashboard',
         name: 'dashboard',
         redirect: '/dashboard/workplace',
         component: RouteView,
-        meta: { title: 'menu.dashboard', keepAlive: true, icon: bxAnaalyse, permission: [ 'dashboard' ] },
+        meta: { title: 'menu.dashboard', icon: bxAnaalyse, permission: [ 'dashboard' ] },
         children: [
           {
             path: '/dashboard/analysis/:pageNo([1-9]\\d*)?',
             name: 'Analysis',
             component: () => import('@/views/dashboard/Analysis'),
-            meta: { title: 'menu.dashboard.analysis', keepAlive: false, permission: [ 'dashboard' ] }
+            meta: { title: 'menu.dashboard.analysis', permission: [ 'dashboard' ] }
           },
           // 外部链接
           {
