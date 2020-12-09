@@ -35,7 +35,6 @@ func App(api *iris.Application) {
 					users.Post("/", controllers.CreateUser).Name = "创建用户"
 					users.Put("/{id:uint}", controllers.UpdateUser).Name = "编辑用户"
 					users.Delete("/{id:uint}", controllers.DeleteUser).Name = "删除用户"
-
 				})
 				admin.PartyFunc("/roles", func(roles iris.Party) {
 					roles.Get("/", controllers.GetAllRoles).Name = "角色列表"

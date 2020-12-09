@@ -47,6 +47,7 @@ require (
 	github.com/smartystreets/assertions v1.2.0 // indirect
 	github.com/smartystreets/goconvey v1.6.4 // indirect
 	github.com/snowlyg/gotransformer v0.1.0
+	github.com/stretchr/testify v1.6.1
 	github.com/tdewolff/parse/v2 v2.5.6 // indirect
 	github.com/vmihailenco/msgpack/v5 v5.0.0 // indirect
 	github.com/xeipuuv/gojsonpointer v0.0.0-20190905194746-02993c407bfb // indirect
