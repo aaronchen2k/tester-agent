@@ -1,6 +1,6 @@
 # openstc.com
-## Service oriented on-demand software automatic testing platform.
-Run web and windows application testing on on-demand virtual machines and containers.
+## Open Software Test Center
+Continuous testing on on-demand virtual machines and docker containers.
 
 Proxmox VE, Vue.js, Golang, MySQL
 
