@@ -96,5 +96,4 @@ version: %s`, Version))
 	if err != nil {
 		panic(err)
 	}
-
 }
