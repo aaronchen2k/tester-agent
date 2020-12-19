@@ -2,7 +2,7 @@ package tests
 
 import (
 	"fmt"
-	"github.com/aaronchen2k/openstc/pkg/libs/proxmox"
+	"github.com/aaronchen2k/openstc/src/libs/proxmox"
 	"github.com/stretchr/testify/assert"
 	"log"
 	"os"
@@ -39,7 +39,7 @@ func TestNodes(t *testing.T) {
 	}
 
 	vms, _ := node.Qemu()
-	assert.Equal(t,  2, len(vms), "proxmox vms number")
+	assert.Equal(t, 2, len(vms), "proxmox vms number")
 
 	var vm proxmox.QemuVM
 	for key, val := range vms {

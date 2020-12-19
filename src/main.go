@@ -4,9 +4,9 @@ package main
 import (
 	"flag"
 	"fmt"
-	"github.com/aaronchen2k/openstc/pkg/libs"
-	"github.com/aaronchen2k/openstc/pkg/seeder"
-	"github.com/aaronchen2k/openstc/pkg/web_server"
+	"github.com/aaronchen2k/openstc/src/libs"
+	"github.com/aaronchen2k/openstc/src/seeder"
+	"github.com/aaronchen2k/openstc/src/web_server"
 	"log"
 	"os"
 )

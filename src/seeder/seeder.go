@@ -2,8 +2,8 @@ package seeder
 
 import (
 	"fmt"
-	"github.com/aaronchen2k/openstc/pkg/libs"
-	"github.com/aaronchen2k/openstc/pkg/models"
+	"github.com/aaronchen2k/openstc/src/libs"
+	"github.com/aaronchen2k/openstc/src/models"
 	logger "github.com/sirupsen/logrus"
 	"math/rand"
 	"path/filepath"

@@ -3,7 +3,7 @@ package models
 import (
 	"errors"
 	"fmt"
-	"github.com/aaronchen2k/openstc/pkg/libs"
+	"github.com/aaronchen2k/openstc/src/libs"
 	gormadapter "github.com/casbin/gorm-adapter/v2"
 	"github.com/fatih/color"
 	"gorm.io/gorm"
@@ -248,7 +248,6 @@ func DropTables() {
 		libs.Config.DB.Prefix+"article_tags",
 		"casbin_rule")
 }
-
 
 // Migrate 迁移数据表
 func Migrate() {

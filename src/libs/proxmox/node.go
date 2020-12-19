@@ -7,7 +7,7 @@ import (
 )
 
 var (
-  Nodes *QemuList
+	Nodes *QemuList
 )
 
 type Node struct {
@@ -88,7 +88,7 @@ func (node Node) Qemu() (QemuList, error) {
 		list[strconv.FormatFloat(vm.VMId, 'f', 0, 64)] = vm
 	}
 
-  Nodes = &list
+	Nodes = &list
 
 	return list, nil
 }

@@ -1,10 +1,10 @@
 package controllers
 
 import (
-	"github.com/aaronchen2k/openstc/pkg/libs"
-	"github.com/aaronchen2k/openstc/pkg/models"
-	"github.com/aaronchen2k/openstc/pkg/transformer"
-	"github.com/aaronchen2k/openstc/pkg/validates"
+	"github.com/aaronchen2k/openstc/src/libs"
+	"github.com/aaronchen2k/openstc/src/models"
+	"github.com/aaronchen2k/openstc/src/transformer"
+	"github.com/aaronchen2k/openstc/src/validates"
 	"time"
 
 	"github.com/go-playground/validator/v10"

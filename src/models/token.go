@@ -2,7 +2,7 @@ package models
 
 import (
 	"fmt"
-	"github.com/aaronchen2k/openstc/pkg/libs"
+	"github.com/aaronchen2k/openstc/src/libs"
 	"github.com/gomodule/redigo/redis"
 	"github.com/pkg/errors"
 	"strings"

@@ -103,7 +103,7 @@ func NewProxMox(HostName string, UserName string, Password string) (*ProxMox, er
 		}
 		proxmox.Client.Jar.SetCookies(cookieURL, cookies)
 
-    Proxmox = proxmox
+		Proxmox = proxmox
 
 		return proxmox, nil
 	}

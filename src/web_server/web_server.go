@@ -2,9 +2,9 @@ package web_server
 
 import (
 	"fmt"
-	"github.com/aaronchen2k/openstc/pkg/libs"
-	"github.com/aaronchen2k/openstc/pkg/models"
-	"github.com/aaronchen2k/openstc/pkg/routes"
+	"github.com/aaronchen2k/openstc/src/libs"
+	"github.com/aaronchen2k/openstc/src/models"
+	"github.com/aaronchen2k/openstc/src/routes"
 	"github.com/kataras/iris/v12"
 	"net/http"
 	"strings"

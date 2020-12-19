@@ -1,9 +1,9 @@
 package routes
 
 import (
-	"github.com/aaronchen2k/openstc/pkg/controllers"
-	"github.com/aaronchen2k/openstc/pkg/libs"
-	"github.com/aaronchen2k/openstc/pkg/middleware"
+	"github.com/aaronchen2k/openstc/src/controllers"
+	"github.com/aaronchen2k/openstc/src/libs"
+	"github.com/aaronchen2k/openstc/src/middleware"
 	"github.com/kataras/iris/v12"
 )
 

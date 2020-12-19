@@ -3,7 +3,7 @@ package models
 import (
 	"errors"
 	"fmt"
-	"github.com/aaronchen2k/openstc/pkg/libs"
+	"github.com/aaronchen2k/openstc/src/libs"
 	"strconv"
 	"time"
 

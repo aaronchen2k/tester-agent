@@ -1,11 +1,10 @@
 package middleware
 
-import
-(
+import (
 	"errors"
 	"fmt"
-	"github.com/aaronchen2k/openstc/pkg/libs"
-	"github.com/aaronchen2k/openstc/pkg/models"
+	"github.com/aaronchen2k/openstc/src/libs"
+	"github.com/aaronchen2k/openstc/src/models"
 	"github.com/casbin/casbin/v2"
 	"github.com/fatih/color"
 	"github.com/iris-contrib/middleware/jwt"

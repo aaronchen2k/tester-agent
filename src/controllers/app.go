@@ -1,9 +1,9 @@
 package controllers
 
 import (
-	"github.com/aaronchen2k/openstc/pkg/libs"
-	"github.com/aaronchen2k/openstc/pkg/models"
-	"github.com/aaronchen2k/openstc/pkg/validates"
+	"github.com/aaronchen2k/openstc/src/libs"
+	"github.com/aaronchen2k/openstc/src/models"
+	"github.com/aaronchen2k/openstc/src/validates"
 	"github.com/go-playground/validator/v10"
 	"github.com/iris-contrib/middleware/jwt"
 	"github.com/kataras/iris/v12"
