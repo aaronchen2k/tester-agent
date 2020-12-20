@@ -3,7 +3,7 @@ package server
 import (
 	"fmt"
 	"github.com/aaronchen2k/openstc/src/libs/casbin"
-	"github.com/aaronchen2k/openstc/src/libs/config"
+	"github.com/aaronchen2k/openstc/src/libs/common"
 	"github.com/aaronchen2k/openstc/src/libs/db"
 	redisUtils "github.com/aaronchen2k/openstc/src/libs/redis"
 	"github.com/aaronchen2k/openstc/src/models"
@@ -30,14 +30,14 @@ func NewServer(assetFile http.FileSystem) *Server {
 }
 
 func (s *Server) Serve() error {
-	if config.Config.HTTPS {
-		host := fmt.Sprintf("%s:%d", config.Config.Host, 443)
-		if err := s.App.Run(iris.TLS(host, config.Config.Certpath, config.Config.Certkey)); err != nil {
+	if common.Config.Https {
+		host := fmt.Sprintf("%s:%d", common.Config.Host, 443)
+		if err := s.App.Run(iris.TLS(host, common.Config.CertPath, common.Config.CertKey)); err != nil {
 			return err
 		}
 	} else {
 		if err := s.App.Run(
-			iris.Addr(fmt.Sprintf("%s:%d", config.Config.Host, config.Config.Port)),
+			iris.Addr(fmt.Sprintf("%s:%d", common.Config.Host, common.Config.Port)),
 			iris.WithoutServerError(iris.ErrServerClosed),
 			iris.WithOptimizations,
 			iris.WithTimeFormat(time.RFC3339),
@@ -50,16 +50,16 @@ func (s *Server) Serve() error {
 }
 
 func (s *Server) NewApp() {
-	s.App.Logger().SetLevel(config.Config.LogLevel)
+	s.App.Logger().SetLevel(common.Config.LogLevel)
 
-	//if libs.Config.Bindata {
+	//if libs.Config.BinData {
 	//	s.App.RegisterView(iris.HTML(s.AssetFile, ".html"))
 	//	s.App.HandleDir("/", s.AssetFile)
 	//}
 
 	db.InitDb()
 	casbinUtils.InitCasbin()
-	redisUtils.InitRedisCluster(config.GetRedisUris(), config.Config.Redis.Pwd)
+	redisUtils.InitRedisCluster(common.GetRedisUris(), common.Config.Redis.Pwd)
 	models.Migrate()
 
 	//iris.RegisterOnInterrupt(func() {
@@ -79,7 +79,7 @@ type PathName struct {
 func (s *Server) GetRoutes() []*models.Permission {
 	var rrs []*models.Permission
 	names := getPathNames(s.App.GetRoutesReadOnly())
-	if config.Config.Debug {
+	if common.Config.Debug {
 		fmt.Println(fmt.Sprintf("路由权限集合：%v", names))
 		fmt.Println(fmt.Sprintf("Iris App ：%v", s.App))
 	}
@@ -94,7 +94,7 @@ func (s *Server) GetRoutes() []*models.Permission {
 
 func getPathNames(routeReadOnly []context.RouteReadOnly) []*PathName {
 	var pns []*PathName
-	if config.Config.Debug {
+	if common.Config.Debug {
 		fmt.Println(fmt.Sprintf("routeReadOnly：%v", routeReadOnly))
 	}
 	for _, s := range routeReadOnly {

@@ -1,3 +1,4 @@
 /.idea/
 /res/res.go
 *.log
+/openstc.db

@@ -4,7 +4,6 @@ import (
 	"errors"
 	"fmt"
 	"github.com/aaronchen2k/openstc/src/libs/common"
-	"github.com/aaronchen2k/openstc/src/libs/config"
 	logger "github.com/sirupsen/logrus"
 	"path/filepath"
 
@@ -18,13 +17,13 @@ func InitCasbin() {
 
 	var err error
 	var conn string
-	if config.Config.DB.Adapter == "mysql" {
+	if common.Config.DB.Adapter == "mysql" {
 		conn = fmt.Sprintf("%v:%v@tcp(%v:%v)/%v?parseTime=True&loc=Local",
-			config.Config.DB.User, config.Config.DB.Password, config.Config.DB.Host, config.Config.DB.Port, config.Config.DB.Name)
-	} else if config.Config.DB.Adapter == "postgres" {
+			common.Config.DB.User, common.Config.DB.Password, common.Config.DB.Host, common.Config.DB.Port, common.Config.DB.Name)
+	} else if common.Config.DB.Adapter == "postgres" {
 		conn = fmt.Sprintf("postgres://%v:%v@%v/%v?sslmode=disable",
-			config.Config.DB.User, config.Config.DB.Password, config.Config.DB.Host, config.Config.DB.Name)
-	} else if config.Config.DB.Adapter == "sqlite3" {
+			common.Config.DB.User, common.Config.DB.Password, common.Config.DB.Host, common.Config.DB.Name)
+	} else if common.Config.DB.Adapter == "sqlite3" {
 		conn = common.DBFile()
 	} else {
 		logger.Println(errors.New("not supported database adapter"))
@@ -34,7 +33,7 @@ func InitCasbin() {
 		logger.Println(fmt.Sprintf("数据链接不可用: %s", conn))
 	}
 
-	c, err := gormadapter.NewAdapter(config.Config.DB.Adapter, conn, true) // Your driver and data source.
+	c, err := gormadapter.NewAdapter(common.Config.DB.Adapter, conn, true) // Your driver and data source.
 	if err != nil {
 		logger.Println(fmt.Sprintf("NewAdapter 错误: %v,Path: %s", err, conn))
 	}

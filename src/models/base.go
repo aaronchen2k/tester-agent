@@ -4,7 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/aaronchen2k/openstc/src/libs/casbin"
-	"github.com/aaronchen2k/openstc/src/libs/config"
+	"github.com/aaronchen2k/openstc/src/libs/common"
 	db2 "github.com/aaronchen2k/openstc/src/libs/db"
 	gormadapter "github.com/casbin/gorm-adapter/v2"
 	"github.com/fatih/color"
@@ -240,14 +240,14 @@ func GetPermissionsForUser(uid uint) [][]string {
 // DropTables 删除数据表
 func DropTables() {
 	_ = db2.Db.Migrator().DropTable(
-		config.Config.DB.Prefix+"users",
-		config.Config.DB.Prefix+"roles",
-		config.Config.DB.Prefix+"permissions",
-		config.Config.DB.Prefix+"articles",
-		config.Config.DB.Prefix+"configs",
-		config.Config.DB.Prefix+"tags",
-		config.Config.DB.Prefix+"types",
-		config.Config.DB.Prefix+"article_tags",
+		common.Config.DB.Prefix+"users",
+		common.Config.DB.Prefix+"roles",
+		common.Config.DB.Prefix+"permissions",
+		common.Config.DB.Prefix+"articles",
+		common.Config.DB.Prefix+"configs",
+		common.Config.DB.Prefix+"tags",
+		common.Config.DB.Prefix+"types",
+		common.Config.DB.Prefix+"article_tags",
 		"casbin_rule")
 }
 

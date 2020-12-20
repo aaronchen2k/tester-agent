@@ -1,8 +1,7 @@
-package config
+package common
 
 import (
 	"fmt"
-	"github.com/aaronchen2k/openstc/src/libs/common"
 	"path/filepath"
 	"strings"
 
@@ -12,35 +11,36 @@ import (
 )
 
 var Config = struct {
-	LogLevel string `default:"info" env:"Loglevel"`
-	Bindata  bool   `default:"true" env:"Bindata"`
-	Debug    bool   `default:"true" env:"Debug"`
-	HTTPS    bool   `default:"false" env:"HTTPS"`
-	Certpath string `default:"" env:"Certpath"`
-	Certkey  string `default:"" env:"Certkey"`
-	Port     int    `default:"8085" env:"PORT"`
+	LogLevel string `yaml:"logLevel" default:"info" env:"LogLevel"`
+	Debug    bool   `yaml:"debug" default:"true" env:"Debug"`
+	BinData  bool   `default:"true" env:"BinData"`
+	Https    bool   `default:"false" env:"Https"`
+	CertPath string `default:"" env:"CertPath"`
+	CertKey  string `default:"" env:"CertKey"`
+	Port     int    `default:"8085" env:"Port"`
 	Host     string `default:"127.0.0.1" env:"Host"`
 	Admin    struct {
 		UserName        string `env:"AdminUserName" default:"admin"`
 		Name            string `env:"AdminName" default:"admin"`
-		Pwd             string `env:"AdminPwd" default:"P2ssw0rd"`
+		Password        string `env:"AdminPassword" default:"P2ssw0rd"`
 		RoleName        string `env:"AdminRoleName" default:"admin"`
-		RoleDisplayName string `env:"TenantRoleDisplayName" default:"超级管理员"`
-	}
+		RoleDisplayName string `env:"RoleDisplayName" default:"超级管理员"`
+	} `yaml:"admin,flow"`
 	DB struct {
-		Prefix   string `env:"DBPrefix" default:"iris_"`
-		Name     string `env:"DBName" default:"openstc"`
-		Adapter  string `env:"DBAdapter" default:"mysql"`
-		Host     string `env:"DBHost" default:"localhost"`
-		Port     string `env:"DBPort" default:"3306"`
-		User     string `env:"DBUser" default:"root"`
-		Password string `env:"DBPassword" default:"P2ssw0rd"`
-	}
+		Prefix   string `yaml:"prefix" env:"DBPrefix" default:"openstc_"`
+		Name     string `yaml:"name" env:"DBName" default:"openstc"`
+		Adapter  string `yaml:"adapter" env:"DBAdapter" default:"mysql"`
+		Host     string `yaml:"host" env:"DBHost" default:"localhost"`
+		Port     string `yaml:"port" env:"DBPort" default:"3306"`
+		User     string `yaml:"user" env:"DBUser" default:"root"`
+		Password string `yaml:"password" env:"DBPassword" default:"P2ssw0rd"`
+	} `yaml:"db,flow"`
 	Redis struct {
 		Host string `env:"RedisHost" default:"localhost"`
 		Port string `env:"RedisPort" default:"6379"`
 		Pwd  string `env:"RedisPwd" default:""`
-	}
+	} `yaml:"redis,flow"`
+
 	Limit struct {
 		Disable bool    `env:"LimitDisable" default:"true"`
 		Limit   float64 `env:"LimitLimit" default:"1"`
@@ -56,8 +56,7 @@ var Config = struct {
 }{}
 
 func InitConfig(p string) {
-
-	configPath := filepath.Join(common.GetExeDir(), "application.yml")
+	configPath := filepath.Join(GetExeDir(), "application.yml")
 	if p != "" {
 		configPath = p
 	}

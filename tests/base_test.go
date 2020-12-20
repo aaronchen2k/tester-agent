@@ -4,7 +4,7 @@ package tests
 
 import (
 	"flag"
-	"github.com/aaronchen2k/openstc/src/libs/config"
+	"github.com/aaronchen2k/openstc/src/libs/common"
 	"github.com/aaronchen2k/openstc/src/models"
 	"github.com/aaronchen2k/openstc/src/seeder"
 	"github.com/aaronchen2k/openstc/src/server"
@@ -26,7 +26,7 @@ var (
 //单元测试基境
 func TestMain(m *testing.M) {
 	flag.Parse()
-	config.InitConfig("")
+	common.InitConfig("")
 	s := server.NewServer(nil) // 初始化app
 	s.NewApp()
 	app = s.App
@@ -193,8 +193,8 @@ func GetOauthToken(e *httpexpect.Expect) string {
 	}
 
 	oj := map[string]string{
-		"username": config.Config.Admin.UserName,
-		"password": config.Config.Admin.Pwd,
+		"username": common.Config.Admin.UserName,
+		"password": common.Config.Admin.Pwd,
 	}
 	r := e.POST("login").WithJSON(oj).
 		Expect().

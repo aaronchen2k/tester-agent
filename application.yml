@@ -1,6 +1,6 @@
-bindata: false #二进制模式
-loglevel: debug  #日志级别 info debug
-debug: false #调试模式
+logLevel: debug  #日志级别 info debug
+debug: true #调试模式
+binData: false #二进制模式
 https: false #https
 host: 127.0.0.1
 port: 8085 #端口
@@ -12,7 +12,7 @@ admin: # 管理员账号信息，用于数据填充
   password: P2ssw0rd
 
 db:
-  adapter: mysql # 数据库类型
+  adapter: sqlite3 # 数据库类型
   host: localhost # 数据库地址
   port: 3306 #数据库端口
   name: openstc #数据库名称

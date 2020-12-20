@@ -5,7 +5,6 @@ import (
 	"flag"
 	"fmt"
 	"github.com/aaronchen2k/openstc/src/libs/common"
-	"github.com/aaronchen2k/openstc/src/libs/config"
 	"github.com/aaronchen2k/openstc/src/seeder"
 	"github.com/aaronchen2k/openstc/src/server"
 	"log"
@@ -51,7 +50,7 @@ func main() {
 
 version: %s`, Version))
 
-	config.InitConfig(*ConfigPath)
+	common.InitConfig(*ConfigPath)
 
 	//irisServer := web_server.NewServer(AssetFile()) 如果需要前端文件
 	irisServer := server.NewServer(nil)
@@ -89,8 +88,8 @@ version: %s`, Version))
 		}
 	}
 
-	if common.IsPortInUse(config.Config.Port) {
-		panic(fmt.Sprintf("端口 %d 已被使用", config.Config.Port))
+	if common.IsPortInUse(common.Config.Port) {
+		panic(fmt.Sprintf("端口 %d 已被使用", common.Config.Port))
 	}
 
 	err := irisServer.Serve()

@@ -42,9 +42,9 @@ compile_mac:
 	@CGO_ENABLED=1 GOOS=darwin GOARCH=amd64 go build -o ${BIN_MAC}openstc-web src/main.go
 
 copy_files:
-#	@echo 'start copy files'
-#	@cp -r {conf.yaml} bin
-#	@for subdir in `ls ${BIN_OUT}`; do cp -r {bin/config.yaml} "${BIN_OUT}$${subdir}/openstc-web"; done
+	@echo 'start copy files'
+	@cp -r {application.yml,rbac_model.conf} bin
+	@for subdir in `ls ${BIN_OUT}`; do cp -r {bin/application.yml,bin/rbac_model.conf} "${BIN_OUT}$${subdir}/openstc-web"; done
 
 package:
 	@echo 'start package'
