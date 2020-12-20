@@ -164,7 +164,7 @@ func (r *UserRepo) CheckLogin(u *models.User, password string) (*models.Token, i
 				return nil, 400, err.Error()
 			}
 
-			return &models.Token{tokenString}, 200, "登陆成功"
+			return &models.Token{Token: tokenString}, 200, "登陆成功"
 		} else {
 			return nil, 400, "用户名或密码错误"
 		}
