@@ -4,10 +4,10 @@ package tests
 
 import (
 	"flag"
-	"github.com/aaronchen2k/openstc/src/libs"
+	"github.com/aaronchen2k/openstc/src/libs/config"
 	"github.com/aaronchen2k/openstc/src/models"
 	"github.com/aaronchen2k/openstc/src/seeder"
-	"github.com/aaronchen2k/openstc/src/web_server"
+	"github.com/aaronchen2k/openstc/src/server"
 	"github.com/aaronchen2k/openstc/tests/mock"
 	"github.com/bxcodec/faker/v3"
 	"github.com/iris-contrib/httpexpect/v2"
@@ -26,8 +26,8 @@ var (
 //单元测试基境
 func TestMain(m *testing.M) {
 	flag.Parse()
-	libs.InitConfig("")
-	s := web_server.NewServer(nil) // 初始化app
+	config.InitConfig("")
+	s := server.NewServer(nil) // 初始化app
 	s.NewApp()
 	app = s.App
 	seeder.Run()
@@ -193,8 +193,8 @@ func GetOauthToken(e *httpexpect.Expect) string {
 	}
 
 	oj := map[string]string{
-		"username": libs.Config.Admin.UserName,
-		"password": libs.Config.Admin.Pwd,
+		"username": config.Config.Admin.UserName,
+		"password": config.Config.Admin.Pwd,
 	}
 	r := e.POST("login").WithJSON(oj).
 		Expect().

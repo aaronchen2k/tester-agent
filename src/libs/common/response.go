@@ -1,4 +1,4 @@
-package libs
+package common
 
 type Response struct {
 	Code int64       `json:"code"`

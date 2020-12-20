@@ -3,6 +3,7 @@ package models
 import (
 	"fmt"
 	"github.com/aaronchen2k/openstc/src/libs"
+	"github.com/aaronchen2k/openstc/src/libs/db"
 	"strconv"
 	"time"
 
@@ -56,7 +57,7 @@ func GetRole(search *Search) (*Role, error) {
 func DeleteRoleById(id uint) error {
 	r := NewRole()
 	r.ID = id
-	err := libs.Db.Delete(r).Error
+	err := db.Db.Delete(r).Error
 	if err != nil {
 		color.Red(fmt.Sprintf("DeleteRoleErr:%s \n", err))
 		return err
@@ -83,7 +84,7 @@ func GetAllRoles(s *Search) ([]*Role, int64, error) {
 
 // CreateRole create role
 func (r *Role) CreateRole() error {
-	if err := libs.Db.Create(r).Error; err != nil {
+	if err := db.Db.Create(r).Error; err != nil {
 		return err
 	}
 
@@ -100,7 +101,7 @@ func addPerms(permIds []uint, role *Role) {
 			color.Red(fmt.Sprintf("AppendPermsErr:%s \n", err))
 		}
 		var perms []Permission
-		libs.Db.Where("id in (?)", permIds).Find(&perms)
+		db.Db.Where("id in (?)", permIds).Find(&perms)
 		for _, perm := range perms {
 			if _, err := libs.Enforcer.AddPolicy(roleId, perm.Name, perm.Act); err != nil {
 				color.Red(fmt.Sprintf("AddPolicy:%s \n", err))

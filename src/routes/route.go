@@ -3,6 +3,7 @@ package routes
 import (
 	"github.com/aaronchen2k/openstc/src/controllers"
 	"github.com/aaronchen2k/openstc/src/libs"
+	"github.com/aaronchen2k/openstc/src/libs/config"
 	"github.com/aaronchen2k/openstc/src/middleware"
 	"github.com/kataras/iris/v12"
 )
@@ -12,7 +13,7 @@ func App(api *iris.Application) {
 	app := api.Party("/api").AllowMethods(iris.MethodOptions)
 	{
 		// 二进制模式 ， 启用项目入口
-		if libs.Config.Bindata {
+		if config.Config.Bindata {
 			app.Get("/", func(ctx iris.Context) { // 首页模块
 				_ = ctx.View("index.html")
 			})

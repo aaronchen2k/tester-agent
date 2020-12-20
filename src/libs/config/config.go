@@ -1,7 +1,8 @@
-package libs
+package config
 
 import (
 	"fmt"
+	"github.com/aaronchen2k/openstc/src/libs/common"
 	"path/filepath"
 	"strings"
 
@@ -56,7 +57,7 @@ var Config = struct {
 
 func InitConfig(p string) {
 
-	configPath := filepath.Join(GetExeDir(), "application.yml")
+	configPath := filepath.Join(common.GetExeDir(), "application.yml")
 	if p != "" {
 		configPath = p
 	}

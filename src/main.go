@@ -4,9 +4,10 @@ package main
 import (
 	"flag"
 	"fmt"
-	"github.com/aaronchen2k/openstc/src/libs"
+	"github.com/aaronchen2k/openstc/src/libs/common"
+	"github.com/aaronchen2k/openstc/src/libs/config"
 	"github.com/aaronchen2k/openstc/src/seeder"
-	"github.com/aaronchen2k/openstc/src/web_server"
+	"github.com/aaronchen2k/openstc/src/server"
 	"log"
 	"os"
 )
@@ -50,10 +51,10 @@ func main() {
 
 version: %s`, Version))
 
-	libs.InitConfig(*ConfigPath)
+	config.InitConfig(*ConfigPath)
 
 	//irisServer := web_server.NewServer(AssetFile()) 如果需要前端文件
-	irisServer := web_server.NewServer(nil)
+	irisServer := server.NewServer(nil)
 	if irisServer == nil {
 		panic("Http 初始化失败")
 	}
@@ -88,8 +89,8 @@ version: %s`, Version))
 		}
 	}
 
-	if libs.IsPortInUse(libs.Config.Port) {
-		panic(fmt.Sprintf("端口 %d 已被使用", libs.Config.Port))
+	if common.IsPortInUse(config.Config.Port) {
+		panic(fmt.Sprintf("端口 %d 已被使用", config.Config.Port))
 	}
 
 	err := irisServer.Serve()

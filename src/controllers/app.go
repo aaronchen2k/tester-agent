@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"github.com/aaronchen2k/openstc/src/libs"
+	"github.com/aaronchen2k/openstc/src/libs/common"
 	"github.com/aaronchen2k/openstc/src/models"
 	"github.com/aaronchen2k/openstc/src/validates"
 	"github.com/go-playground/validator/v10"
@@ -28,7 +29,7 @@ func UserLogin(ctx iris.Context) {
 	aul := new(validates.LoginRequest)
 
 	if err := ctx.ReadJSON(aul); err != nil {
-		_, _ = ctx.JSON(libs.ApiResource(400, nil, err.Error()))
+		_, _ = ctx.JSON(common.ApiResource(400, nil, err.Error()))
 		return
 	}
 
@@ -37,7 +38,7 @@ func UserLogin(ctx iris.Context) {
 		errs := err.(validator.ValidationErrors)
 		for _, e := range errs.Translate(validates.ValidateTrans) {
 			if len(e) > 0 {
-				_, _ = ctx.JSON(libs.ApiResource(400, nil, e))
+				_, _ = ctx.JSON(common.ApiResource(400, nil, e))
 				return
 			}
 		}
@@ -57,13 +58,13 @@ func UserLogin(ctx iris.Context) {
 
 	user, err := models.GetUser(s)
 	if err != nil {
-		_, _ = ctx.JSON(libs.ApiResource(400, nil, err.Error()))
+		_, _ = ctx.JSON(common.ApiResource(400, nil, err.Error()))
 		return
 	}
 
 	response, code, msg := user.CheckLogin(aul.Password)
 
-	_, _ = ctx.JSON(libs.ApiResource(code, response, msg))
+	_, _ = ctx.JSON(common.ApiResource(code, response, msg))
 }
 
 /**
@@ -86,18 +87,18 @@ func UserLogout(ctx iris.Context) {
 	defer conn.Close()
 	sess, err := models.GetRedisSessionV2(conn, value.Raw)
 	if err != nil {
-		_, _ = ctx.JSON(libs.ApiResource(400, nil, err.Error()))
+		_, _ = ctx.JSON(common.ApiResource(400, nil, err.Error()))
 		return
 	}
 	if sess != nil {
 		if err := sess.DelUserTokenCache(conn, value.Raw); err != nil {
-			_, _ = ctx.JSON(libs.ApiResource(400, nil, err.Error()))
+			_, _ = ctx.JSON(common.ApiResource(400, nil, err.Error()))
 			return
 		}
 	}
 
 	ctx.Application().Logger().Infof("%d 退出系统", sess.UserId)
-	_, _ = ctx.JSON(libs.ApiResource(200, nil, "退出"))
+	_, _ = ctx.JSON(common.ApiResource(200, nil, "退出"))
 }
 
 /**
@@ -120,15 +121,15 @@ func UserExpire(ctx iris.Context) {
 	defer conn.Close()
 	sess, err := models.GetRedisSessionV2(conn, value.Raw)
 	if err != nil {
-		_, _ = ctx.JSON(libs.ApiResource(400, nil, err.Error()))
+		_, _ = ctx.JSON(common.ApiResource(400, nil, err.Error()))
 		return
 	}
 	if sess != nil {
 		if err := sess.UpdateUserTokenCacheExpire(conn, value.Raw); err != nil {
-			_, _ = ctx.JSON(libs.ApiResource(400, nil, err.Error()))
+			_, _ = ctx.JSON(common.ApiResource(400, nil, err.Error()))
 			return
 		}
 	}
 
-	_, _ = ctx.JSON(libs.ApiResource(200, nil, ""))
+	_, _ = ctx.JSON(common.ApiResource(200, nil, ""))
 }

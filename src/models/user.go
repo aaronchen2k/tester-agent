@@ -4,6 +4,8 @@ import (
 	"errors"
 	"fmt"
 	"github.com/aaronchen2k/openstc/src/libs"
+	"github.com/aaronchen2k/openstc/src/libs/common"
+	"github.com/aaronchen2k/openstc/src/libs/db"
 	"strconv"
 	"time"
 
@@ -70,7 +72,7 @@ func DeleteUser(id uint) error {
 		return errors.New(fmt.Sprintf("不能删除管理员 : %s \n ", u.Username))
 	}
 
-	if err := libs.Db.Delete(u, id).Error; err != nil {
+	if err := db.Db.Delete(u, id).Error; err != nil {
 		color.Red(fmt.Sprintf("DeleteUserByIdErr:%s \n ", err))
 		return err
 	}
@@ -95,8 +97,8 @@ func GetAllUsers(s *Search) ([]*User, int64, error) {
 
 // CreateUser create user
 func (u *User) CreateUser() error {
-	u.Password = libs.HashPassword(u.Password)
-	if err := libs.Db.Create(u).Error; err != nil {
+	u.Password = common.HashPassword(u.Password)
+	if err := db.Db.Create(u).Error; err != nil {
 		return err
 	}
 
@@ -108,7 +110,7 @@ func (u *User) CreateUser() error {
 // UpdateUserById update user by id
 func UpdateUserById(id uint, nu *User) error {
 	if len(nu.Password) > 0 {
-		nu.Password = libs.HashPassword(nu.Password)
+		nu.Password = common.HashPassword(nu.Password)
 	}
 	if err := Update(&User{}, nu, id); err != nil {
 		return err

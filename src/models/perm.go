@@ -2,7 +2,7 @@ package models
 
 import (
 	"fmt"
-	"github.com/aaronchen2k/openstc/src/libs"
+	"github.com/aaronchen2k/openstc/src/libs/db"
 	"time"
 
 	"github.com/fatih/color"
@@ -40,7 +40,7 @@ func GetPermission(search *Search) (*Permission, error) {
 func DeletePermissionById(id uint) error {
 	p := NewPermission()
 	p.ID = id
-	if err := libs.Db.Delete(p).Error; err != nil {
+	if err := db.Db.Delete(p).Error; err != nil {
 		color.Red(fmt.Sprintf("DeletePermissionByIdError:%s \n", err))
 		return err
 	}
@@ -70,7 +70,7 @@ func GetAllPermissions(s *Search) ([]*Permission, int64, error) {
 
 // CreatePermission create permission
 func (p *Permission) CreatePermission() error {
-	if err := libs.Db.Create(p).Error; err != nil {
+	if err := db.Db.Create(p).Error; err != nil {
 		return err
 	}
 	return nil

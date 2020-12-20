@@ -4,6 +4,8 @@ import (
 	"errors"
 	"fmt"
 	"github.com/aaronchen2k/openstc/src/libs"
+	"github.com/aaronchen2k/openstc/src/libs/config"
+	db2 "github.com/aaronchen2k/openstc/src/libs/db"
 	gormadapter "github.com/casbin/gorm-adapter/v2"
 	"github.com/fatih/color"
 	"gorm.io/gorm"
@@ -39,7 +41,7 @@ type Search struct {
 
 // GetAll 批量查询
 func GetAll(model interface{}, s *Search) *gorm.DB {
-	db := libs.Db.Model(model)
+	db := db2.Db.Model(model)
 	sort := "desc"
 	orderBy := "created_at"
 	if len(s.Sort) > 0 {
@@ -58,7 +60,7 @@ func GetAll(model interface{}, s *Search) *gorm.DB {
 
 // Found 查询条件
 func Found(s *Search) *gorm.DB {
-	return libs.Db.Scopes(Relation(s.Relations), FoundByWhere(s.Fields))
+	return db2.Db.Scopes(Relation(s.Relations), FoundByWhere(s.Fields))
 }
 
 // IsNotFound 判断是否是查询不存在错误
@@ -72,7 +74,7 @@ func IsNotFound(err error) bool {
 
 // Update 更新
 func Update(v, d interface{}, id uint) error {
-	if err := libs.Db.Model(v).Where("id = ?", id).Updates(d).Error; err != nil {
+	if err := db2.Db.Model(v).Where("id = ?", id).Updates(d).Error; err != nil {
 		color.Red(fmt.Sprintf("Update %+v to %+v\n", v, d))
 		return err
 	}
@@ -237,21 +239,21 @@ func GetPermissionsForUser(uid uint) [][]string {
 
 // DropTables 删除数据表
 func DropTables() {
-	_ = libs.Db.Migrator().DropTable(
-		libs.Config.DB.Prefix+"users",
-		libs.Config.DB.Prefix+"roles",
-		libs.Config.DB.Prefix+"permissions",
-		libs.Config.DB.Prefix+"articles",
-		libs.Config.DB.Prefix+"configs",
-		libs.Config.DB.Prefix+"tags",
-		libs.Config.DB.Prefix+"types",
-		libs.Config.DB.Prefix+"article_tags",
+	_ = db2.Db.Migrator().DropTable(
+		config.Config.DB.Prefix+"users",
+		config.Config.DB.Prefix+"roles",
+		config.Config.DB.Prefix+"permissions",
+		config.Config.DB.Prefix+"articles",
+		config.Config.DB.Prefix+"configs",
+		config.Config.DB.Prefix+"tags",
+		config.Config.DB.Prefix+"types",
+		config.Config.DB.Prefix+"article_tags",
 		"casbin_rule")
 }
 
 // Migrate 迁移数据表
 func Migrate() {
-	err := libs.Db.AutoMigrate(
+	err := db2.Db.AutoMigrate(
 		&User{},
 		&Role{},
 		&Permission{},

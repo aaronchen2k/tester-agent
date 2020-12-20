@@ -1,7 +1,7 @@
 package controllers
 
 import (
-	"github.com/aaronchen2k/openstc/src/libs"
+	"github.com/aaronchen2k/openstc/src/libs/common"
 	"github.com/aaronchen2k/openstc/src/models"
 	"github.com/aaronchen2k/openstc/src/transformer"
 	"github.com/aaronchen2k/openstc/src/validates"
@@ -28,7 +28,7 @@ import (
 func GetProfile(ctx iris.Context) {
 	ctx.StatusCode(iris.StatusOK)
 	sess := ctx.Values().Get("sess").(*models.RedisSessionV2)
-	id := uint(libs.ParseInt(sess.UserId, 10))
+	id := uint(common.ParseInt(sess.UserId, 10))
 	s := &models.Search{
 		Fields: []*models.Filed{
 			{
@@ -40,10 +40,10 @@ func GetProfile(ctx iris.Context) {
 	}
 	user, err := models.GetUser(s)
 	if err != nil {
-		_, _ = ctx.JSON(libs.ApiResource(400, nil, err.Error()))
+		_, _ = ctx.JSON(common.ApiResource(400, nil, err.Error()))
 		return
 	}
-	_, _ = ctx.JSON(libs.ApiResource(200, userTransform(user), "请求成功"))
+	_, _ = ctx.JSON(common.ApiResource(200, userTransform(user), "请求成功"))
 }
 
 /**
@@ -71,10 +71,10 @@ func GetAdminInfo(ctx iris.Context) {
 	}
 	user, err := models.GetUser(s)
 	if err != nil {
-		_, _ = ctx.JSON(libs.ApiResource(400, nil, err.Error()))
+		_, _ = ctx.JSON(common.ApiResource(400, nil, err.Error()))
 		return
 	}
-	_, _ = ctx.JSON(libs.ApiResource(200, map[string]string{"avatar": user.Avatar}, "请求成功"))
+	_, _ = ctx.JSON(common.ApiResource(200, map[string]string{"avatar": user.Avatar}, "请求成功"))
 }
 
 /**
@@ -92,11 +92,11 @@ func GetAdminInfo(ctx iris.Context) {
 func ChangeAvatar(ctx iris.Context) {
 	ctx.StatusCode(iris.StatusOK)
 	sess := ctx.Values().Get("sess").(*models.RedisSessionV2)
-	id := uint(libs.ParseInt(sess.UserId, 10))
+	id := uint(common.ParseInt(sess.UserId, 10))
 
 	avatar := new(models.Avatar)
 	if err := ctx.ReadJSON(avatar); err != nil {
-		_, _ = ctx.JSON(libs.ApiResource(400, nil, err.Error()))
+		_, _ = ctx.JSON(common.ApiResource(400, nil, err.Error()))
 		return
 	}
 
@@ -105,7 +105,7 @@ func ChangeAvatar(ctx iris.Context) {
 		errs := err.(validator.ValidationErrors)
 		for _, e := range errs.Translate(validates.ValidateTrans) {
 			if len(e) > 0 {
-				_, _ = ctx.JSON(libs.ApiResource(400, nil, e))
+				_, _ = ctx.JSON(common.ApiResource(400, nil, e))
 				return
 			}
 		}
@@ -116,10 +116,10 @@ func ChangeAvatar(ctx iris.Context) {
 	user.Avatar = avatar.Avatar
 	err = models.UpdateUserById(id, user)
 	if err != nil {
-		_, _ = ctx.JSON(libs.ApiResource(400, nil, err.Error()))
+		_, _ = ctx.JSON(common.ApiResource(400, nil, err.Error()))
 		return
 	}
-	_, _ = ctx.JSON(libs.ApiResource(200, userTransform(user), "请求成功"))
+	_, _ = ctx.JSON(common.ApiResource(200, userTransform(user), "请求成功"))
 }
 
 /**
@@ -148,10 +148,10 @@ func GetUser(ctx iris.Context) {
 	}
 	user, err := models.GetUser(s)
 	if err != nil {
-		_, _ = ctx.JSON(libs.ApiResource(400, nil, err.Error()))
+		_, _ = ctx.JSON(common.ApiResource(400, nil, err.Error()))
 		return
 	}
-	_, _ = ctx.JSON(libs.ApiResource(200, userTransform(user), "操作成功"))
+	_, _ = ctx.JSON(common.ApiResource(200, userTransform(user), "操作成功"))
 }
 
 /**
@@ -172,7 +172,7 @@ func CreateUser(ctx iris.Context) {
 	ctx.StatusCode(iris.StatusOK)
 	user := new(models.User)
 	if err := ctx.ReadJSON(user); err != nil {
-		_, _ = ctx.JSON(libs.ApiResource(400, nil, err.Error()))
+		_, _ = ctx.JSON(common.ApiResource(400, nil, err.Error()))
 		return
 	}
 
@@ -181,7 +181,7 @@ func CreateUser(ctx iris.Context) {
 		errs := err.(validator.ValidationErrors)
 		for _, e := range errs.Translate(validates.ValidateTrans) {
 			if len(e) > 0 {
-				_, _ = ctx.JSON(libs.ApiResource(400, nil, e))
+				_, _ = ctx.JSON(common.ApiResource(400, nil, e))
 				return
 			}
 		}
@@ -189,15 +189,15 @@ func CreateUser(ctx iris.Context) {
 
 	err = user.CreateUser()
 	if err != nil {
-		_, _ = ctx.JSON(libs.ApiResource(400, nil, err.Error()))
+		_, _ = ctx.JSON(common.ApiResource(400, nil, err.Error()))
 		return
 	}
 
 	if user.ID == 0 {
-		_, _ = ctx.JSON(libs.ApiResource(400, nil, "操作失败"))
+		_, _ = ctx.JSON(common.ApiResource(400, nil, "操作失败"))
 		return
 	}
-	_, _ = ctx.JSON(libs.ApiResource(200, userTransform(user), "操作成功"))
+	_, _ = ctx.JSON(common.ApiResource(200, userTransform(user), "操作成功"))
 	return
 
 }
@@ -221,7 +221,7 @@ func UpdateUser(ctx iris.Context) {
 	user := new(models.User)
 
 	if err := ctx.ReadJSON(user); err != nil {
-		_, _ = ctx.JSON(libs.ApiResource(400, nil, err.Error()))
+		_, _ = ctx.JSON(common.ApiResource(400, nil, err.Error()))
 	}
 
 	err := validates.Validate.Struct(*user)
@@ -229,7 +229,7 @@ func UpdateUser(ctx iris.Context) {
 		errs := err.(validator.ValidationErrors)
 		for _, e := range errs.Translate(validates.ValidateTrans) {
 			if len(e) > 0 {
-				_, _ = ctx.JSON(libs.ApiResource(400, nil, e))
+				_, _ = ctx.JSON(common.ApiResource(400, nil, e))
 				return
 			}
 		}
@@ -237,16 +237,16 @@ func UpdateUser(ctx iris.Context) {
 
 	id, _ := ctx.Params().GetUint("id")
 	if user.Username == "username" {
-		_, _ = ctx.JSON(libs.ApiResource(400, nil, "不能编辑管理员"))
+		_, _ = ctx.JSON(common.ApiResource(400, nil, "不能编辑管理员"))
 		return
 	}
 
 	err = models.UpdateUserById(id, user)
 	if err != nil {
-		_, _ = ctx.JSON(libs.ApiResource(400, nil, err.Error()))
+		_, _ = ctx.JSON(common.ApiResource(400, nil, err.Error()))
 		return
 	}
-	_, _ = ctx.JSON(libs.ApiResource(200, userTransform(user), "操作成功"))
+	_, _ = ctx.JSON(common.ApiResource(200, userTransform(user), "操作成功"))
 }
 
 /**
@@ -267,10 +267,10 @@ func DeleteUser(ctx iris.Context) {
 
 	err := models.DeleteUser(id)
 	if err != nil {
-		_, _ = ctx.JSON(libs.ApiResource(400, nil, err.Error()))
+		_, _ = ctx.JSON(common.ApiResource(400, nil, err.Error()))
 		return
 	}
-	_, _ = ctx.JSON(libs.ApiResource(200, nil, "删除成功"))
+	_, _ = ctx.JSON(common.ApiResource(200, nil, "删除成功"))
 }
 
 /**
@@ -293,12 +293,12 @@ func GetAllUsers(ctx iris.Context) {
 	s.Fields = append(s.Fields, models.GetSearche("name", name))
 	users, count, err := models.GetAllUsers(s)
 	if err != nil {
-		_, _ = ctx.JSON(libs.ApiResource(400, nil, err.Error()))
+		_, _ = ctx.JSON(common.ApiResource(400, nil, err.Error()))
 		return
 	}
 
 	transform := usersTransform(users)
-	_, _ = ctx.JSON(libs.ApiResource(200, map[string]interface{}{"items": transform, "total": count, "limit": s.Limit}, "操作成功"))
+	_, _ = ctx.JSON(common.ApiResource(200, map[string]interface{}{"items": transform, "total": count, "limit": s.Limit}, "操作成功"))
 
 }
 

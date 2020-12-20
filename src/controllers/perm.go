@@ -2,7 +2,7 @@ package controllers
 
 import (
 	"fmt"
-	"github.com/aaronchen2k/openstc/src/libs"
+	"github.com/aaronchen2k/openstc/src/libs/common"
 	"github.com/aaronchen2k/openstc/src/models"
 	"github.com/aaronchen2k/openstc/src/transformer"
 	"github.com/aaronchen2k/openstc/src/validates"
@@ -39,11 +39,11 @@ func GetPermission(ctx iris.Context) {
 	}
 	perm, err := models.GetPermission(s)
 	if err != nil {
-		_, _ = ctx.JSON(libs.ApiResource(400, nil, err.Error()))
+		_, _ = ctx.JSON(common.ApiResource(400, nil, err.Error()))
 		return
 	}
 
-	_, _ = ctx.JSON(libs.ApiResource(200, permTransform(perm), "操作成功"))
+	_, _ = ctx.JSON(common.ApiResource(200, permTransform(perm), "操作成功"))
 }
 
 /**
@@ -67,7 +67,7 @@ func CreatePermission(ctx iris.Context) {
 	ctx.StatusCode(iris.StatusOK)
 	perm := new(models.Permission)
 	if err := ctx.ReadJSON(perm); err != nil {
-		_, _ = ctx.JSON(libs.ApiResource(400, nil, err.Error()))
+		_, _ = ctx.JSON(common.ApiResource(400, nil, err.Error()))
 		return
 	}
 	err := validates.Validate.Struct(*perm)
@@ -75,7 +75,7 @@ func CreatePermission(ctx iris.Context) {
 		errs := err.(validator.ValidationErrors)
 		for _, e := range errs.Translate(validates.ValidateTrans) {
 			if len(e) > 0 {
-				_, _ = ctx.JSON(libs.ApiResource(400, nil, e))
+				_, _ = ctx.JSON(common.ApiResource(400, nil, e))
 				return
 			}
 		}
@@ -83,15 +83,15 @@ func CreatePermission(ctx iris.Context) {
 
 	err = perm.CreatePermission()
 	if err != nil {
-		_, _ = ctx.JSON(libs.ApiResource(400, nil, fmt.Sprintf("Error create prem: %s", err.Error())))
+		_, _ = ctx.JSON(common.ApiResource(400, nil, fmt.Sprintf("Error create prem: %s", err.Error())))
 		return
 	}
 
 	if perm.ID == 0 {
-		_, _ = ctx.JSON(libs.ApiResource(400, perm, "操作失败"))
+		_, _ = ctx.JSON(common.ApiResource(400, perm, "操作失败"))
 		return
 	}
-	_, _ = ctx.JSON(libs.ApiResource(200, permTransform(perm), "操作成功"))
+	_, _ = ctx.JSON(common.ApiResource(200, permTransform(perm), "操作成功"))
 
 }
 
@@ -117,7 +117,7 @@ func UpdatePermission(ctx iris.Context) {
 	aul := new(models.Permission)
 
 	if err := ctx.ReadJSON(aul); err != nil {
-		_, _ = ctx.JSON(libs.ApiResource(400, nil, err.Error()))
+		_, _ = ctx.JSON(common.ApiResource(400, nil, err.Error()))
 		return
 	}
 	err := validates.Validate.Struct(*aul)
@@ -125,7 +125,7 @@ func UpdatePermission(ctx iris.Context) {
 		errs := err.(validator.ValidationErrors)
 		for _, e := range errs.Translate(validates.ValidateTrans) {
 			if len(e) > 0 {
-				_, _ = ctx.JSON(libs.ApiResource(400, nil, e))
+				_, _ = ctx.JSON(common.ApiResource(400, nil, e))
 				return
 			}
 		}
@@ -134,11 +134,11 @@ func UpdatePermission(ctx iris.Context) {
 	id, _ := ctx.Params().GetUint("id")
 	err = models.UpdatePermission(id, aul)
 	if err != nil {
-		_, _ = ctx.JSON(libs.ApiResource(400, nil, fmt.Sprintf("Error update prem: %s", err.Error())))
+		_, _ = ctx.JSON(common.ApiResource(400, nil, fmt.Sprintf("Error update prem: %s", err.Error())))
 		return
 	}
 
-	_, _ = ctx.JSON(libs.ApiResource(200, permTransform(aul), "操作成功"))
+	_, _ = ctx.JSON(common.ApiResource(200, permTransform(aul), "操作成功"))
 
 }
 
@@ -159,10 +159,10 @@ func DeletePermission(ctx iris.Context) {
 	id, _ := ctx.Params().GetUint("id")
 	err := models.DeletePermissionById(id)
 	if err != nil {
-		_, _ = ctx.JSON(libs.ApiResource(400, nil, err.Error()))
+		_, _ = ctx.JSON(common.ApiResource(400, nil, err.Error()))
 		return
 	}
-	_, _ = ctx.JSON(libs.ApiResource(200, nil, "删除成功"))
+	_, _ = ctx.JSON(common.ApiResource(200, nil, "删除成功"))
 }
 
 /**
@@ -182,12 +182,12 @@ func GetAllPermissions(ctx iris.Context) {
 	s := GetCommonListSearch(ctx)
 	permissions, count, err := models.GetAllPermissions(s)
 	if err != nil {
-		_, _ = ctx.JSON(libs.ApiResource(400, nil, err.Error()))
+		_, _ = ctx.JSON(common.ApiResource(400, nil, err.Error()))
 		return
 	}
 
 	transform := permsTransform(permissions)
-	_, _ = ctx.JSON(libs.ApiResource(200, map[string]interface{}{"items": transform, "total": count, "limit": s.Limit}, "操作成功"))
+	_, _ = ctx.JSON(common.ApiResource(200, map[string]interface{}{"items": transform, "total": count, "limit": s.Limit}, "操作成功"))
 
 }
 

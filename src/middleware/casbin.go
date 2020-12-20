@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/aaronchen2k/openstc/src/libs"
+	"github.com/aaronchen2k/openstc/src/libs/common"
 	"github.com/aaronchen2k/openstc/src/models"
 	"github.com/casbin/casbin/v2"
 	"github.com/fatih/color"
@@ -26,19 +27,19 @@ func (c *Casbin) ServeHTTP(ctx iris.Context) {
 	sess, err := models.GetRedisSessionV2(conn, value.Raw)
 	if err != nil {
 		models.UserTokenExpired(value.Raw)
-		_, _ = ctx.JSON(libs.ApiResource(401, nil, ""))
+		_, _ = ctx.JSON(common.ApiResource(401, nil, ""))
 		ctx.StopExecution()
 		return
 	}
 	if sess == nil {
 		ctx.StopExecution()
-		_, _ = ctx.JSON(libs.ApiResource(401, nil, ""))
+		_, _ = ctx.JSON(common.ApiResource(401, nil, ""))
 		ctx.StopExecution()
 		return
 	} else {
 		check, err := c.Check(ctx.Request(), sess.UserId)
 		if !check {
-			_, _ = ctx.JSON(libs.ApiResource(403, nil, err.Error()))
+			_, _ = ctx.JSON(common.ApiResource(403, nil, err.Error()))
 			ctx.StopExecution()
 			return
 		} else {
