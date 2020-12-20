@@ -4,14 +4,21 @@ import (
 	"fmt"
 	"github.com/aaronchen2k/openstc/src/libs/common"
 	"github.com/aaronchen2k/openstc/src/models"
-	"github.com/aaronchen2k/openstc/src/transformer"
+	"github.com/aaronchen2k/openstc/src/repo"
 	"github.com/aaronchen2k/openstc/src/validates"
-	"time"
-
 	"github.com/go-playground/validator/v10"
 	"github.com/kataras/iris/v12"
-	gf "github.com/snowlyg/gotransformer"
 )
+
+type PermController struct {
+	BaseController
+	userRepo *repo.UserRepo
+	permRepo *repo.PermRepo
+}
+
+func NewPermController(userRepo *repo.UserRepo, permRepo *repo.PermRepo) *PermController {
+	return &PermController{userRepo: userRepo, permRepo: permRepo}
+}
 
 /**
 * @api {get} /admin/permissions/:id 根据id获取权限信息
@@ -25,7 +32,7 @@ import (
 * @apiSuccess {String} data 返回数据
 * @apiPermission
  */
-func GetPermission(ctx iris.Context) {
+func (c *PermController) GetPermission(ctx iris.Context) {
 	ctx.StatusCode(iris.StatusOK)
 	id, _ := ctx.Params().GetUint("id")
 	s := &models.Search{
@@ -37,13 +44,13 @@ func GetPermission(ctx iris.Context) {
 			},
 		},
 	}
-	perm, err := models.GetPermission(s)
+	perm, err := c.permRepo.GetPermission(s)
 	if err != nil {
 		_, _ = ctx.JSON(common.ApiResource(400, nil, err.Error()))
 		return
 	}
 
-	_, _ = ctx.JSON(common.ApiResource(200, permTransform(perm), "操作成功"))
+	_, _ = ctx.JSON(common.ApiResource(200, c.permRepo.PermTransform(perm), "操作成功"))
 }
 
 /**
@@ -62,7 +69,7 @@ func GetPermission(ctx iris.Context) {
 * @apiSuccess {String} data 返回数据
 * @apiPermission null
  */
-func CreatePermission(ctx iris.Context) {
+func (c *PermController) CreatePermission(ctx iris.Context) {
 
 	ctx.StatusCode(iris.StatusOK)
 	perm := new(models.Permission)
@@ -81,7 +88,7 @@ func CreatePermission(ctx iris.Context) {
 		}
 	}
 
-	err = perm.CreatePermission()
+	err = c.permRepo.CreatePermission(perm)
 	if err != nil {
 		_, _ = ctx.JSON(common.ApiResource(400, nil, fmt.Sprintf("Error create prem: %s", err.Error())))
 		return
@@ -91,7 +98,7 @@ func CreatePermission(ctx iris.Context) {
 		_, _ = ctx.JSON(common.ApiResource(400, perm, "操作失败"))
 		return
 	}
-	_, _ = ctx.JSON(common.ApiResource(200, permTransform(perm), "操作成功"))
+	_, _ = ctx.JSON(common.ApiResource(200, c.permRepo.PermTransform(perm), "操作成功"))
 
 }
 
@@ -111,7 +118,7 @@ func CreatePermission(ctx iris.Context) {
 * @apiSuccess {String} data 返回数据
 * @apiPermission null
  */
-func UpdatePermission(ctx iris.Context) {
+func (c *PermController) UpdatePermission(ctx iris.Context) {
 
 	ctx.StatusCode(iris.StatusOK)
 	aul := new(models.Permission)
@@ -132,13 +139,13 @@ func UpdatePermission(ctx iris.Context) {
 	}
 
 	id, _ := ctx.Params().GetUint("id")
-	err = models.UpdatePermission(id, aul)
+	err = c.permRepo.UpdatePermission(id, aul)
 	if err != nil {
 		_, _ = ctx.JSON(common.ApiResource(400, nil, fmt.Sprintf("Error update prem: %s", err.Error())))
 		return
 	}
 
-	_, _ = ctx.JSON(common.ApiResource(200, permTransform(aul), "操作成功"))
+	_, _ = ctx.JSON(common.ApiResource(200, c.permRepo.PermTransform(aul), "操作成功"))
 
 }
 
@@ -154,10 +161,10 @@ func UpdatePermission(ctx iris.Context) {
 * @apiSuccess {String} data 返回数据
 * @apiPermission null
  */
-func DeletePermission(ctx iris.Context) {
+func (c *PermController) DeletePermission(ctx iris.Context) {
 	ctx.StatusCode(iris.StatusOK)
 	id, _ := ctx.Params().GetUint("id")
-	err := models.DeletePermissionById(id)
+	err := c.permRepo.DeletePermissionById(id)
 	if err != nil {
 		_, _ = ctx.JSON(common.ApiResource(400, nil, err.Error()))
 		return
@@ -177,32 +184,16 @@ func DeletePermission(ctx iris.Context) {
 * @apiSuccess {String} data 返回数据
 * @apiPermission null
  */
-func GetAllPermissions(ctx iris.Context) {
+func (c *PermController) GetAllPermissions(ctx iris.Context) {
 	ctx.StatusCode(iris.StatusOK)
-	s := GetCommonListSearch(ctx)
-	permissions, count, err := models.GetAllPermissions(s)
+	s := c.GetCommonListSearch(ctx)
+	permissions, count, err := c.permRepo.GetAllPermissions(s)
 	if err != nil {
 		_, _ = ctx.JSON(common.ApiResource(400, nil, err.Error()))
 		return
 	}
 
-	transform := permsTransform(permissions)
+	transform := c.permRepo.PermsTransform(permissions)
 	_, _ = ctx.JSON(common.ApiResource(200, map[string]interface{}{"items": transform, "total": count, "limit": s.Limit}, "操作成功"))
 
-}
-
-func permsTransform(perms []*models.Permission) []*transformer.Permission {
-	var rs []*transformer.Permission
-	for _, perm := range perms {
-		r := permTransform(perm)
-		rs = append(rs, r)
-	}
-	return rs
-}
-
-func permTransform(perm *models.Permission) *transformer.Permission {
-	r := &transformer.Permission{}
-	g := gf.NewTransform(r, perm, time.RFC3339)
-	_ = g.Transformer()
-	return r
 }

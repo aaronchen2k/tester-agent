@@ -6,8 +6,8 @@ import (
 	"flag"
 	"github.com/aaronchen2k/openstc/src/libs/common"
 	"github.com/aaronchen2k/openstc/src/models"
-	"github.com/aaronchen2k/openstc/src/seeder"
 	"github.com/aaronchen2k/openstc/src/server"
+	"github.com/aaronchen2k/openstc/src/service"
 	"github.com/aaronchen2k/openstc/tests/mock"
 	"github.com/bxcodec/faker/v3"
 	"github.com/iris-contrib/httpexpect/v2"
@@ -28,9 +28,9 @@ func TestMain(m *testing.M) {
 	flag.Parse()
 	common.InitConfig("")
 	s := server.NewServer(nil) // 初始化app
-	s.NewApp()
+	s.NewApp(nil, nil, nil, nil)
 	app = s.App
-	seeder.Run()
+	service.Run()
 
 	exitCode := m.Run()
 

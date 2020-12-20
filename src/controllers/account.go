@@ -4,11 +4,25 @@ import (
 	"github.com/aaronchen2k/openstc/src/libs/common"
 	"github.com/aaronchen2k/openstc/src/libs/redis"
 	"github.com/aaronchen2k/openstc/src/models"
+	"github.com/aaronchen2k/openstc/src/repo"
 	"github.com/aaronchen2k/openstc/src/validates"
 	"github.com/go-playground/validator/v10"
 	"github.com/iris-contrib/middleware/jwt"
 	"github.com/kataras/iris/v12"
 )
+
+type AccountController struct {
+	userRepo  *repo.UserRepo
+	tokenRepo *repo.TokenRepo
+	roleRepo  *repo.RoleRepo
+	permRepo  *repo.PermRepo
+}
+
+func NewAccountController(userRepo *repo.UserRepo,
+	roleRepo *repo.RoleRepo, permRepo *repo.PermRepo, tokenRepo *repo.TokenRepo) *AccountController {
+
+	return &AccountController{userRepo: userRepo, tokenRepo: tokenRepo, roleRepo: roleRepo, permRepo: permRepo}
+}
 
 /**
 * @api {post} /admin/login 用户登陆
@@ -24,7 +38,7 @@ import (
 * @apiSuccess {String} data 返回数据
 * @apiPermission null
  */
-func UserLogin(ctx iris.Context) {
+func (c *AccountController) UserLogin(ctx iris.Context) {
 	ctx.StatusCode(iris.StatusOK)
 	aul := new(validates.LoginRequest)
 
@@ -56,13 +70,13 @@ func UserLogin(ctx iris.Context) {
 		},
 	}
 
-	user, err := models.GetUser(s)
+	user, err := c.userRepo.GetUser(s)
 	if err != nil {
 		_, _ = ctx.JSON(common.ApiResource(400, nil, err.Error()))
 		return
 	}
 
-	response, code, msg := user.CheckLogin(aul.Password)
+	response, code, msg := c.userRepo.CheckLogin(user, aul.Password)
 
 	_, _ = ctx.JSON(common.ApiResource(code, response, msg))
 }
@@ -79,19 +93,19 @@ func UserLogin(ctx iris.Context) {
 * @apiSuccess {String} data 返回数据
 * @apiPermission null
  */
-func UserLogout(ctx iris.Context) {
+func (c *AccountController) UserLogout(ctx iris.Context) {
 
 	ctx.StatusCode(iris.StatusOK)
 	value := ctx.Values().Get("jwt").(*jwt.Token)
-	conn := redis.GetRedisClusterClient()
+	conn := redisUtils.GetRedisClusterClient()
 	defer conn.Close()
-	sess, err := models.GetRedisSessionV2(conn, value.Raw)
+	sess, err := c.tokenRepo.GetRedisSessionV2(conn, value.Raw)
 	if err != nil {
 		_, _ = ctx.JSON(common.ApiResource(400, nil, err.Error()))
 		return
 	}
 	if sess != nil {
-		if err := sess.DelUserTokenCache(conn, value.Raw); err != nil {
+		if err := c.tokenRepo.DelUserTokenCache(conn, *sess, value.Raw); err != nil {
 			_, _ = ctx.JSON(common.ApiResource(400, nil, err.Error()))
 			return
 		}
@@ -113,19 +127,19 @@ func UserLogout(ctx iris.Context) {
 * @apiSuccess {String} data 返回数据
 * @apiPermission null
  */
-func UserExpire(ctx iris.Context) {
+func (c *AccountController) UserExpire(ctx iris.Context) {
 
 	ctx.StatusCode(iris.StatusOK)
 	value := ctx.Values().Get("jwt").(*jwt.Token)
-	conn := redis.GetRedisClusterClient()
+	conn := redisUtils.GetRedisClusterClient()
 	defer conn.Close()
-	sess, err := models.GetRedisSessionV2(conn, value.Raw)
+	sess, err := c.tokenRepo.GetRedisSessionV2(conn, value.Raw)
 	if err != nil {
 		_, _ = ctx.JSON(common.ApiResource(400, nil, err.Error()))
 		return
 	}
 	if sess != nil {
-		if err := sess.UpdateUserTokenCacheExpire(conn, value.Raw); err != nil {
+		if err := c.tokenRepo.UpdateUserTokenCacheExpire(conn, *sess, value.Raw); err != nil {
 			_, _ = ctx.JSON(common.ApiResource(400, nil, err.Error()))
 			return
 		}

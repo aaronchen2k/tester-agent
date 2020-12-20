@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"github.com/aaronchen2k/openstc/src/libs/common"
 	redisUtils "github.com/aaronchen2k/openstc/src/libs/redis"
-	"github.com/aaronchen2k/openstc/src/models"
+	"github.com/aaronchen2k/openstc/src/repo"
 	"github.com/casbin/casbin/v2"
 	"github.com/fatih/color"
 	"github.com/iris-contrib/middleware/jwt"
@@ -13,8 +13,14 @@ import (
 	"net/http"
 )
 
-func New(e *casbin.Enforcer) *Casbin {
-	return &Casbin{enforcer: e}
+func New(enforcer *casbin.Enforcer, tokenRepo *repo.TokenRepo) *Casbin {
+	return &Casbin{enforcer: enforcer, tokenRepo: tokenRepo}
+}
+
+// Casbin is the auth services which contains the casbin enforcer.
+type Casbin struct {
+	enforcer  *casbin.Enforcer
+	tokenRepo *repo.TokenRepo
 }
 
 func (c *Casbin) ServeHTTP(ctx iris.Context) {
@@ -24,9 +30,9 @@ func (c *Casbin) ServeHTTP(ctx iris.Context) {
 	conn := redisUtils.GetRedisClusterClient()
 	defer conn.Close()
 
-	sess, err := models.GetRedisSessionV2(conn, value.Raw)
+	sess, err := c.tokenRepo.GetRedisSessionV2(conn, value.Raw)
 	if err != nil {
-		models.UserTokenExpired(value.Raw)
+		c.tokenRepo.UserTokenExpired(value.Raw)
 		_, _ = ctx.JSON(common.ApiResource(401, nil, ""))
 		ctx.StopExecution()
 		return
@@ -48,11 +54,6 @@ func (c *Casbin) ServeHTTP(ctx iris.Context) {
 	}
 
 	ctx.Next()
-}
-
-// Casbin is the auth services which contains the casbin enforcer.
-type Casbin struct {
-	enforcer *casbin.Enforcer
 }
 
 // Check checks the username, request's method and path and

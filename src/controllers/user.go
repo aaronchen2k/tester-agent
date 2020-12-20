@@ -3,6 +3,7 @@ package controllers
 import (
 	"github.com/aaronchen2k/openstc/src/libs/common"
 	"github.com/aaronchen2k/openstc/src/models"
+	"github.com/aaronchen2k/openstc/src/repo"
 	"github.com/aaronchen2k/openstc/src/transformer"
 	"github.com/aaronchen2k/openstc/src/validates"
 	"strconv"
@@ -12,6 +13,16 @@ import (
 	"github.com/kataras/iris/v12"
 	gf "github.com/snowlyg/gotransformer"
 )
+
+type UserController struct {
+	BaseController
+	userRepo *repo.UserRepo
+	roleRepo *repo.RoleRepo
+}
+
+func NewUserController(userRepo *repo.UserRepo, roleRepo *repo.RoleRepo) *UserController {
+	return &UserController{userRepo: userRepo, roleRepo: roleRepo}
+}
 
 /**
 * @api {get} /admin/profile 获取登陆用户信息
@@ -25,7 +36,7 @@ import (
 * @apiSuccess {String} data 返回数据
 * @apiPermission 登陆用户
  */
-func GetProfile(ctx iris.Context) {
+func (c *UserController) GetProfile(ctx iris.Context) {
 	ctx.StatusCode(iris.StatusOK)
 	sess := ctx.Values().Get("sess").(*models.RedisSessionV2)
 	id := uint(common.ParseInt(sess.UserId, 10))
@@ -38,12 +49,12 @@ func GetProfile(ctx iris.Context) {
 			},
 		},
 	}
-	user, err := models.GetUser(s)
+	user, err := c.userRepo.GetUser(s)
 	if err != nil {
 		_, _ = ctx.JSON(common.ApiResource(400, nil, err.Error()))
 		return
 	}
-	_, _ = ctx.JSON(common.ApiResource(200, userTransform(user), "请求成功"))
+	_, _ = ctx.JSON(common.ApiResource(200, c.userTransform(user), "请求成功"))
 }
 
 /**
@@ -58,7 +69,7 @@ func GetProfile(ctx iris.Context) {
 * @apiSuccess {String} data 返回数据
 * @apiPermission 登陆用户
  */
-func GetAdminInfo(ctx iris.Context) {
+func (c *UserController) GetAdminInfo(ctx iris.Context) {
 	ctx.StatusCode(iris.StatusOK)
 	s := &models.Search{
 		Fields: []*models.Filed{
@@ -69,7 +80,7 @@ func GetAdminInfo(ctx iris.Context) {
 			},
 		},
 	}
-	user, err := models.GetUser(s)
+	user, err := c.userRepo.GetUser(s)
 	if err != nil {
 		_, _ = ctx.JSON(common.ApiResource(400, nil, err.Error()))
 		return
@@ -89,7 +100,7 @@ func GetAdminInfo(ctx iris.Context) {
 * @apiSuccess {String} data 返回数据
 * @apiPermission 登陆用户
  */
-func ChangeAvatar(ctx iris.Context) {
+func (c *UserController) ChangeAvatar(ctx iris.Context) {
 	ctx.StatusCode(iris.StatusOK)
 	sess := ctx.Values().Get("sess").(*models.RedisSessionV2)
 	id := uint(common.ParseInt(sess.UserId, 10))
@@ -111,15 +122,15 @@ func ChangeAvatar(ctx iris.Context) {
 		}
 	}
 
-	user := models.NewUser()
+	user := c.userRepo.NewUser()
 	user.ID = id
 	user.Avatar = avatar.Avatar
-	err = models.UpdateUserById(id, user)
+	err = c.userRepo.UpdateUserById(id, user)
 	if err != nil {
 		_, _ = ctx.JSON(common.ApiResource(400, nil, err.Error()))
 		return
 	}
-	_, _ = ctx.JSON(common.ApiResource(200, userTransform(user), "请求成功"))
+	_, _ = ctx.JSON(common.ApiResource(200, c.userTransform(user), "请求成功"))
 }
 
 /**
@@ -134,7 +145,7 @@ func ChangeAvatar(ctx iris.Context) {
 * @apiSuccess {String} data 返回数据
 * @apiPermission 登陆用户
  */
-func GetUser(ctx iris.Context) {
+func (c *UserController) GetUser(ctx iris.Context) {
 	ctx.StatusCode(iris.StatusOK)
 	id, _ := ctx.Params().GetUint("id")
 	s := &models.Search{
@@ -146,12 +157,12 @@ func GetUser(ctx iris.Context) {
 			},
 		},
 	}
-	user, err := models.GetUser(s)
+	user, err := c.userRepo.GetUser(s)
 	if err != nil {
 		_, _ = ctx.JSON(common.ApiResource(400, nil, err.Error()))
 		return
 	}
-	_, _ = ctx.JSON(common.ApiResource(200, userTransform(user), "操作成功"))
+	_, _ = ctx.JSON(common.ApiResource(200, c.userTransform(user), "操作成功"))
 }
 
 /**
@@ -168,7 +179,7 @@ func GetUser(ctx iris.Context) {
 * @apiSuccess {String} data 返回数据
 * @apiPermission null
  */
-func CreateUser(ctx iris.Context) {
+func (c *UserController) CreateUser(ctx iris.Context) {
 	ctx.StatusCode(iris.StatusOK)
 	user := new(models.User)
 	if err := ctx.ReadJSON(user); err != nil {
@@ -187,7 +198,7 @@ func CreateUser(ctx iris.Context) {
 		}
 	}
 
-	err = user.CreateUser()
+	err = c.userRepo.CreateUser(user)
 	if err != nil {
 		_, _ = ctx.JSON(common.ApiResource(400, nil, err.Error()))
 		return
@@ -197,7 +208,7 @@ func CreateUser(ctx iris.Context) {
 		_, _ = ctx.JSON(common.ApiResource(400, nil, "操作失败"))
 		return
 	}
-	_, _ = ctx.JSON(common.ApiResource(200, userTransform(user), "操作成功"))
+	_, _ = ctx.JSON(common.ApiResource(200, c.userTransform(user), "操作成功"))
 	return
 
 }
@@ -216,7 +227,7 @@ func CreateUser(ctx iris.Context) {
 * @apiSuccess {String} data 返回数据
 * @apiPermission null
  */
-func UpdateUser(ctx iris.Context) {
+func (c *UserController) UpdateUser(ctx iris.Context) {
 	ctx.StatusCode(iris.StatusOK)
 	user := new(models.User)
 
@@ -241,12 +252,12 @@ func UpdateUser(ctx iris.Context) {
 		return
 	}
 
-	err = models.UpdateUserById(id, user)
+	err = c.userRepo.UpdateUserById(id, user)
 	if err != nil {
 		_, _ = ctx.JSON(common.ApiResource(400, nil, err.Error()))
 		return
 	}
-	_, _ = ctx.JSON(common.ApiResource(200, userTransform(user), "操作成功"))
+	_, _ = ctx.JSON(common.ApiResource(200, c.userTransform(user), "操作成功"))
 }
 
 /**
@@ -261,11 +272,11 @@ func UpdateUser(ctx iris.Context) {
 * @apiSuccess {String} data 返回数据
 * @apiPermission null
  */
-func DeleteUser(ctx iris.Context) {
+func (c *UserController) DeleteUser(ctx iris.Context) {
 	ctx.StatusCode(iris.StatusOK)
 	id, _ := ctx.Params().GetUint("id")
 
-	err := models.DeleteUser(id)
+	err := c.userRepo.DeleteUser(id)
 	if err != nil {
 		_, _ = ctx.JSON(common.ApiResource(400, nil, err.Error()))
 		return
@@ -285,38 +296,38 @@ func DeleteUser(ctx iris.Context) {
 * @apiSuccess {String} data 返回数据
 * @apiPermission null
  */
-func GetAllUsers(ctx iris.Context) {
+func (c *UserController) GetAllUsers(ctx iris.Context) {
 	ctx.StatusCode(iris.StatusOK)
-	s := GetCommonListSearch(ctx)
+	s := c.GetCommonListSearch(ctx)
 	name := ctx.FormValue("name")
 
-	s.Fields = append(s.Fields, models.GetSearche("name", name))
-	users, count, err := models.GetAllUsers(s)
+	s.Fields = append(s.Fields, c.userRepo.GetSearche("name", name))
+	users, count, err := c.userRepo.GetAllUsers(s)
 	if err != nil {
 		_, _ = ctx.JSON(common.ApiResource(400, nil, err.Error()))
 		return
 	}
 
-	transform := usersTransform(users)
+	transform := c.usersTransform(users)
 	_, _ = ctx.JSON(common.ApiResource(200, map[string]interface{}{"items": transform, "total": count, "limit": s.Limit}, "操作成功"))
 
 }
 
-func usersTransform(users []*models.User) []*transformer.User {
+func (c *UserController) usersTransform(users []*models.User) []*transformer.User {
 	var us []*transformer.User
 	for _, user := range users {
-		u := userTransform(user)
+		u := c.userTransform(user)
 		us = append(us, u)
 	}
 	return us
 }
 
-func userTransform(user *models.User) *transformer.User {
+func (c *UserController) userTransform(user *models.User) *transformer.User {
 	u := &transformer.User{}
 	g := gf.NewTransform(u, user, time.RFC3339)
 	_ = g.Transformer()
 
-	roleIds := models.GetRolesForUser(user.ID)
+	roleIds := c.userRepo.GetRolesForUser(user.ID)
 	var ris []int
 	for _, roleId := range roleIds {
 		ri, _ := strconv.Atoi(roleId)
@@ -331,9 +342,9 @@ func userTransform(user *models.User) *transformer.User {
 			},
 		},
 	}
-	roles, _, err := models.GetAllRoles(s)
+	roles, _, err := c.roleRepo.GetAllRoles(s)
 	if err == nil {
-		u.Roles = rolesTransform(roles)
+		u.Roles = c.roleRepo.RolesTransform(roles)
 	}
 	return u
 }

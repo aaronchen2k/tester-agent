@@ -3,14 +3,24 @@ package controllers
 import (
 	"github.com/aaronchen2k/openstc/src/libs/common"
 	"github.com/aaronchen2k/openstc/src/models"
-	"github.com/aaronchen2k/openstc/src/transformer"
+	"github.com/aaronchen2k/openstc/src/repo"
 	"github.com/aaronchen2k/openstc/src/validates"
-	"time"
 
 	"github.com/go-playground/validator/v10"
 	"github.com/kataras/iris/v12"
-	gf "github.com/snowlyg/gotransformer"
 )
+
+type RoleController struct {
+	BaseController
+
+	userRepo *repo.UserRepo
+	roleRepo *repo.RoleRepo
+	permRepo *repo.PermRepo
+}
+
+func NewRoleController(userRepo *repo.UserRepo, roleRepo *repo.RoleRepo, permRepo *repo.PermRepo) *RoleController {
+	return &RoleController{userRepo: userRepo, roleRepo: roleRepo, permRepo: permRepo}
+}
 
 /**
 * @api {get} /admin/roles/:id 根据id获取角色信息
@@ -24,7 +34,7 @@ import (
 * @apiSuccess {String} data 返回数据
 * @apiPermission
  */
-func GetRole(ctx iris.Context) {
+func (c *RoleController) GetRole(ctx iris.Context) {
 	ctx.StatusCode(iris.StatusOK)
 	id, _ := ctx.Params().GetUint("id")
 	s := &models.Search{
@@ -36,14 +46,14 @@ func GetRole(ctx iris.Context) {
 			},
 		},
 	}
-	role, err := models.GetRole(s)
+	role, err := c.roleRepo.GetRole(s)
 	if err != nil {
 		_, _ = ctx.JSON(common.ApiResource(400, nil, err.Error()))
 		return
 	}
 
-	rr := roleTransform(role)
-	rr.Perms = permsTransform(role.RolePermissions())
+	rr := c.roleRepo.RoleTransform(role)
+	rr.Perms = c.permRepo.PermsTransform(c.roleRepo.RolePermissions(role))
 	_, _ = ctx.JSON(common.ApiResource(200, rr, "操作成功"))
 }
 
@@ -63,7 +73,7 @@ func GetRole(ctx iris.Context) {
 * @apiSuccess {String} data 返回数据
 * @apiPermission null
  */
-func CreateRole(ctx iris.Context) {
+func (c *RoleController) CreateRole(ctx iris.Context) {
 
 	ctx.StatusCode(iris.StatusOK)
 	role := new(models.Role)
@@ -84,7 +94,7 @@ func CreateRole(ctx iris.Context) {
 		}
 	}
 
-	err = role.CreateRole()
+	err = c.roleRepo.CreateRole(role)
 	if err != nil {
 		_, _ = ctx.JSON(common.ApiResource(400, nil, err.Error()))
 		return
@@ -93,7 +103,7 @@ func CreateRole(ctx iris.Context) {
 		_, _ = ctx.JSON(common.ApiResource(400, nil, "操作失败"))
 		return
 	}
-	_, _ = ctx.JSON(common.ApiResource(200, roleTransform(role), "操作成功"))
+	_, _ = ctx.JSON(common.ApiResource(200, c.roleRepo.RoleTransform(role), "操作成功"))
 
 }
 
@@ -113,7 +123,7 @@ func CreateRole(ctx iris.Context) {
 * @apiSuccess {String} data 返回数据
 * @apiPermission null
  */
-func UpdateRole(ctx iris.Context) {
+func (c *RoleController) UpdateRole(ctx iris.Context) {
 
 	ctx.StatusCode(iris.StatusOK)
 	role := new(models.Role)
@@ -134,12 +144,12 @@ func UpdateRole(ctx iris.Context) {
 	}
 
 	id, _ := ctx.Params().GetUint("id")
-	err = models.UpdateRole(id, role)
+	err = c.roleRepo.UpdateRole(id, role)
 	if err != nil {
 		_, _ = ctx.JSON(common.ApiResource(400, nil, err.Error()))
 		return
 	}
-	_, _ = ctx.JSON(common.ApiResource(200, roleTransform(role), "操作成功"))
+	_, _ = ctx.JSON(common.ApiResource(200, c.roleRepo.RoleTransform(role), "操作成功"))
 
 }
 
@@ -155,11 +165,11 @@ func UpdateRole(ctx iris.Context) {
 * @apiSuccess {String} data 返回数据
 * @apiPermission null
  */
-func DeleteRole(ctx iris.Context) {
+func (c *RoleController) DeleteRole(ctx iris.Context) {
 	ctx.StatusCode(iris.StatusOK)
 	id, _ := ctx.Params().GetUint("id")
 
-	err := models.DeleteRoleById(id)
+	err := c.roleRepo.DeleteRoleById(id)
 	if err != nil {
 		_, _ = ctx.JSON(common.ApiResource(400, nil, err.Error()))
 		return
@@ -180,32 +190,15 @@ func DeleteRole(ctx iris.Context) {
 * @apiSuccess {String} data 返回数据
 * @apiPermission null
  */
-func GetAllRoles(ctx iris.Context) {
+func (c *RoleController) GetAllRoles(ctx iris.Context) {
 	ctx.StatusCode(iris.StatusOK)
-	s := GetCommonListSearch(ctx)
-	roles, count, err := models.GetAllRoles(s)
+	s := c.GetCommonListSearch(ctx)
+	roles, count, err := c.roleRepo.GetAllRoles(s)
 	if err != nil {
 		_, _ = ctx.JSON(common.ApiResource(400, nil, err.Error()))
 		return
 	}
 
-	transform := rolesTransform(roles)
+	transform := c.roleRepo.RolesTransform(roles)
 	_, _ = ctx.JSON(common.ApiResource(200, map[string]interface{}{"items": transform, "total": count, "limit": s.Limit}, "操作成功"))
-}
-
-func rolesTransform(roles []*models.Role) []*transformer.Role {
-	var rs []*transformer.Role
-	for _, role := range roles {
-		r := roleTransform(role)
-		rs = append(rs, r)
-	}
-	return rs
-}
-
-func roleTransform(role *models.Role) *transformer.Role {
-	r := &transformer.Role{}
-	g := gf.NewTransform(r, role, time.RFC3339)
-	_ = g.Transformer()
-	r.Perms = permsTransform(role.RolePermissions())
-	return r
 }
