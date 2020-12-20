@@ -26,7 +26,7 @@ func NewUserRepo(tokenRepo *TokenRepo) *UserRepo {
 	return &UserRepo{tokenRepo: tokenRepo}
 }
 
-func (role *UserRepo) NewUser() *models.User {
+func (r *UserRepo) NewUser() *models.User {
 	return &models.User{
 		Model: gorm.Model{
 			CreatedAt: time.Now(),

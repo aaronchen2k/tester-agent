@@ -2,3 +2,4 @@
 /res/res.go
 *.log
 /openstc.db
+/bin/

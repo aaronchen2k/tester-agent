@@ -136,14 +136,14 @@ func (r *BaseRepo) FoundByWhere(fields []*models.Filed) func(db *gorm.DB) *gorm.
 func (r *BaseRepo) GetRelations(relation string, fs map[string]interface{}) []*models.Relate {
 	var relates []*models.Relate
 	if len(relation) > 0 {
-		res := strings.Split(relation, ";")
-		for _, re := range res {
+		arr := strings.Split(relation, ";")
+		for _, item := range arr {
 			relate := &models.Relate{
-				Value: re,
+				Value: item,
 			}
 			// 增加关联过滤
 			for key, f := range fs {
-				if key == re {
+				if key == item {
 					relate.Func = f
 				}
 			}
@@ -155,8 +155,8 @@ func (r *BaseRepo) GetRelations(relation string, fs map[string]interface{}) []*m
 	return relates
 }
 
-// GetSearche 转换前端查询关系为 *Filed
-func (r *BaseRepo) GetSearche(key, search string) *models.Filed {
+// GetSearch 转换前端查询关系为 *Filed
+func (r *BaseRepo) GetSearch(key, search string) *models.Filed {
 	if len(search) > 0 {
 		if strings.Contains(search, ":") {
 			searches := strings.Split(search, ":")

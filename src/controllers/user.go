@@ -301,7 +301,7 @@ func (c *UserController) GetAllUsers(ctx iris.Context) {
 	s := c.GetCommonListSearch(ctx)
 	name := ctx.FormValue("name")
 
-	s.Fields = append(s.Fields, c.userRepo.GetSearche("name", name))
+	s.Fields = append(s.Fields, c.userRepo.GetSearch("name", name))
 	users, count, err := c.userRepo.GetAllUsers(s)
 	if err != nil {
 		_, _ = ctx.JSON(common.ApiResource(400, nil, err.Error()))
