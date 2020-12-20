@@ -1,7 +1,3 @@
-*.dll
-*.db
-*.exe
-*.txt
-*.log
-
 /.idea/
+/res/res.go
+*.log
