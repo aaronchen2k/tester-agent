@@ -1,4 +1,4 @@
-package casbin
+package casbinUtils
 
 import (
 	"errors"

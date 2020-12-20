@@ -3,7 +3,7 @@ package models
 import (
 	"errors"
 	"fmt"
-	"github.com/aaronchen2k/openstc/src/libs"
+	"github.com/aaronchen2k/openstc/src/libs/casbin"
 	"github.com/aaronchen2k/openstc/src/libs/config"
 	db2 "github.com/aaronchen2k/openstc/src/libs/db"
 	gormadapter "github.com/casbin/gorm-adapter/v2"
@@ -83,7 +83,7 @@ func Update(v, d interface{}, id uint) error {
 
 // GetRolesForUser 获取角色
 func GetRolesForUser(uid uint) []string {
-	uids, err := libs.Enforcer.GetRolesForUser(strconv.FormatUint(uint64(uid), 10))
+	uids, err := casbinUtils.Enforcer.GetRolesForUser(strconv.FormatUint(uint64(uid), 10))
 	if err != nil {
 		color.Red(fmt.Sprintf("GetRolesForUser 错误: %v", err))
 		return []string{}
@@ -234,7 +234,7 @@ func Paginate(page, pageSize int) func(db *gorm.DB) *gorm.DB {
 
 // GetPermissionsForUser 获取角色权限
 func GetPermissionsForUser(uid uint) [][]string {
-	return libs.Enforcer.GetPermissionsForUser(strconv.FormatUint(uint64(uid), 10))
+	return casbinUtils.Enforcer.GetPermissionsForUser(strconv.FormatUint(uint64(uid), 10))
 }
 
 // DropTables 删除数据表

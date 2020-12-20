@@ -2,7 +2,7 @@ package models
 
 import (
 	"fmt"
-	"github.com/aaronchen2k/openstc/src/libs"
+	redisUtils "github.com/aaronchen2k/openstc/src/libs/redis"
 	"github.com/gomodule/redigo/redis"
 	"github.com/pkg/errors"
 	"strings"
@@ -57,7 +57,7 @@ type RedisSessionV2 struct {
 	Scope        uint64 `json:"scope" redis:"scope"`
 }
 
-func GetRedisSessionV2(conn *libs.RedisCluster, token string) (*RedisSessionV2, error) {
+func GetRedisSessionV2(conn *redisUtils.RedisCluster, token string) (*RedisSessionV2, error) {
 	sKey := ZXW_SESSION_TOKEN_PREFIX + token
 	if !conn.Exists(sKey) {
 		return nil, ERR_TOKEN_INVALID
@@ -69,7 +69,7 @@ func GetRedisSessionV2(conn *libs.RedisCluster, token string) (*RedisSessionV2, 
 	return pp, nil
 }
 
-func loadRedisHashToStruct(conn *libs.RedisCluster, sKey string, pst interface{}) error {
+func loadRedisHashToStruct(conn *redisUtils.RedisCluster, sKey string, pst interface{}) error {
 	vals, err := redis.Values(conn.HGetAll(sKey))
 	if err != nil {
 		return err
@@ -82,7 +82,7 @@ func loadRedisHashToStruct(conn *libs.RedisCluster, sKey string, pst interface{}
 }
 
 func isUserTokenOver(userId string) bool {
-	conn := libs.GetRedisClusterClient()
+	conn := redisUtils.GetRedisClusterClient()
 	defer conn.Close()
 	if getUserTokenCount(conn, userId) >= getUserTokenMaxCount(conn) {
 		return true
@@ -90,7 +90,7 @@ func isUserTokenOver(userId string) bool {
 	return false
 }
 
-func getUserTokenCount(conn *libs.RedisCluster, userId string) int {
+func getUserTokenCount(conn *redisUtils.RedisCluster, userId string) int {
 	count, err := redis.Int(conn.Scard(ZXW_SESSION_USER_PREFIX + userId))
 	if err != nil {
 		fmt.Println(fmt.Sprintf("getUserTokenCount error :%+v", err))
@@ -99,7 +99,7 @@ func getUserTokenCount(conn *libs.RedisCluster, userId string) int {
 	return count
 }
 
-func getUserTokenMaxCount(conn *libs.RedisCluster) int {
+func getUserTokenMaxCount(conn *redisUtils.RedisCluster) int {
 	count, err := redis.Int(conn.GetKey(ZXW_SESSION_USER_MAX_TOKEN_PREFIX))
 	if err != nil {
 		return ZXW_SESSION_USER_MAX_TOKEN_DEFAULT
@@ -108,7 +108,7 @@ func getUserTokenMaxCount(conn *libs.RedisCluster) int {
 }
 
 func UserTokenExpired(token string) {
-	conn := libs.GetRedisClusterClient()
+	conn := redisUtils.GetRedisClusterClient()
 	defer conn.Close()
 
 	uKey := ZXW_SESSION_BIND_USER_PREFIX + token
@@ -141,7 +141,7 @@ func getUserScope(userType string) uint64 {
 	return NoneScope
 }
 
-func (r *RedisSessionV2) ToCache(conn *libs.RedisCluster, token string) error {
+func (r *RedisSessionV2) ToCache(conn *redisUtils.RedisCluster, token string) error {
 	sKey := ZXW_SESSION_TOKEN_PREFIX + token
 
 	if _, err := conn.HMSet(sKey,
@@ -158,7 +158,7 @@ func (r *RedisSessionV2) ToCache(conn *libs.RedisCluster, token string) error {
 	return nil
 }
 
-func (r *RedisSessionV2) SyncUserTokenCache(conn *libs.RedisCluster, token string) error {
+func (r *RedisSessionV2) SyncUserTokenCache(conn *redisUtils.RedisCluster, token string) error {
 	sKey := ZXW_SESSION_USER_PREFIX + token
 	if _, err := conn.Sadd(sKey, token); err != nil {
 		fmt.Println(fmt.Sprintf("conn.SyncUserTokenCache1 error :%+v", err))
@@ -173,7 +173,7 @@ func (r *RedisSessionV2) SyncUserTokenCache(conn *libs.RedisCluster, token strin
 	return nil
 }
 
-func (r *RedisSessionV2) UpdateUserTokenCacheExpire(conn *libs.RedisCluster, token string) error {
+func (r *RedisSessionV2) UpdateUserTokenCacheExpire(conn *redisUtils.RedisCluster, token string) error {
 	if _, err := conn.Expire(ZXW_SESSION_TOKEN_PREFIX+token, int(r.GetTokenExpire().Seconds())); err != nil {
 		fmt.Println(fmt.Sprintf("conn.UpdateUserTokenCacheExpire error :%+v", err))
 		return err
@@ -193,7 +193,7 @@ func (r *RedisSessionV2) GetTokenExpire() time.Duration {
 	return timeout
 }
 
-func (r *RedisSessionV2) DelUserTokenCache(conn *libs.RedisCluster, token string) error {
+func (r *RedisSessionV2) DelUserTokenCache(conn *redisUtils.RedisCluster, token string) error {
 	sKey := ZXW_SESSION_USER_PREFIX + r.UserId
 	_, err := conn.Do("SREM", sKey, token)
 	if err != nil {
@@ -208,7 +208,7 @@ func (r *RedisSessionV2) DelUserTokenCache(conn *libs.RedisCluster, token string
 
 	return nil
 }
-func (r *RedisSessionV2) DelTokenCache(conn *libs.RedisCluster, token string) error {
+func (r *RedisSessionV2) DelTokenCache(conn *redisUtils.RedisCluster, token string) error {
 	sKey2 := ZXW_SESSION_BIND_USER_PREFIX + token
 	_, err := conn.Del(sKey2)
 	if err != nil {
@@ -225,7 +225,7 @@ func (r *RedisSessionV2) DelTokenCache(conn *libs.RedisCluster, token string) er
 	return nil
 }
 
-func (r *RedisSessionV2) CleanUserTokenCache(conn *libs.RedisCluster) error {
+func (r *RedisSessionV2) CleanUserTokenCache(conn *redisUtils.RedisCluster) error {
 	sKey := ZXW_SESSION_USER_PREFIX + r.UserId
 	allTokens, err := redis.Strings(conn.Members(sKey))
 	if err != nil {

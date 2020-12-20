@@ -2,7 +2,7 @@ package routes
 
 import (
 	"github.com/aaronchen2k/openstc/src/controllers"
-	"github.com/aaronchen2k/openstc/src/libs"
+	"github.com/aaronchen2k/openstc/src/libs/casbin"
 	"github.com/aaronchen2k/openstc/src/libs/config"
 	"github.com/aaronchen2k/openstc/src/middleware"
 	"github.com/kataras/iris/v12"
@@ -24,7 +24,7 @@ func App(api *iris.Application) {
 			v1.Post("/admin/login", controllers.UserLogin)
 
 			v1.PartyFunc("/admin", func(admin iris.Party) {
-				casbinMiddleware := middleware.New(libs.Enforcer)                    //casbin for gorm                                                   // <- IMPORTANT, register the middleware.
+				casbinMiddleware := middleware.New(casbinUtils.Enforcer)             //casbin for gorm                                                   // <- IMPORTANT, register the middleware.
 				admin.Use(middleware.JwtHandler().Serve, casbinMiddleware.ServeHTTP) //登录验证
 				admin.Post("/logout", controllers.UserLogout).Name = "退出"
 				admin.Get("/expire", controllers.UserExpire).Name = "刷新 token"

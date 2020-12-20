@@ -2,7 +2,7 @@ package models
 
 import (
 	"fmt"
-	"github.com/aaronchen2k/openstc/src/libs"
+	"github.com/aaronchen2k/openstc/src/libs/casbin"
 	"github.com/aaronchen2k/openstc/src/libs/db"
 	"strconv"
 	"time"
@@ -97,13 +97,13 @@ func (r *Role) CreateRole() error {
 func addPerms(permIds []uint, role *Role) {
 	if len(permIds) > 0 {
 		roleId := strconv.FormatUint(uint64(role.ID), 10)
-		if _, err := libs.Enforcer.DeletePermissionsForUser(roleId); err != nil {
+		if _, err := casbinUtils.Enforcer.DeletePermissionsForUser(roleId); err != nil {
 			color.Red(fmt.Sprintf("AppendPermsErr:%s \n", err))
 		}
 		var perms []Permission
 		db.Db.Where("id in (?)", permIds).Find(&perms)
 		for _, perm := range perms {
-			if _, err := libs.Enforcer.AddPolicy(roleId, perm.Name, perm.Act); err != nil {
+			if _, err := casbinUtils.Enforcer.AddPolicy(roleId, perm.Name, perm.Act); err != nil {
 				color.Red(fmt.Sprintf("AddPolicy:%s \n", err))
 			}
 		}

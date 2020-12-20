@@ -3,8 +3,8 @@ package common
 import (
 	"fmt"
 	"github.com/aaronchen2k/openstc-agent/res"
-	commonUtils "github.com/aaronchen2k/openstc-common/src/utils/common"
-	logUtils "github.com/aaronchen2k/openstc-common/src/utils/log"
+	"github.com/aaronchen2k/openstc-common/src/libs/common"
+	"github.com/aaronchen2k/openstc-common/src/libs/log"
 	"github.com/fatih/color"
 	"io/ioutil"
 	"os"
@@ -15,12 +15,12 @@ var (
 )
 
 func PrintUsage() {
-	logUtils.PrintToWithColor("Usage: ", color.FgCyan)
+	_logUtils.PrintToWithColor("Usage: ", color.FgCyan)
 
 	usage := ReadResData(usageFile)
 
 	app := "openstc-agent"
-	if commonUtils.IsWin() {
+	if _commonUtils.IsWin() {
 		app += ".exe"
 	}
 	usage = fmt.Sprintf(usage, app)
@@ -28,7 +28,7 @@ func PrintUsage() {
 }
 
 func ReadResData(path string) string {
-	isRelease := commonUtils.IsRelease()
+	isRelease := _commonUtils.IsRelease()
 
 	var jsonStr string
 	if isRelease {
@@ -40,7 +40,7 @@ func ReadResData(path string) string {
 			jsonStr = "fail to read " + path
 		} else {
 			str := string(buf)
-			jsonStr = commonUtils.RemoveBlankLine(str)
+			jsonStr = _commonUtils.RemoveBlankLine(str)
 		}
 	}
 

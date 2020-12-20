@@ -2,9 +2,10 @@ package server
 
 import (
 	"fmt"
-	"github.com/aaronchen2k/openstc/src/libs"
+	"github.com/aaronchen2k/openstc/src/libs/casbin"
 	"github.com/aaronchen2k/openstc/src/libs/config"
 	"github.com/aaronchen2k/openstc/src/libs/db"
+	redisUtils "github.com/aaronchen2k/openstc/src/libs/redis"
 	"github.com/aaronchen2k/openstc/src/models"
 	"github.com/aaronchen2k/openstc/src/routes"
 	"github.com/kataras/iris/v12"
@@ -57,8 +58,8 @@ func (s *Server) NewApp() {
 	//}
 
 	db.InitDb()
-	libs.InitCasbin()
-	libs.InitRedisCluster(config.GetRedisUris(), config.Config.Redis.Pwd)
+	casbinUtils.InitCasbin()
+	redisUtils.InitRedisCluster(config.GetRedisUris(), config.Config.Redis.Pwd)
 	models.Migrate()
 
 	//iris.RegisterOnInterrupt(func() {

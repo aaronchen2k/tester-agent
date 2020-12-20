@@ -3,8 +3,8 @@ package middleware
 import (
 	"errors"
 	"fmt"
-	"github.com/aaronchen2k/openstc/src/libs"
 	"github.com/aaronchen2k/openstc/src/libs/common"
+	redisUtils "github.com/aaronchen2k/openstc/src/libs/redis"
 	"github.com/aaronchen2k/openstc/src/models"
 	"github.com/casbin/casbin/v2"
 	"github.com/fatih/color"
@@ -21,7 +21,7 @@ func (c *Casbin) ServeHTTP(ctx iris.Context) {
 	ctx.StatusCode(http.StatusOK)
 	value := ctx.Values().Get("jwt").(*jwt.Token)
 
-	conn := libs.GetRedisClusterClient()
+	conn := redisUtils.GetRedisClusterClient()
 	defer conn.Close()
 
 	sess, err := models.GetRedisSessionV2(conn, value.Raw)

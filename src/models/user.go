@@ -3,9 +3,10 @@ package models
 import (
 	"errors"
 	"fmt"
-	"github.com/aaronchen2k/openstc/src/libs"
+	"github.com/aaronchen2k/openstc/src/libs/casbin"
 	"github.com/aaronchen2k/openstc/src/libs/common"
 	"github.com/aaronchen2k/openstc/src/libs/db"
+	redisUtils "github.com/aaronchen2k/openstc/src/libs/redis"
 	"strconv"
 	"time"
 
@@ -124,13 +125,13 @@ func UpdateUserById(id uint, nu *User) error {
 func addRoles(user *User) {
 	if len(user.RoleIds) > 0 {
 		userId := strconv.FormatUint(uint64(user.ID), 10)
-		if _, err := libs.Enforcer.DeleteRolesForUser(userId); err != nil {
+		if _, err := casbinUtils.Enforcer.DeleteRolesForUser(userId); err != nil {
 			color.Red(fmt.Sprintf("CreateUserErr:%s \n ", err))
 		}
 
 		for _, roleId := range user.RoleIds {
 			roleId := strconv.FormatUint(uint64(roleId), 10)
-			if _, err := libs.Enforcer.AddRoleForUser(userId, roleId); err != nil {
+			if _, err := casbinUtils.Enforcer.AddRoleForUser(userId, roleId); err != nil {
 				color.Red(fmt.Sprintf("CreateUserErr:%s \n ", err))
 			}
 		}
@@ -160,7 +161,7 @@ func (u *User) CheckLogin(password string) (*Token, int64, string) {
 				CreationDate: time.Now().Unix(),
 				Scope:        getUserScope("admin"),
 			}
-			conn := libs.GetRedisClusterClient()
+			conn := redisUtils.GetRedisClusterClient()
 			defer conn.Close()
 
 			if err := rsv2.ToCache(conn, tokenString); err != nil {
