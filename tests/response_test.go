@@ -1,6 +1,6 @@
 // +build test
 
-package libs
+package tests
 
 import "testing"
 

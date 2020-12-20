@@ -1,9 +1,13 @@
 module github.com/aaronchen2k/openstc
 
-go 1.14
+go 1.15
+
+replace github.com/aaronchen2k/openstc-common v0.0.1 => ../openstc-common
 
 require (
 	github.com/Joker/hpp v1.0.0 // indirect
+	github.com/aaronchen2k/openstc-agent v0.0.0-20201219073533-31b1ff9706d3
+	github.com/aaronchen2k/openstc-common v0.0.1
 	github.com/azumads/faker v0.0.0-20150921074035-6cae71ddb107
 	github.com/bxcodec/faker/v3 v3.5.0
 	github.com/casbin/casbin/v2 v2.19.2
@@ -22,26 +26,19 @@ require (
 	github.com/iris-contrib/httpexpect/v2 v2.0.5
 	github.com/iris-contrib/middleware/cors v0.0.0-20201115103636-07e8bced147f
 	github.com/iris-contrib/middleware/jwt v0.0.0-20201115103636-07e8bced147f
-	github.com/iris-contrib/pongo2 v0.0.1 // indirect
 	github.com/jackc/pgx/v4 v4.9.2 // indirect
 	github.com/jameskeane/bcrypt v0.0.0-20120420032655-c3cd44c1e20f
 	github.com/jinzhu/configor v1.2.1
-	github.com/jinzhu/gorm v1.9.16
+	github.com/jinzhu/gorm v1.9.16 // indirect
 	github.com/k0kubun/colorstring v0.0.0-20150214042306-9440f1994b88 // indirect
 	github.com/kataras/iris/v12 v12.2.0-alpha.0.20201113181155-4d09475c290d
-	github.com/klauspost/compress v1.11.3 // indirect
-	github.com/konsorten/go-windows-terminal-sequences v1.0.3 // indirect
-	github.com/kr/text v0.2.0 // indirect
 	github.com/lib/pq v1.8.0 // indirect
 	github.com/manveru/gobdd v0.0.0-20131210092515-f1a17fdd710b // indirect
 	github.com/mattn/go-sqlite3 v2.0.3+incompatible // indirect
 	github.com/mna/redisc v1.1.7
-	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
-	github.com/modern-go/reflect2 v1.0.1 // indirect
 	github.com/nxadm/tail v1.4.5 // indirect
 	github.com/pkg/errors v0.9.1
 	github.com/russross/blackfriday/v2 v2.1.0 // indirect
-	github.com/ryanuber/columnize v2.1.0+incompatible // indirect
 	github.com/shopspring/decimal v1.2.0 // indirect
 	github.com/sirupsen/logrus v1.7.0
 	github.com/smartystreets/assertions v1.2.0 // indirect
@@ -53,12 +50,8 @@ require (
 	github.com/xeipuuv/gojsonpointer v0.0.0-20190905194746-02993c407bfb // indirect
 	github.com/yudai/pp v2.0.1+incompatible // indirect
 	golang.org/x/crypto v0.0.0-20201124201722-c8d3bf9c5392 // indirect
-	golang.org/x/net v0.0.0-20201110031124-69a78807bb2b // indirect
-	golang.org/x/sys v0.0.0-20201126233918-771906719818 // indirect
 	golang.org/x/xerrors v0.0.0-20200804184101-5ec99f83aff1 // indirect
-	gopkg.in/check.v1 v1.0.0-20201128035030-22ab2dfb190c // indirect
 	gopkg.in/ini.v1 v1.62.0
-	gopkg.in/yaml.v2 v2.4.0 // indirect
 	gorm.io/driver/mysql v1.0.3
 	gorm.io/driver/postgres v1.0.5
 	gorm.io/driver/sqlite v1.1.4
