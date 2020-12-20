@@ -1,8 +1,8 @@
 package controllers
 
 import (
-	"github.com/aaronchen2k/openstc/src/libs"
 	"github.com/aaronchen2k/openstc/src/libs/common"
+	"github.com/aaronchen2k/openstc/src/libs/redis"
 	"github.com/aaronchen2k/openstc/src/models"
 	"github.com/aaronchen2k/openstc/src/validates"
 	"github.com/go-playground/validator/v10"
@@ -83,7 +83,7 @@ func UserLogout(ctx iris.Context) {
 
 	ctx.StatusCode(iris.StatusOK)
 	value := ctx.Values().Get("jwt").(*jwt.Token)
-	conn := libs.GetRedisClusterClient()
+	conn := redis.GetRedisClusterClient()
 	defer conn.Close()
 	sess, err := models.GetRedisSessionV2(conn, value.Raw)
 	if err != nil {
@@ -117,7 +117,7 @@ func UserExpire(ctx iris.Context) {
 
 	ctx.StatusCode(iris.StatusOK)
 	value := ctx.Values().Get("jwt").(*jwt.Token)
-	conn := libs.GetRedisClusterClient()
+	conn := redis.GetRedisClusterClient()
 	defer conn.Close()
 	sess, err := models.GetRedisSessionV2(conn, value.Raw)
 	if err != nil {
