@@ -3,27 +3,24 @@ package repo
 import (
 	"errors"
 	"fmt"
-	"github.com/aaronchen2k/openstc/src/libs/casbin"
 	"github.com/aaronchen2k/openstc/src/libs/common"
-	db2 "github.com/aaronchen2k/openstc/src/libs/db"
+	"github.com/aaronchen2k/openstc/src/libs/db"
 	"github.com/aaronchen2k/openstc/src/models"
-	gormadapter "github.com/casbin/gorm-adapter/v2"
 	"github.com/fatih/color"
 	"gorm.io/gorm"
-	"strconv"
 	"strings"
 )
 
-type BaseRepo struct {
+type CommonRepo struct {
 }
 
-func NewBaseRepo() *BaseRepo {
-	return &BaseRepo{}
+func NewCommonRepo() *CommonRepo {
+	return &CommonRepo{}
 }
 
 // GetAll 批量查询
-func (r *BaseRepo) GetAll(model interface{}, s *models.Search) *gorm.DB {
-	db := db2.Db.Model(model)
+func (r *CommonRepo) GetAll(model interface{}, s *models.Search) *gorm.DB {
+	db := db.GetInst().DB().Model(model)
 	sort := "desc"
 	orderBy := "created_at"
 	if len(s.Sort) > 0 {
@@ -41,12 +38,12 @@ func (r *BaseRepo) GetAll(model interface{}, s *models.Search) *gorm.DB {
 }
 
 // Found 查询条件
-func (r *BaseRepo) Found(s *models.Search) *gorm.DB {
-	return db2.Db.Scopes(r.Relation(s.Relations), r.FoundByWhere(s.Fields))
+func (r *CommonRepo) Found(s *models.Search) *gorm.DB {
+	return db.GetInst().DB().Scopes(r.Relation(s.Relations), r.FoundByWhere(s.Fields))
 }
 
 // IsNotFound 判断是否是查询不存在错误
-func (r *BaseRepo) IsNotFound(err error) bool {
+func (r *CommonRepo) IsNotFound(err error) bool {
 	if ok := errors.Is(err, gorm.ErrRecordNotFound); ok {
 		color.Yellow("查询数据不存在")
 		return true
@@ -55,27 +52,16 @@ func (r *BaseRepo) IsNotFound(err error) bool {
 }
 
 // Update 更新
-func (r *BaseRepo) Update(v, d interface{}, id uint) error {
-	if err := db2.Db.Model(v).Where("id = ?", id).Updates(d).Error; err != nil {
+func (r *CommonRepo) Update(v, d interface{}, id uint) error {
+	if err := db.GetInst().DB().Model(v).Where("id = ?", id).Updates(d).Error; err != nil {
 		color.Red(fmt.Sprintf("Update %+v to %+v\n", v, d))
 		return err
 	}
 	return nil
 }
 
-// GetRolesForUser 获取角色
-func (r *BaseRepo) GetRolesForUser(uid uint) []string {
-	uids, err := casbinUtils.Enforcer.GetRolesForUser(strconv.FormatUint(uint64(uid), 10))
-	if err != nil {
-		color.Red(fmt.Sprintf("GetRolesForUser 错误: %v", err))
-		return []string{}
-	}
-
-	return uids
-}
-
 // Relation 加载关联关系
-func (r *BaseRepo) Relation(relates []*models.Relate) func(db *gorm.DB) *gorm.DB {
+func (r *CommonRepo) Relation(relates []*models.Relate) func(db *gorm.DB) *gorm.DB {
 	return func(db *gorm.DB) *gorm.DB {
 		if len(relates) > 0 {
 			for _, re := range relates {
@@ -94,7 +80,7 @@ func (r *BaseRepo) Relation(relates []*models.Relate) func(db *gorm.DB) *gorm.DB
 }
 
 // FoundByWhere 查询条件
-func (r *BaseRepo) FoundByWhere(fields []*models.Filed) func(db *gorm.DB) *gorm.DB {
+func (r *CommonRepo) FoundByWhere(fields []*models.Filed) func(db *gorm.DB) *gorm.DB {
 	return func(db *gorm.DB) *gorm.DB {
 		if len(fields) > 0 {
 			for _, field := range fields {
@@ -133,7 +119,7 @@ func (r *BaseRepo) FoundByWhere(fields []*models.Filed) func(db *gorm.DB) *gorm.
 }
 
 // GetRelations 转换前端获取关联关系为 []*Relate
-func (r *BaseRepo) GetRelations(relation string, fs map[string]interface{}) []*models.Relate {
+func (r *CommonRepo) GetRelations(relation string, fs map[string]interface{}) []*models.Relate {
 	var relates []*models.Relate
 	if len(relation) > 0 {
 		arr := strings.Split(relation, ";")
@@ -156,7 +142,7 @@ func (r *BaseRepo) GetRelations(relation string, fs map[string]interface{}) []*m
 }
 
 // GetSearch 转换前端查询关系为 *Filed
-func (r *BaseRepo) GetSearch(key, search string) *models.Filed {
+func (r *CommonRepo) GetSearch(key, search string) *models.Filed {
 	if len(search) > 0 {
 		if strings.Contains(search, ":") {
 			searches := strings.Split(search, ":")
@@ -191,7 +177,7 @@ func (r *BaseRepo) GetSearch(key, search string) *models.Filed {
 }
 
 // Paginate 分页
-func (r *BaseRepo) Paginate(page, pageSize int) func(db *gorm.DB) *gorm.DB {
+func (r *CommonRepo) Paginate(page, pageSize int) func(db *gorm.DB) *gorm.DB {
 	return func(db *gorm.DB) *gorm.DB {
 		if page == 0 {
 			page = 1
@@ -214,14 +200,9 @@ func (r *BaseRepo) Paginate(page, pageSize int) func(db *gorm.DB) *gorm.DB {
 	}
 }
 
-// GetPermissionsForUser 获取角色权限
-func (r *BaseRepo) GetPermissionsForUser(uid uint) [][]string {
-	return casbinUtils.Enforcer.GetPermissionsForUser(strconv.FormatUint(uint64(uid), 10))
-}
-
 // DropTables 删除数据表
-func (r *BaseRepo) DropTables() {
-	_ = db2.Db.Migrator().DropTable(
+func (r *CommonRepo) DropTables() {
+	_ = db.GetInst().DB().Migrator().DropTable(
 		common.Config.DB.Prefix+"users",
 		common.Config.DB.Prefix+"roles",
 		common.Config.DB.Prefix+"permissions",
@@ -231,18 +212,4 @@ func (r *BaseRepo) DropTables() {
 		common.Config.DB.Prefix+"types",
 		common.Config.DB.Prefix+"article_tags",
 		"casbin_rule")
-}
-
-// Migrate 迁移数据表
-func (r *BaseRepo) Migrate() {
-	err := db2.Db.AutoMigrate(
-		&models.User{},
-		&models.Role{},
-		&models.Permission{},
-		&gormadapter.CasbinRule{},
-	)
-
-	if err != nil {
-		color.Yellow(fmt.Sprintf("初始化数据表错误 ：%+v", err))
-	}
 }

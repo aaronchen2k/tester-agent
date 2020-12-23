@@ -26,15 +26,7 @@ var Config = struct {
 		RoleName        string `env:"AdminRoleName" default:"admin"`
 		RoleDisplayName string `env:"RoleDisplayName" default:"超级管理员"`
 	} `yaml:"admin,flow"`
-	DB struct {
-		Prefix   string `yaml:"prefix" env:"DBPrefix" default:"openstc_"`
-		Name     string `yaml:"name" env:"DBName" default:"openstc"`
-		Adapter  string `yaml:"adapter" env:"DBAdapter" default:"mysql"`
-		Host     string `yaml:"host" env:"DBHost" default:"localhost"`
-		Port     string `yaml:"port" env:"DBPort" default:"3306"`
-		User     string `yaml:"user" env:"DBUser" default:"root"`
-		Password string `yaml:"password" env:"DBPassword" default:"P2ssw0rd"`
-	} `yaml:"db,flow"`
+	DB    DBConfig `yaml:"db,flow"`
 	Redis struct {
 		Host string `env:"RedisHost" default:"localhost"`
 		Port string `env:"RedisPort" default:"6379"`
@@ -55,6 +47,16 @@ var Config = struct {
 	}
 }{}
 
+type DBConfig struct {
+	Prefix   string `yaml:"prefix" env:"DBPrefix" default:"openstc_"`
+	Name     string `yaml:"name" env:"DBName" default:"openstc"`
+	Adapter  string `yaml:"adapter" env:"DBAdapter" default:"mysql"`
+	Host     string `yaml:"host" env:"DBHost" default:"localhost"`
+	Port     string `yaml:"port" env:"DBPort" default:"3306"`
+	User     string `yaml:"user" env:"DBUser" default:"root"`
+	Password string `yaml:"password" env:"DBPassword" default:"P2ssw0rd"`
+}
+
 func InitConfig(p string) {
 	configPath := filepath.Join(GetExeDir(), "application.yml")
 	if p != "" {
@@ -68,7 +70,7 @@ func InitConfig(p string) {
 	}
 
 	if Config.Debug {
-		fmt.Println(fmt.Sprintf("配置项：%v", Config))
+		fmt.Println(fmt.Sprintf("配置项：%+v", Config))
 	}
 }
 

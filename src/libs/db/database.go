@@ -1,13 +1,16 @@
 package db
 
 import (
-	"errors"
 	"fmt"
+	_logUtils "github.com/aaronchen2k/openstc-common/src/libs/log"
 	"github.com/aaronchen2k/openstc/src/libs/common"
-	logger "github.com/sirupsen/logrus"
+	"github.com/aaronchen2k/openstc/src/models"
+	"github.com/casbin/gorm-adapter/v2"
+	"github.com/fatih/color"
 	"gorm.io/driver/mysql"
 	"gorm.io/driver/postgres"
 	"gorm.io/driver/sqlite"
+	"gorm.io/gorm/logger"
 	"gorm.io/gorm/schema"
 	"gorm.io/plugin/dbresolver"
 	"time"
@@ -18,11 +21,18 @@ import (
 )
 
 var (
-	Db *gorm.DB
+	inst *Instance
 )
 
-func InitDb() {
-	var err error
+func GetInst() *Instance {
+	if inst == nil {
+		InitDB()
+	}
+
+	return inst
+}
+
+func InitDB() {
 	var dialector gorm.Dialector
 
 	if common.Config.DB.Adapter == "sqlite3" {
@@ -40,10 +50,11 @@ func InitDb() {
 		dialector = postgres.Open(conn)
 
 	} else {
-		logger.Println(errors.New("not supported database adapter"))
+		_logUtils.Info("not supported database adapter")
 	}
 
-	Db, err = gorm.Open(dialector, &gorm.Config{
+	DB, err := gorm.Open(dialector, &gorm.Config{
+		Logger: logger.Default.LogMode(logger.Info),
 		NamingStrategy: schema.NamingStrategy{
 			TablePrefix:   common.Config.DB.Prefix, // 表名前缀，`User` 的表名应该是 `t_users`
 			SingularTable: false,                   // 使用单数表名，启用该选项，此时，`User` 的表名应该是 `t_user`
@@ -51,10 +62,10 @@ func InitDb() {
 	})
 
 	if err != nil {
-		logger.Println(err)
+		_logUtils.Info(err.Error())
 	}
 
-	_ = Db.Use(
+	_ = DB.Use(
 		dbresolver.Register(
 			dbresolver.Config{ /* xxx */ }).
 			SetConnMaxIdleTime(time.Hour).
@@ -62,5 +73,40 @@ func InitDb() {
 			SetMaxIdleConns(100).
 			SetMaxOpenConns(200),
 	)
-	Db.Session(&gorm.Session{FullSaveAssociations: true, AllowGlobalUpdate: false})
+
+	DB.Session(&gorm.Session{FullSaveAssociations: true, AllowGlobalUpdate: false})
+
+	inst = &Instance{}
+	inst.db = DB
+	inst.config = &common.Config.DB
+}
+
+func (*Instance) DB() *gorm.DB {
+	return inst.db
+}
+
+type Instance struct {
+	config *common.DBConfig
+	db     *gorm.DB
+}
+
+func (i *Instance) Close() error {
+	if i.db != nil {
+		sqlDB, _ := i.db.DB()
+		return sqlDB.Close()
+	}
+	return nil
+}
+
+func (i *Instance) Migrate() {
+	err := i.DB().AutoMigrate(
+		&models.User{},
+		&models.Role{},
+		&models.Permission{},
+		&gormadapter.CasbinRule{},
+	)
+
+	if err != nil {
+		color.Yellow(fmt.Sprintf("初始化数据表错误 ：%+v", err))
+	}
 }

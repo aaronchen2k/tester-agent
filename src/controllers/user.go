@@ -4,6 +4,7 @@ import (
 	"github.com/aaronchen2k/openstc/src/libs/common"
 	"github.com/aaronchen2k/openstc/src/models"
 	"github.com/aaronchen2k/openstc/src/repo"
+	"github.com/aaronchen2k/openstc/src/service"
 	"github.com/aaronchen2k/openstc/src/transformer"
 	"github.com/aaronchen2k/openstc/src/validates"
 	"strconv"
@@ -15,13 +16,14 @@ import (
 )
 
 type UserController struct {
-	BaseController
-	userRepo *repo.UserRepo
-	roleRepo *repo.RoleRepo
+	UserService *service.UserService `inject:""`
+	RoleService *service.RoleService `inject:""`
+	UserRepo    *repo.UserRepo       `inject:""`
+	RoleRepo    *repo.RoleRepo       `inject:""`
 }
 
-func NewUserController(userRepo *repo.UserRepo, roleRepo *repo.RoleRepo) *UserController {
-	return &UserController{userRepo: userRepo, roleRepo: roleRepo}
+func NewUserController() *UserController {
+	return &UserController{}
 }
 
 /**
@@ -38,18 +40,10 @@ func NewUserController(userRepo *repo.UserRepo, roleRepo *repo.RoleRepo) *UserCo
  */
 func (c *UserController) GetProfile(ctx iris.Context) {
 	ctx.StatusCode(iris.StatusOK)
-	sess := ctx.Values().Get("sess").(*models.RedisSessionV2)
-	id := uint(common.ParseInt(sess.UserId, 10))
-	s := &models.Search{
-		Fields: []*models.Filed{
-			{
-				Key:       "id",
-				Condition: "=",
-				Value:     id,
-			},
-		},
-	}
-	user, err := c.userRepo.GetUser(s)
+	//sess := ctx.Values().Get("sess").(*models.RedisSessionV2)
+	//id := uint(common.ParseInt(sess.UserId, 10))
+
+	user, err := c.UserRepo.GetUser(nil)
 	if err != nil {
 		_, _ = ctx.JSON(common.ApiResource(400, nil, err.Error()))
 		return
@@ -71,16 +65,8 @@ func (c *UserController) GetProfile(ctx iris.Context) {
  */
 func (c *UserController) GetAdminInfo(ctx iris.Context) {
 	ctx.StatusCode(iris.StatusOK)
-	s := &models.Search{
-		Fields: []*models.Filed{
-			{
-				Key:       "username",
-				Condition: "=",
-				Value:     "username",
-			},
-		},
-	}
-	user, err := c.userRepo.GetUser(s)
+
+	user, err := c.UserRepo.GetUser(nil)
 	if err != nil {
 		_, _ = ctx.JSON(common.ApiResource(400, nil, err.Error()))
 		return
@@ -122,10 +108,10 @@ func (c *UserController) ChangeAvatar(ctx iris.Context) {
 		}
 	}
 
-	user := c.userRepo.NewUser()
+	user := c.UserRepo.NewUser()
 	user.ID = id
 	user.Avatar = avatar.Avatar
-	err = c.userRepo.UpdateUserById(id, user)
+	err = c.UserService.UpdateUserById(id, user)
 	if err != nil {
 		_, _ = ctx.JSON(common.ApiResource(400, nil, err.Error()))
 		return
@@ -147,17 +133,9 @@ func (c *UserController) ChangeAvatar(ctx iris.Context) {
  */
 func (c *UserController) GetUser(ctx iris.Context) {
 	ctx.StatusCode(iris.StatusOK)
-	id, _ := ctx.Params().GetUint("id")
-	s := &models.Search{
-		Fields: []*models.Filed{
-			{
-				Key:       "id",
-				Condition: "=",
-				Value:     id,
-			},
-		},
-	}
-	user, err := c.userRepo.GetUser(s)
+	//id, _ := ctx.Params().GetUint("id")
+
+	user, err := c.UserRepo.GetUser(nil)
 	if err != nil {
 		_, _ = ctx.JSON(common.ApiResource(400, nil, err.Error()))
 		return
@@ -198,7 +176,7 @@ func (c *UserController) CreateUser(ctx iris.Context) {
 		}
 	}
 
-	err = c.userRepo.CreateUser(user)
+	err = c.UserService.CreateUser(user)
 	if err != nil {
 		_, _ = ctx.JSON(common.ApiResource(400, nil, err.Error()))
 		return
@@ -252,7 +230,7 @@ func (c *UserController) UpdateUser(ctx iris.Context) {
 		return
 	}
 
-	err = c.userRepo.UpdateUserById(id, user)
+	err = c.UserService.UpdateUserById(id, user)
 	if err != nil {
 		_, _ = ctx.JSON(common.ApiResource(400, nil, err.Error()))
 		return
@@ -276,7 +254,7 @@ func (c *UserController) DeleteUser(ctx iris.Context) {
 	ctx.StatusCode(iris.StatusOK)
 	id, _ := ctx.Params().GetUint("id")
 
-	err := c.userRepo.DeleteUser(id)
+	err := c.UserRepo.DeleteUser(id)
 	if err != nil {
 		_, _ = ctx.JSON(common.ApiResource(400, nil, err.Error()))
 		return
@@ -298,18 +276,17 @@ func (c *UserController) DeleteUser(ctx iris.Context) {
  */
 func (c *UserController) GetAllUsers(ctx iris.Context) {
 	ctx.StatusCode(iris.StatusOK)
-	s := c.GetCommonListSearch(ctx)
-	name := ctx.FormValue("name")
+	//name := ctx.FormValue("name")
 
-	s.Fields = append(s.Fields, c.userRepo.GetSearch("name", name))
-	users, count, err := c.userRepo.GetAllUsers(s)
+	users, count, err := c.UserRepo.GetAllUsers(nil)
 	if err != nil {
 		_, _ = ctx.JSON(common.ApiResource(400, nil, err.Error()))
 		return
 	}
 
 	transform := c.usersTransform(users)
-	_, _ = ctx.JSON(common.ApiResource(200, map[string]interface{}{"items": transform, "total": count, "limit": s.Limit}, "操作成功"))
+	_, _ = ctx.JSON(common.ApiResource(200,
+		map[string]interface{}{"items": transform, "total": count, "limit": "s.Limit"}, "操作成功"))
 
 }
 
@@ -327,24 +304,15 @@ func (c *UserController) userTransform(user *models.User) *transformer.User {
 	g := gf.NewTransform(u, user, time.RFC3339)
 	_ = g.Transformer()
 
-	roleIds := c.userRepo.GetRolesForUser(user.ID)
+	roleIds := c.RoleService.GetRolesForUser(user.ID)
 	var ris []int
 	for _, roleId := range roleIds {
 		ri, _ := strconv.Atoi(roleId)
 		ris = append(ris, ri)
 	}
-	s := &models.Search{
-		Fields: []*models.Filed{
-			{
-				Key:       "id",
-				Condition: "in",
-				Value:     ris,
-			},
-		},
-	}
-	roles, _, err := c.roleRepo.GetAllRoles(s)
+	roles, _, err := c.RoleRepo.GetAllRoles(nil)
 	if err == nil {
-		u.Roles = c.roleRepo.RolesTransform(roles)
+		u.Roles = c.RoleService.RolesTransform(roles)
 	}
 	return u
 }

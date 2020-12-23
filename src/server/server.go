@@ -3,15 +3,17 @@ package server
 import (
 	"fmt"
 	"github.com/aaronchen2k/openstc/src/controllers"
-	"github.com/aaronchen2k/openstc/src/libs/casbin"
 	"github.com/aaronchen2k/openstc/src/libs/common"
 	"github.com/aaronchen2k/openstc/src/libs/db"
 	redisUtils "github.com/aaronchen2k/openstc/src/libs/redis"
+	"github.com/aaronchen2k/openstc/src/middleware"
 	"github.com/aaronchen2k/openstc/src/models"
 	"github.com/aaronchen2k/openstc/src/repo"
 	"github.com/aaronchen2k/openstc/src/routes"
 	"github.com/aaronchen2k/openstc/src/service"
+	"github.com/facebookgo/inject"
 	"github.com/kataras/iris/v12"
+	"github.com/sirupsen/logrus"
 	"net/http"
 	"strings"
 	"time"
@@ -22,7 +24,6 @@ import (
 type Server struct {
 	App       *iris.Application
 	AssetFile http.FileSystem
-	baseRepo  *repo.BaseRepo
 }
 
 func NewServer(assetFile http.FileSystem) *Server {
@@ -33,61 +34,37 @@ func NewServer(assetFile http.FileSystem) *Server {
 	}
 }
 
-func Init(version string, printVersion, seederData, syncPerms, printRouter *bool) {
-	// gen objects
-	permRepo := repo.NewPermRepo()
-	roleRepo := repo.NewRoleRepo(permRepo)
-	tokenRepo := repo.NewTokenRepo()
-	userRepo := repo.NewUserRepo(tokenRepo)
+func Init(version string, printVersion, printRouter *bool) {
 
-	seederService := service.NewSeeder(userRepo, roleRepo, permRepo)
-
-	accountCtrl := controllers.NewAccountController(userRepo, roleRepo, permRepo, tokenRepo)
-	permCtrl := controllers.NewPermController(userRepo, permRepo)
-	roleCtrl := controllers.NewRoleController(userRepo, roleRepo, permRepo)
-	userCtrl := controllers.NewUserController(userRepo, roleRepo)
+	db.InitDB()
+	db.GetInst().Migrate()
 
 	// irisServer := server.NewServer(AssetFile()) // 加载前端文件
 	irisServer := NewServer(nil)
 	if irisServer == nil {
 		panic("Http 初始化失败")
 	}
-
 	irisServer.App.Logger().SetLevel(common.Config.LogLevel)
 
-	// init
-
-	//if libs.Config.BinData {
-	//	s.App.RegisterView(iris.HTML(s.AssetFile, ".html"))
-	//	s.App.HandleDir("/", s.AssetFile)
+	//if common.Config.BinData {
+	//	irisServer.App.RegisterView(iris.HTML(irisServer.AssetFile, ".html"))
+	//	irisServer.App.HandleDir("/", irisServer.AssetFile)
 	//}
 
-	db.InitDb()
-	casbinUtils.InitCasbin()
+	router := routes.NewRouter(irisServer.App)
+	injectObj(router)
+	router.App()
+
+	//casbinUtils.InitCasbin()
 	redisUtils.InitRedisCluster(common.GetRedisUris(), common.Config.Redis.Pwd)
-	irisServer.baseRepo.Migrate()
 
-	//iris.RegisterOnInterrupt(func() {
-	//	_ = libs.Db
-	//})
-
-	routes.App(irisServer.App, accountCtrl, userCtrl, roleCtrl, permCtrl, tokenRepo)
+	iris.RegisterOnInterrupt(func() {
+		defer db.GetInst().Close()
+	})
 
 	// deal with the command
 	if *printVersion {
 		fmt.Println(fmt.Sprintf("版本号：%s", version))
-	}
-
-	if *seederData {
-		fmt.Println("填充数据：")
-		fmt.Println()
-		seederService.Run()
-	}
-
-	if *syncPerms {
-		fmt.Println("同步权限：")
-		fmt.Println()
-		seederService.AddPerm()
 	}
 
 	if *printRouter {
@@ -111,6 +88,47 @@ func Init(version string, printVersion, seederData, syncPerms, printRouter *bool
 	err := irisServer.Serve()
 	if err != nil {
 		panic(err)
+	}
+}
+
+func injectObj(router *routes.Router) {
+	// inject
+	var g inject.Graph
+	g.Logger = logrus.StandardLogger()
+
+	if err := g.Provide(
+		// db
+		&inject.Object{Value: db.GetInst().DB()},
+
+		&inject.Object{Value: middleware.NewEnforcer()},
+		&inject.Object{Value: middleware.NewCasbinService()},
+
+		// repo
+		&inject.Object{Value: repo.NewCommonRepo()},
+		&inject.Object{Value: repo.NewPermRepo()},
+		&inject.Object{Value: repo.NewTokenRepo()},
+		&inject.Object{Value: repo.NewRoleRepo()},
+		&inject.Object{Value: repo.NewUserRepo()},
+
+		// service
+		&inject.Object{Value: service.NewSeeder()},
+
+		// controller
+		&inject.Object{Value: controllers.NewInitController()},
+		&inject.Object{Value: controllers.NewAccountController()},
+		&inject.Object{Value: controllers.NewPermController()},
+		&inject.Object{Value: controllers.NewRoleController()},
+		&inject.Object{Value: controllers.NewUserController()},
+
+		// router
+		&inject.Object{Value: router},
+	); err != nil {
+		logrus.Fatalf("provide usecase objects to the Graph: %v", err)
+	}
+
+	err := g.Populate()
+	if err != nil {
+		logrus.Fatalf("populate the incomplete Objects: %v", err)
 	}
 }
 

@@ -11,13 +11,12 @@ import (
 )
 
 type PermController struct {
-	BaseController
-	userRepo *repo.UserRepo
-	permRepo *repo.PermRepo
+	UserRepo *repo.UserRepo `inject:""`
+	PermRepo *repo.PermRepo `inject:""`
 }
 
-func NewPermController(userRepo *repo.UserRepo, permRepo *repo.PermRepo) *PermController {
-	return &PermController{userRepo: userRepo, permRepo: permRepo}
+func NewPermController() *PermController {
+	return &PermController{}
 }
 
 /**
@@ -34,23 +33,15 @@ func NewPermController(userRepo *repo.UserRepo, permRepo *repo.PermRepo) *PermCo
  */
 func (c *PermController) GetPermission(ctx iris.Context) {
 	ctx.StatusCode(iris.StatusOK)
-	id, _ := ctx.Params().GetUint("id")
-	s := &models.Search{
-		Fields: []*models.Filed{
-			{
-				Key:       "id",
-				Condition: "=",
-				Value:     id,
-			},
-		},
-	}
-	perm, err := c.permRepo.GetPermission(s)
+	//id, _ := ctx.Params().GetUint("id")
+
+	perm, err := c.PermRepo.GetPermission(nil)
 	if err != nil {
 		_, _ = ctx.JSON(common.ApiResource(400, nil, err.Error()))
 		return
 	}
 
-	_, _ = ctx.JSON(common.ApiResource(200, c.permRepo.PermTransform(perm), "操作成功"))
+	_, _ = ctx.JSON(common.ApiResource(200, c.PermRepo.PermTransform(perm), "操作成功"))
 }
 
 /**
@@ -88,7 +79,7 @@ func (c *PermController) CreatePermission(ctx iris.Context) {
 		}
 	}
 
-	err = c.permRepo.CreatePermission(perm)
+	err = c.PermRepo.CreatePermission(perm)
 	if err != nil {
 		_, _ = ctx.JSON(common.ApiResource(400, nil, fmt.Sprintf("Error create prem: %s", err.Error())))
 		return
@@ -98,7 +89,7 @@ func (c *PermController) CreatePermission(ctx iris.Context) {
 		_, _ = ctx.JSON(common.ApiResource(400, perm, "操作失败"))
 		return
 	}
-	_, _ = ctx.JSON(common.ApiResource(200, c.permRepo.PermTransform(perm), "操作成功"))
+	_, _ = ctx.JSON(common.ApiResource(200, c.PermRepo.PermTransform(perm), "操作成功"))
 
 }
 
@@ -139,13 +130,13 @@ func (c *PermController) UpdatePermission(ctx iris.Context) {
 	}
 
 	id, _ := ctx.Params().GetUint("id")
-	err = c.permRepo.UpdatePermission(id, aul)
+	err = c.PermRepo.UpdatePermission(id, aul)
 	if err != nil {
 		_, _ = ctx.JSON(common.ApiResource(400, nil, fmt.Sprintf("Error update prem: %s", err.Error())))
 		return
 	}
 
-	_, _ = ctx.JSON(common.ApiResource(200, c.permRepo.PermTransform(aul), "操作成功"))
+	_, _ = ctx.JSON(common.ApiResource(200, c.PermRepo.PermTransform(aul), "操作成功"))
 
 }
 
@@ -164,7 +155,7 @@ func (c *PermController) UpdatePermission(ctx iris.Context) {
 func (c *PermController) DeletePermission(ctx iris.Context) {
 	ctx.StatusCode(iris.StatusOK)
 	id, _ := ctx.Params().GetUint("id")
-	err := c.permRepo.DeletePermissionById(id)
+	err := c.PermRepo.DeletePermissionById(id)
 	if err != nil {
 		_, _ = ctx.JSON(common.ApiResource(400, nil, err.Error()))
 		return
@@ -186,14 +177,13 @@ func (c *PermController) DeletePermission(ctx iris.Context) {
  */
 func (c *PermController) GetAllPermissions(ctx iris.Context) {
 	ctx.StatusCode(iris.StatusOK)
-	s := c.GetCommonListSearch(ctx)
-	permissions, count, err := c.permRepo.GetAllPermissions(s)
+	permissions, count, err := c.PermRepo.GetAllPermissions(nil)
 	if err != nil {
 		_, _ = ctx.JSON(common.ApiResource(400, nil, err.Error()))
 		return
 	}
 
-	transform := c.permRepo.PermsTransform(permissions)
-	_, _ = ctx.JSON(common.ApiResource(200, map[string]interface{}{"items": transform, "total": count, "limit": s.Limit}, "操作成功"))
+	transform := c.PermRepo.PermsTransform(permissions)
+	_, _ = ctx.JSON(common.ApiResource(200, map[string]interface{}{"items": transform, "total": count, "limit": "s.Limit"}, "操作成功"))
 
 }

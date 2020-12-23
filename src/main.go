@@ -13,8 +13,6 @@ var (
 	version      = "master"
 	configPath   = flag.String("c", "", "配置路径")
 	printVersion = flag.Bool("v", false, "打印版本号")
-	seederData   = flag.Bool("s", false, "填充基础数据")
-	syncPerms    = flag.Bool("p", true, "同步权限")
 	printRouter  = flag.Bool("r", false, "打印路由列表")
 )
 
@@ -39,5 +37,5 @@ func main() {
 	flag.Parse()
 
 	common.InitConfig(*configPath)
-	server.Init(version, printVersion, seederData, syncPerms, printRouter)
+	server.Init(version, printVersion, printRouter)
 }

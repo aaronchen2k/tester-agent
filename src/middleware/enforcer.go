@@ -1,20 +1,16 @@
-package casbinUtils
+package middleware
 
 import (
 	"errors"
 	"fmt"
 	"github.com/aaronchen2k/openstc/src/libs/common"
-	logger "github.com/sirupsen/logrus"
-	"path/filepath"
-
 	"github.com/casbin/casbin/v2"
-	gormadapter "github.com/casbin/gorm-adapter/v2"
+	"github.com/casbin/gorm-adapter/v2"
+	"github.com/sirupsen/logrus"
+	"path/filepath"
 )
 
-var Enforcer *casbin.Enforcer
-
-func InitCasbin() {
-
+func NewEnforcer() *casbin.Enforcer {
 	var err error
 	var conn string
 	if common.Config.DB.Adapter == "mysql" {
@@ -26,24 +22,25 @@ func InitCasbin() {
 	} else if common.Config.DB.Adapter == "sqlite3" {
 		conn = common.DBFile()
 	} else {
-		logger.Println(errors.New("not supported database adapter"))
+		logrus.Println(errors.New("not supported database adapter"))
 	}
 
 	if len(conn) == 0 {
-		logger.Println(fmt.Sprintf("数据链接不可用: %s", conn))
+		logrus.Println(fmt.Sprintf("数据链接不可用: %s", conn))
 	}
 
 	c, err := gormadapter.NewAdapter(common.Config.DB.Adapter, conn, true) // Your driver and data source.
 	if err != nil {
-		logger.Println(fmt.Sprintf("NewAdapter 错误: %v,Path: %s", err, conn))
+		logrus.Println(fmt.Sprintf("NewAdapter 错误: %v,Path: %s", err, conn))
 	}
 
 	casbinModelPath := filepath.Join(common.GetExeDir(), "rbac_model.conf")
-	Enforcer, err = casbin.NewEnforcer(casbinModelPath, c)
+	enforcer, err := casbin.NewEnforcer(casbinModelPath, c)
 	if err != nil {
-		logger.Println(fmt.Sprintf("NewEnforcer 错误: %v", err))
+		logrus.Println(fmt.Sprintf("NewEnforcer 错误: %v", err))
 	}
 
-	_ = Enforcer.LoadPolicy()
+	_ = enforcer.LoadPolicy()
 
+	return enforcer
 }

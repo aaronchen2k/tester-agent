@@ -5,11 +5,14 @@ import (
 	redisUtils "github.com/aaronchen2k/openstc/src/libs/redis"
 	"github.com/aaronchen2k/openstc/src/models"
 	"github.com/gomodule/redigo/redis"
+	"gorm.io/gorm"
 	"strings"
 	"time"
 )
 
 type TokenRepo struct {
+	CommonRepo
+	DB *gorm.DB `inject:""`
 }
 
 func NewTokenRepo() *TokenRepo {
@@ -40,7 +43,7 @@ func (r *TokenRepo) loadRedisHashToStruct(conn *redisUtils.RedisCluster, sKey st
 	return nil
 }
 
-func (r *TokenRepo) isUserTokenOver(userId string) bool {
+func (r *TokenRepo) IsUserTokenOver(userId string) bool {
 	conn := redisUtils.GetRedisClusterClient()
 	defer conn.Close()
 	if r.getUserTokenCount(conn, userId) >= r.getUserTokenMaxCount(conn) {
@@ -92,7 +95,7 @@ func (r *TokenRepo) UserTokenExpired(token string) {
 	return
 }
 
-func (r *TokenRepo) getUserScope(userType string) uint64 {
+func (r *TokenRepo) GetUserScope(userType string) uint64 {
 	switch userType {
 	case "admin":
 		return models.AdminScope

@@ -2,7 +2,6 @@ package repo
 
 import (
 	"fmt"
-	"github.com/aaronchen2k/openstc/src/libs/db"
 	"github.com/aaronchen2k/openstc/src/models"
 	"github.com/aaronchen2k/openstc/src/transformer"
 	gf "github.com/snowlyg/gotransformer"
@@ -13,7 +12,8 @@ import (
 )
 
 type PermRepo struct {
-	BaseRepo
+	CommonRepo
+	DB *gorm.DB `inject:""`
 }
 
 func NewPermRepo() *PermRepo {
@@ -43,7 +43,7 @@ func (r *PermRepo) GetPermission(search *models.Search) (*models.Permission, err
 func (r *PermRepo) DeletePermissionById(id uint) error {
 	p := r.NewPermission()
 	p.ID = id
-	if err := db.Db.Delete(p).Error; err != nil {
+	if err := r.DB.Delete(p).Error; err != nil {
 		color.Red(fmt.Sprintf("DeletePermissionByIdError:%s \n", err))
 		return err
 	}
@@ -73,7 +73,7 @@ func (r *PermRepo) GetAllPermissions(s *models.Search) ([]*models.Permission, in
 
 // CreatePermission create permission
 func (r *PermRepo) CreatePermission(perm *models.Permission) error {
-	if err := db.Db.Create(perm).Error; err != nil {
+	if err := r.DB.Create(perm).Error; err != nil {
 		return err
 	}
 	return nil

@@ -3,6 +3,7 @@ package service
 import (
 	"fmt"
 	"github.com/aaronchen2k/openstc/src/libs/common"
+	"github.com/aaronchen2k/openstc/src/libs/db"
 	"github.com/aaronchen2k/openstc/src/models"
 	"github.com/aaronchen2k/openstc/src/repo"
 	logger "github.com/sirupsen/logrus"
@@ -16,14 +17,19 @@ import (
 )
 
 type SeederService struct {
-	userRepo *repo.UserRepo
-	roleRepo *repo.RoleRepo
-	permRepo *repo.PermRepo
+	RoleService *RoleService `inject:""`
+	UserService *UserService `inject:""`
+
+	CommonRepo *repo.CommonRepo `inject:""`
+	UserRepo   *repo.UserRepo   `inject:""`
+	RoleRepo   *repo.RoleRepo   `inject:""`
+	PermRepo   *repo.PermRepo   `inject:""`
 }
 
-func NewSeeder(userRepo *repo.UserRepo, roleRepo *repo.RoleRepo,
-	permRepo *repo.PermRepo) *SeederService {
-	return &SeederService{userRepo: userRepo, roleRepo: roleRepo, permRepo: permRepo}
+func NewSeeder() *SeederService {
+	seeder := &SeederService{}
+	seeder.init()
+	return seeder
 }
 
 var (
@@ -44,11 +50,11 @@ func (s *SeederService) init() {
 	Fake.Rand = rand.New(rand.NewSource(42))
 	rand.Seed(time.Now().UnixNano())
 
-	filepaths, _ := filepath.Glob(filepath.Join(common.CWD(), "service", "data", "*.yml"))
+	filePaths, _ := filepath.Glob(filepath.Join(common.GetExeDir(), "perms.yml"))
 	if common.Config.Debug {
-		fmt.Println(fmt.Sprintf("数据填充YML文件路径：%+v\n", filepaths))
+		fmt.Println(fmt.Sprintf("数据填充YML文件路径：%+v\n", filePaths))
 	}
-	if err := configor.Load(&Seeds, filepaths...); err != nil {
+	if err := configor.Load(&Seeds, filePaths...); err != nil {
 		logger.Println(err)
 	}
 }
@@ -92,7 +98,7 @@ func (s *SeederService) CreatePerms() {
 				},
 			},
 		}
-		perm, err := s.permRepo.GetPermission(search)
+		perm, err := s.PermRepo.GetPermission(search)
 		if err == nil {
 			if perm.ID == 0 {
 				perm = &models.Permission{
@@ -102,7 +108,7 @@ func (s *SeederService) CreatePerms() {
 					Description: m.Description,
 					Act:         m.Act,
 				}
-				if err := s.permRepo.CreatePermission(perm); err != nil {
+				if err := s.PermRepo.CreatePermission(perm); err != nil {
 					logger.Println(fmt.Sprintf("权限填充错误：%+v\n", err))
 				}
 			}
@@ -121,13 +127,13 @@ func (s *SeederService) CreateAdminRole() {
 			},
 		},
 	}
-	role, err := s.roleRepo.GetRole(search)
+	role, err := s.RoleRepo.GetRole(search)
 	var permIds []uint
 	ss := &models.Search{
 		Limit:  -1,
 		Offset: -1,
 	}
-	perms, _, err := s.permRepo.GetAllPermissions(ss)
+	perms, _, err := s.PermRepo.GetAllPermissions(ss)
 	if common.Config.Debug {
 		if err != nil {
 			fmt.Println(fmt.Sprintf("权限获取失败：%+v\n", err))
@@ -148,11 +154,11 @@ func (s *SeederService) CreateAdminRole() {
 				Model:       gorm.Model{CreatedAt: time.Now()},
 			}
 			role.PermIds = permIds
-			if err := s.roleRepo.CreateRole(role); err != nil {
+			if err := s.RoleService.CreateRole(role); err != nil {
 				logger.Println(fmt.Sprintf("管理角色填充错误：%+v\n", err))
 			}
 		} else {
-			if err := s.roleRepo.UpdateRole(role.ID, role); err != nil {
+			if err := s.RoleService.UpdateRole(role.ID, role); err != nil {
 				logger.Println(fmt.Sprintf("管理角色填充错误：%+v\n", err))
 			}
 		}
@@ -175,7 +181,7 @@ func (s *SeederService) CreateAdminUser() {
 			},
 		},
 	}
-	admin, err := s.userRepo.GetUser(search)
+	admin, err := s.UserRepo.GetUser(search)
 	if err != nil {
 		fmt.Println(fmt.Sprintf("Get admin error：%+v\n", err))
 	}
@@ -185,7 +191,7 @@ func (s *SeederService) CreateAdminUser() {
 		Limit:  -1,
 		Offset: -1,
 	}
-	roles, _, err := s.roleRepo.GetAllRoles(ss)
+	roles, _, err := s.RoleRepo.GetAllRoles(ss)
 	if common.Config.Debug {
 		if err != nil {
 			fmt.Println(fmt.Sprintf("角色获取失败：%+v\n", err))
@@ -207,12 +213,12 @@ func (s *SeederService) CreateAdminUser() {
 			Model:    gorm.Model{CreatedAt: time.Now()},
 		}
 		admin.RoleIds = roleIds
-		if err := s.userRepo.CreateUser(admin); err != nil {
+		if err := s.UserService.CreateUser(admin); err != nil {
 			logger.Println(fmt.Sprintf("管理员填充错误：%+v\n", err))
 		}
 	} else {
 		admin.Password = common.Config.Admin.Password
-		if err := s.userRepo.UpdateUserById(admin.ID, admin); err != nil {
+		if err := s.UserService.UpdateUserById(admin.ID, admin); err != nil {
 			logger.Println(fmt.Sprintf("管理员填充错误：%+v\n", err))
 		}
 	}
@@ -225,10 +231,10 @@ func (s *SeederService) CreateAdminUser() {
 
 /*
 	AutoMigrates 重置数据表
-	libs.Db.DropTableIfExists 删除存在数据表
-	libs.Db.AutoMigrate 重建数据表
+	libs.DB.DropTableIfExists 删除存在数据表
+	libs.DB.AutoMigrate 重建数据表
 */
 func (s *SeederService) AutoMigrates() {
-	s.userRepo.DropTables()
-	s.userRepo.Migrate()
+	s.CommonRepo.DropTables()
+	db.GetInst().Migrate()
 }

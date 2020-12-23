@@ -13,6 +13,8 @@ require (
 	github.com/casbin/casbin/v2 v2.19.2
 	github.com/casbin/gorm-adapter/v2 v2.1.0
 	github.com/denisenkom/go-mssqldb v0.9.0 // indirect
+	github.com/facebookgo/inject v0.0.0-20180706035515-f23751cae28b
+	github.com/facebookgo/structtag v0.0.0-20150214074306-217e25fb9691 // indirect
 	github.com/fatih/color v1.10.0
 	github.com/flosch/pongo2/v4 v4.0.1 // indirect
 	github.com/go-playground/locales v0.13.0
@@ -29,7 +31,6 @@ require (
 	github.com/jackc/pgx/v4 v4.9.2 // indirect
 	github.com/jameskeane/bcrypt v0.0.0-20120420032655-c3cd44c1e20f
 	github.com/jinzhu/configor v1.2.1
-	github.com/jinzhu/gorm v1.9.16 // indirect
 	github.com/k0kubun/colorstring v0.0.0-20150214042306-9440f1994b88 // indirect
 	github.com/kataras/iris/v12 v12.2.0-alpha.0.20201113181155-4d09475c290d
 	github.com/lib/pq v1.8.0 // indirect
