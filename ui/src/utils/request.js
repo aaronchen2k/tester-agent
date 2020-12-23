@@ -43,6 +43,8 @@ const errorHandler = (error) => {
 
 // request interceptor
 request.interceptors.request.use(config => {
+  console.log('===Axios Request===', config.url, config.data)
+
   const token = storage.get(ACCESS_TOKEN)
   console.log('add token in request header', token)
   // 如果 token 存在

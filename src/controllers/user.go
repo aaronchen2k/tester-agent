@@ -40,10 +40,18 @@ func NewUserController() *UserController {
  */
 func (c *UserController) GetProfile(ctx iris.Context) {
 	ctx.StatusCode(iris.StatusOK)
-	//sess := ctx.Values().Get("sess").(*models.RedisSessionV2)
-	//id := uint(common.ParseInt(sess.UserId, 10))
-
-	user, err := c.UserRepo.GetUser(nil)
+	sess := ctx.Values().Get("sess").(*models.RedisSessionV2)
+	id := uint(common.ParseInt(sess.UserId, 10))
+	s := &models.Search{
+		Fields: []*models.Filed{
+			{
+				Key:       "id",
+				Condition: "=",
+				Value:     id,
+			},
+		},
+	}
+	user, err := c.UserRepo.GetUser(s)
 	if err != nil {
 		_, _ = ctx.JSON(common.ApiResource(400, nil, err.Error()))
 		return

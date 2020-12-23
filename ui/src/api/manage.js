@@ -3,6 +3,7 @@ import request from '@/utils/request'
 const prefix = '/v1/admin'
 
 const api = {
+  profile: `${prefix}/profile`,
   user: `${prefix}/user`,
   role: '/role',
   service: '/service',
@@ -12,6 +13,14 @@ const api = {
 }
 
 export default api
+
+export function getProfile (parameter) {
+  return request({
+    url: api.profile,
+    method: 'get',
+    data: parameter
+  })
+}
 
 export function getUserList (parameter) {
   return request({

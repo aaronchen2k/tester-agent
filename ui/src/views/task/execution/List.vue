@@ -73,6 +73,7 @@
 // 演示如何使用 this.$dialog 封装 modal 组件
 import TaskForm from '../../list/modules/TaskForm'
 import Info from '../../list/components/Info'
+import { getProfile } from '@/api/manage'
 
 const data = []
 data.push({
@@ -139,6 +140,17 @@ export default {
       status: 'all'
     }
   },
+  computed: {
+  },
+  mounted () {
+  },
+  created () {
+    console.log('created')
+    getProfile().then(response => {
+      console.log('getProfile', response)
+    })
+  },
+
   methods: {
     add () {
       this.$dialog(TaskForm,
