@@ -3,7 +3,7 @@ package repo
 import (
 	_const "github.com/aaronchen2k/openstc-common/src/libs/const"
 	"github.com/aaronchen2k/openstc/src/model"
-	"github.com/jinzhu/gorm"
+	"gorm.io/gorm"
 	"strings"
 	"time"
 )

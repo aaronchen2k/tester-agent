@@ -29,8 +29,9 @@ func (c *HostController) PostRegister() (result _domain.RpcResult) {
 }
 
 func (c *HostController) List(ctx iris.Context) {
-	c.HostService.ListAll()
-	_, _ = ctx.JSON(common.ApiResource(200, nil, "请求成功"))
+	hosts := c.HostService.ListAll()
+
+	_, _ = ctx.JSON(common.ApiResource(200, hosts, "请求成功"))
 }
 
 func (c *HostController) Get(ctx iris.Context) {

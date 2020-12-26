@@ -4,7 +4,7 @@ import (
 	_const "github.com/aaronchen2k/openstc-common/src/libs/const"
 )
 
-type BackingImage struct {
+type Image struct {
 	BaseModel
 
 	Name string
@@ -28,6 +28,6 @@ type BackingImage struct {
 	DriverIsoId uint
 }
 
-func (BackingImage) TableName() string {
+func (Image) TableName() string {
 	return "biz_backing_image"
 }

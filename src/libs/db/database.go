@@ -100,9 +100,19 @@ func (i *Instance) Close() error {
 
 func (i *Instance) Migrate() {
 	err := i.DB().AutoMigrate(
-		&model.User{},
-		&model.Role{},
+		&model.Build{},
+		&model.Container{},
+		&model.Device{},
+		&model.Host{},
+		&model.Image{},
+		&model.Iso{},
 		&model.Permission{},
+		&model.Queue{},
+		&model.Role{},
+		&model.Task{},
+		&model.User{},
+		&model.Vm{},
+
 		&gormadapter.CasbinRule{},
 	)
 

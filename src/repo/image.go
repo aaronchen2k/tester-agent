@@ -15,13 +15,13 @@ type ImageRepo struct {
 	DB *gorm.DB `inject:""`
 }
 
-func (r *ImageRepo) Get(id int) (image model.BackingImage) {
+func (r *ImageRepo) Get(id int) (image model.Image) {
 	r.DB.Where("id=?", id).First(&image)
 	return
 }
 
 func (r *ImageRepo) QueryByOs(platform _const.OsPlatform, osType _const.OsType, osLang _const.OsLang) (ids []int) {
-	var db = r.DB.Model(model.BackingImage{}).Where("NOT disabled AND NOT deleted")
+	var db = r.DB.Model(model.Image{}).Where("NOT disabled AND NOT deleted")
 	if platform != "" {
 		db.Where("osPlatform = ?", platform)
 	}

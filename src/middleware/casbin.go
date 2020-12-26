@@ -38,7 +38,7 @@ func (m *CasbinService) ServeHTTP(ctx iris.Context) {
 		defer conn.Close()
 
 		credentials, err = m.TokenRepo.GetRedisSession(conn, value.Raw)
-		if err != nil {
+		if err != nil || credentials == nil {
 			m.TokenRepo.UserTokenExpired(value.Raw)
 			_, _ = ctx.JSON(common.ApiResource(401, nil, ""))
 			ctx.StopExecution()

@@ -1,5 +1,5 @@
 import axios from 'axios'
-import store from '@/store'
+// import store from '@/store'
 import storage from 'store'
 import router from '../router'
 import notification from 'ant-design-vue/es/notification'
@@ -15,10 +15,11 @@ const request = axios.create({
 
 // 异常拦截处理器
 const errorHandler = (error) => {
+  console.log('===errorHandler===', error)
   if (error.response) {
     const data = error.response.data
     // 从 localstorage 获取 token
-    const token = storage.get(ACCESS_TOKEN)
+    // const token = storage.get(ACCESS_TOKEN)
     if (error.response.status === 403) {
       notification.error({
         message: 'Forbidden',
@@ -30,13 +31,13 @@ const errorHandler = (error) => {
         message: 'Unauthorized',
         description: 'Authorization verification failed'
       })
-      if (token) {
-        store.dispatch('Logout').then(() => {
-          setTimeout(() => {
-            window.location.reload()
-          }, 1500)
-        })
-      }
+      // if (token) {
+      //   store.dispatch('Logout').then(() => {
+      //     setTimeout(() => {
+      //       window.location.reload()
+      //     }, 1500)
+      //   })
+      // }
 
       router.push({ path: '/user/login' })
     }
@@ -62,8 +63,11 @@ request.interceptors.request.use(config => {
 request.interceptors.response.use((response) => {
   console.log('===Response===', response)
 
-  if (response.data.code !== 200) {
-    router.push({ path: '/user/login' })
+  if (response.data.code === 401) {
+    if (router.currentRoute.path !== '/user/login') {
+      router.push({ path: '/user/login' })
+    }
+
     return
   }
 

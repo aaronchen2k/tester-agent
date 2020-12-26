@@ -5,7 +5,7 @@ import (
 	_commonUtils "github.com/aaronchen2k/openstc-common/src/libs/common"
 	_const "github.com/aaronchen2k/openstc-common/src/libs/const"
 	"github.com/aaronchen2k/openstc/src/model"
-	"github.com/jinzhu/gorm"
+	"gorm.io/gorm"
 	"strconv"
 	"strings"
 )

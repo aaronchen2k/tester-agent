@@ -4,6 +4,11 @@ type Response struct {
 	Code int64       `json:"code"`
 	Msg  interface{} `json:"message"`
 	Data interface{} `json:"data"`
+
+	PageSize   int `json:"pageSize"`
+	PageNo     int `json:"pageNo"`
+	TotalPage  int `json:"totalPage"`
+	TotalCount int `json:"totalCount"`
 }
 
 type Lists struct {
