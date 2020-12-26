@@ -44,19 +44,25 @@ export const asyncRouterMap = [
         name: 'res',
         redirect: '/res/node/list',
         component: RouteView,
-        meta: { title: 'menu.res', icon: bxAnaalyse, permission: [ 'task' ] },
+        meta: { title: 'menu.res', icon: bxAnaalyse, permission: [ 'res' ] },
         children: [
           {
             path: '/res/node/list',
             name: 'node-list',
             component: () => import('@/views/res/node/List'),
-            meta: { title: 'menu.node', permission: [ 'task' ] }
+            meta: { title: 'menu.node', permission: [ 'res' ] }
           },
           {
             path: '/task/vm/list',
             name: 'vm-list',
             component: () => import('@/views/res/vm/List'),
-            meta: { title: 'menu.vm', permission: [ 'task' ] }
+            meta: { title: 'menu.vm', permission: [ 'res' ] }
+          },
+          {
+            path: '/res/container/list',
+            name: 'container-list',
+            component: () => import('@/views/res/container/List'),
+            meta: { title: 'menu.container', permission: [ 'res' ] }
           }
         ]
       },

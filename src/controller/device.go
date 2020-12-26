@@ -13,7 +13,7 @@ type DeviceController struct {
 }
 
 func NewDeviceController() *DeviceController {
-	return &DeviceController{Service: service.NewDeviceService()}
+	return &DeviceController{}
 }
 func (g *DeviceController) PostRegister() (result _domain.RpcResult) {
 	var devices []_domain.DeviceInst

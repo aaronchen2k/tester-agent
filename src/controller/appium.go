@@ -20,7 +20,7 @@ type AppiumController struct {
 }
 
 func NewAppiumController() *AppiumController {
-	return &AppiumController{Service: service.NewAppiumService()}
+	return &AppiumController{}
 }
 func (g *AppiumController) PostUpload() (result _domain.RpcResult) {
 	dir := _const.UploadDir + _dateUtils.DateStr(time.Now())

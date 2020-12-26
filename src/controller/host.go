@@ -3,6 +3,7 @@ package controller
 import (
 	_domain "github.com/aaronchen2k/openstc-common/src/domain"
 	_logUtils "github.com/aaronchen2k/openstc-common/src/libs/log"
+	"github.com/aaronchen2k/openstc/src/libs/common"
 	"github.com/aaronchen2k/openstc/src/service"
 	"github.com/kataras/iris/v12"
 )
@@ -13,16 +14,26 @@ type HostController struct {
 }
 
 func NewHostController() *HostController {
-	return &HostController{HostService: service.NewHostService()}
+	return &HostController{}
 }
-func (g *HostController) PostRegister() (result _domain.RpcResult) {
+func (c *HostController) PostRegister() (result _domain.RpcResult) {
 	var host _domain.Host
-	if err := g.Ctx.ReadJSON(&host); err != nil {
+	if err := c.Ctx.ReadJSON(&host); err != nil {
 		_logUtils.Error(err.Error())
 		result.Fail("wrong request data")
 		return
 	}
 
-	result = g.HostService.Register(host)
+	result = c.HostService.Register(host)
 	return result
+}
+
+func (c *HostController) List(ctx iris.Context) {
+	c.HostService.ListAll()
+	_, _ = ctx.JSON(common.ApiResource(200, nil, "请求成功"))
+}
+
+func (c *HostController) Get(ctx iris.Context) {
+
+	_, _ = ctx.JSON(common.ApiResource(200, nil, "请求成功"))
 }

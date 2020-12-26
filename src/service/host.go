@@ -107,3 +107,7 @@ func (s *HostService) getVmsByStatus(host _domain.Host, vmNames []string) (runni
 
 	return
 }
+
+func (s *HostService) ListAll() {
+	s.HostRepo.Query()
+}

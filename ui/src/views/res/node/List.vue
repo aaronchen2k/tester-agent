@@ -121,7 +121,7 @@
 <script>
 import moment from 'moment'
 import { STable, Ellipsis } from '@/components'
-import { getRoleList, getServiceList } from '@/api/manage'
+import { listHost } from '@/api/manage'
 
 import StepByStepModal from '../../list/modules/StepByStepModal'
 import CreateForm from '../../list/modules/CreateForm'
@@ -207,7 +207,7 @@ export default {
       loadData: parameter => {
         const requestParameters = Object.assign({}, parameter, this.queryParam)
         console.log('loadData request parameters:', requestParameters)
-        return getServiceList(requestParameters)
+        return listHost(requestParameters)
           .then(res => {
             return res.result
           })
@@ -225,7 +225,7 @@ export default {
     }
   },
   created () {
-    getRoleList({ t: new Date() })
+    listHost({ t: new Date() })
   },
   computed: {
     rowSelection () {

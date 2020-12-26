@@ -11,5 +11,5 @@ type ImageController struct {
 }
 
 func NewImageController() *ImageController {
-	return &ImageController{ImageService: service.NewImageService()}
+	return &ImageController{}
 }

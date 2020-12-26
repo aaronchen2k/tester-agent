@@ -10,13 +10,13 @@ import (
 	"strings"
 )
 
-func NewHostRepo() *HostRepo {
-	return &HostRepo{}
-}
-
 type HostRepo struct {
 	CommonRepo
 	DB *gorm.DB `inject:""`
+}
+
+func NewHostRepo() *HostRepo {
+	return &HostRepo{}
 }
 
 func (r *HostRepo) Register(host _domain.Host) (po model.Host, err error) {
@@ -29,6 +29,11 @@ func (r *HostRepo) Register(host _domain.Host) (po model.Host, err error) {
 		err = r.DB.Model(&host).Updates(host).Error
 		return
 	}
+}
+
+func (r *HostRepo) Query() (hosts []*model.Host) {
+	r.DB.Where("true").Find(hosts)
+	return
 }
 
 func (r *HostRepo) Get(id int) (host model.Host) {

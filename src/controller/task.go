@@ -16,7 +16,7 @@ type TaskController struct {
 }
 
 func NewTaskController() *TaskController {
-	return &TaskController{TaskService: service.NewTaskService(), QueueService: service.NewQueueService()}
+	return &TaskController{}
 }
 func (g *TaskController) PostCreate() (result _domain.RpcResult) {
 	var task model.Task

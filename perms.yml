@@ -9,6 +9,11 @@ perms:
     description: "个人信息"
     act: "GET"
 
+  - name: "/api/v1/admin/hosts"
+    displayname: "PVE节点"
+    description: "PVE节点"
+    act: "GET"
+
   - name: "/api/v1/admin/expire"
     displayname: "刷新token"
     description: "刷新token"

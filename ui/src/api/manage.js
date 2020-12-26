@@ -4,12 +4,14 @@ const prefix = '/v1/admin'
 
 const api = {
   profile: `${prefix}/profile`,
+  hosts: `${prefix}/hosts`,
+
   user: `${prefix}/user`,
-  role: '/role',
-  service: '/service',
-  permission: '/permission',
-  permissionNoPager: '/permission/no-pager',
-  orgTree: '/org/tree'
+  role: `${prefix}/role`,
+  service: `${prefix}/service`,
+  permission: `${prefix}/permission`,
+  permissionNoPager: `${prefix}/permission/no-pager`,
+  orgTree: `${prefix}/org/tree`
 }
 
 export default api
@@ -17,6 +19,13 @@ export default api
 export function getProfile (parameter) {
   return request({
     url: api.profile,
+    method: 'get',
+    data: parameter
+  })
+}
+export function listHost (parameter) {
+  return request({
+    url: api.hosts,
     method: 'get',
     data: parameter
   })

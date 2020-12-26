@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"github.com/aaronchen2k/openstc-common/src/libs/convertor"
 	"github.com/aaronchen2k/openstc/src/domain"
 	"github.com/aaronchen2k/openstc/src/libs/common"
 	sessionUtils "github.com/aaronchen2k/openstc/src/libs/session"
@@ -14,7 +15,6 @@ import (
 	"time"
 
 	"github.com/kataras/iris/v12"
-	gf "github.com/snowlyg/gotransformer"
 )
 
 type UserController struct {
@@ -316,7 +316,7 @@ func (c *UserController) usersTransform(users []*model.User) []*transformer.User
 
 func (c *UserController) userTransform(user *model.User) *transformer.User {
 	u := &transformer.User{}
-	g := gf.NewTransform(u, user, time.RFC3339)
+	g := convertor.NewTransform(u, user, time.RFC3339)
 	_ = g.Transformer()
 
 	roleIds := c.RoleService.GetRolesForUser(user.ID)

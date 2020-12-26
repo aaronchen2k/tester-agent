@@ -16,7 +16,7 @@ type VmController struct {
 }
 
 func NewVmController() *VmController {
-	return &VmController{VmService: service.NewVmService()}
+	return &VmController{}
 }
 
 func (g *VmController) PostRegister() (result _domain.RpcResult) {

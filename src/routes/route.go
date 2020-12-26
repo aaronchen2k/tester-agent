@@ -13,11 +13,18 @@ type Router struct {
 
 	CasbinService *middleware.CasbinService `inject:""`
 
-	InitCtrl    *controller.InitController    `inject:""`
 	AccountCtrl *controller.AccountController `inject:""`
-	UserCtrl    *controller.UserController    `inject:""`
-	RoleCtrl    *controller.RoleController    `inject:""`
+	AppiumCtrl  *controller.AppiumController  `inject:""`
+	DeviceCtrl  *controller.DeviceController  `inject:""`
+	FileCtrl    *controller.FileController    `inject:""`
+	HostCtrl    *controller.HostController    `inject:""`
+	ImageCtrl   *controller.ImageController   `inject:""`
+	InitCtrl    *controller.InitController    `inject:""`
 	PermCtrl    *controller.PermController    `inject:""`
+	RoleCtrl    *controller.RoleController    `inject:""`
+	TaskCtrl    *controller.TaskController    `inject:""`
+	UserCtrl    *controller.UserController    `inject:""`
+	VmCtrl      *controller.VmController      `inject:""`
 
 	TokenRepo *repo.TokenRepo `inject:""`
 }
@@ -52,6 +59,11 @@ func (r *Router) App() {
 				admin.Post("/logout", r.AccountCtrl.UserLogout).Name = "退出"
 				admin.Get("/expire", r.AccountCtrl.UserExpire).Name = "刷新 token"
 				admin.Get("/profile", r.UserCtrl.GetProfile).Name = "个人信息"
+
+				admin.PartyFunc("/hosts", func(users iris.Party) {
+					users.Get("/", r.HostCtrl.List).Name = "PVE节点列表"
+					users.Get("/{id:uint}", r.HostCtrl.Get).Name = "用户详情"
+				})
 
 				admin.PartyFunc("/users", func(users iris.Party) {
 					users.Get("/", r.UserCtrl.GetAllUsers).Name = "用户列表"

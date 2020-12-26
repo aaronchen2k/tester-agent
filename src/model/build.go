@@ -3,11 +3,12 @@ package model
 import (
 	"github.com/aaronchen2k/openstc-common/src/domain"
 	_const "github.com/aaronchen2k/openstc-common/src/libs/const"
+	"gorm.io/gorm"
 	"time"
 )
 
 type Build struct {
-	BaseModel
+	gorm.Model
 
 	QueueId uint
 	Queue   `sql:"-", gorm:"foreignkey:QueueId"`
