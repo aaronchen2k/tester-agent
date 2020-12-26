@@ -2,7 +2,7 @@
 ## Open Software Test Center
 Continuous testing on on-demand virtual machines and docker containers.
 
-Proxmox VE, Vue.js, Golang, MySQL
+Vue.js, Golang, MySQL, Proxmox VE, Docker
 
 ## Quick start
 TODO
