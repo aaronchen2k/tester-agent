@@ -19,7 +19,7 @@ type VmRepo struct {
 
 func (r *VmRepo) Register(vm _domain.Vm) (err error) {
 	// just update status by mac for exist vm
-	r.DB.Model(&vm).Where("mac=?", vm.MacAddress).
+	r.DB.Model(&model.Vm{}).Where("mac=?", vm.MacAddress).
 		Updates(
 			map[string]interface{}{"status": vm.Status, "ip": vm.PublicIp, "port": vm.PublicPort, "workDir": vm.WorkDir,
 				"lastRegisterDate": time.Now(), "updatedAt": time.Now()})
