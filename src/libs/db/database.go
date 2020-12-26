@@ -4,7 +4,7 @@ import (
 	"fmt"
 	_logUtils "github.com/aaronchen2k/openstc-common/src/libs/log"
 	"github.com/aaronchen2k/openstc/src/libs/common"
-	"github.com/aaronchen2k/openstc/src/models"
+	"github.com/aaronchen2k/openstc/src/model"
 	"github.com/casbin/gorm-adapter/v2"
 	"github.com/fatih/color"
 	"gorm.io/driver/mysql"
@@ -100,9 +100,9 @@ func (i *Instance) Close() error {
 
 func (i *Instance) Migrate() {
 	err := i.DB().AutoMigrate(
-		&models.User{},
-		&models.Role{},
-		&models.Permission{},
+		&model.User{},
+		&model.Role{},
+		&model.Permission{},
 		&gormadapter.CasbinRule{},
 	)
 

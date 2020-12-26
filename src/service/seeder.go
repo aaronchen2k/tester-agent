@@ -2,9 +2,10 @@ package service
 
 import (
 	"fmt"
+	"github.com/aaronchen2k/openstc/src/domain"
 	"github.com/aaronchen2k/openstc/src/libs/common"
 	"github.com/aaronchen2k/openstc/src/libs/db"
-	"github.com/aaronchen2k/openstc/src/models"
+	"github.com/aaronchen2k/openstc/src/model"
 	"github.com/aaronchen2k/openstc/src/repo"
 	logger "github.com/sirupsen/logrus"
 	"math/rand"
@@ -13,7 +14,6 @@ import (
 
 	"github.com/azumads/faker"
 	"github.com/jinzhu/configor"
-	"gorm.io/gorm"
 )
 
 type SeederService struct {
@@ -85,8 +85,8 @@ func (s *SeederService) CreatePerms() {
 		fmt.Println(fmt.Sprintf("填充权限：%+v\n", Seeds))
 	}
 	for _, m := range Seeds.Perms {
-		search := &models.Search{
-			Fields: []*models.Filed{
+		search := &domain.Search{
+			Fields: []*domain.Filed{
 				{
 					Key:       "name",
 					Condition: "=",
@@ -101,8 +101,7 @@ func (s *SeederService) CreatePerms() {
 		perm, err := s.PermRepo.GetPermission(search)
 		if err == nil {
 			if perm.ID == 0 {
-				perm = &models.Permission{
-					Model:       gorm.Model{CreatedAt: time.Now()},
+				perm = &model.Permission{
 					Name:        m.Name,
 					DisplayName: m.DisplayName,
 					Description: m.Description,
@@ -118,8 +117,8 @@ func (s *SeederService) CreatePerms() {
 
 // CreateAdminRole 新建管理角色
 func (s *SeederService) CreateAdminRole() {
-	search := &models.Search{
-		Fields: []*models.Filed{
+	search := &domain.Search{
+		Fields: []*domain.Filed{
 			{
 				Key:       "name",
 				Condition: "=",
@@ -129,7 +128,7 @@ func (s *SeederService) CreateAdminRole() {
 	}
 	role, err := s.RoleRepo.GetRole(search)
 	var permIds []uint
-	ss := &models.Search{
+	ss := &domain.Search{
 		Limit:  -1,
 		Offset: -1,
 	}
@@ -147,11 +146,10 @@ func (s *SeederService) CreateAdminRole() {
 
 	if err == nil {
 		if role.ID == 0 {
-			role = &models.Role{
+			role = &model.Role{
 				Name:        common.Config.Admin.RoleName,
 				DisplayName: common.Config.Admin.RoleDisplayName,
 				Description: common.Config.Admin.RoleDisplayName,
-				Model:       gorm.Model{CreatedAt: time.Now()},
 			}
 			role.PermIds = permIds
 			if err := s.RoleService.CreateRole(role); err != nil {
@@ -172,8 +170,8 @@ func (s *SeederService) CreateAdminRole() {
 
 // CreateAdminUser 新建管理员
 func (s *SeederService) CreateAdminUser() {
-	search := &models.Search{
-		Fields: []*models.Filed{
+	search := &domain.Search{
+		Fields: []*domain.Filed{
 			{
 				Key:       "username",
 				Condition: "=",
@@ -187,7 +185,7 @@ func (s *SeederService) CreateAdminUser() {
 	}
 
 	var roleIds []uint
-	ss := &models.Search{
+	ss := &domain.Search{
 		Limit:  -1,
 		Offset: -1,
 	}
@@ -204,13 +202,12 @@ func (s *SeederService) CreateAdminUser() {
 	admin.RoleIds = roleIds
 
 	if admin.ID == 0 {
-		admin = &models.User{
+		admin = &model.User{
 			Username: common.Config.Admin.UserName,
 			Name:     common.Config.Admin.Name,
 			Password: common.Config.Admin.Password,
 			Avatar:   "https://wx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTIPbZRufW9zPiaGpfdXgU7icRL1licKEicYyOiace8QQsYVKvAgCrsJx1vggLAD2zJMeSXYcvMSkw9f4pw/132",
 			Intro:    "超级弱鸡程序猿一枚！！！！",
-			Model:    gorm.Model{CreatedAt: time.Now()},
 		}
 		admin.RoleIds = roleIds
 		if err := s.UserService.CreateUser(admin); err != nil {

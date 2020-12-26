@@ -1,12 +1,11 @@
-package controllers
+package controller
 
 import (
 	"github.com/aaronchen2k/openstc/src/libs/common"
-	"github.com/aaronchen2k/openstc/src/models"
+	"github.com/aaronchen2k/openstc/src/model"
 	"github.com/aaronchen2k/openstc/src/repo"
 	"github.com/aaronchen2k/openstc/src/service"
-	"github.com/aaronchen2k/openstc/src/validates"
-
+	"github.com/aaronchen2k/openstc/src/validate"
 	"github.com/go-playground/validator/v10"
 	"github.com/kataras/iris/v12"
 )
@@ -69,17 +68,17 @@ func (c *RoleController) GetRole(ctx iris.Context) {
 func (c *RoleController) CreateRole(ctx iris.Context) {
 
 	ctx.StatusCode(iris.StatusOK)
-	role := new(models.Role)
+	role := new(model.Role)
 
 	if err := ctx.ReadJSON(role); err != nil {
 		_, _ = ctx.JSON(common.ApiResource(400, nil, err.Error()))
 		return
 	}
 
-	err := validates.Validate.Struct(*role)
+	err := validate.Validate.Struct(*role)
 	if err != nil {
 		errs := err.(validator.ValidationErrors)
-		for _, e := range errs.Translate(validates.ValidateTrans) {
+		for _, e := range errs.Translate(validate.ValidateTrans) {
 			if len(e) > 0 {
 				_, _ = ctx.JSON(common.ApiResource(400, nil, e))
 				return
@@ -119,16 +118,16 @@ func (c *RoleController) CreateRole(ctx iris.Context) {
 func (c *RoleController) UpdateRole(ctx iris.Context) {
 
 	ctx.StatusCode(iris.StatusOK)
-	role := new(models.Role)
+	role := new(model.Role)
 	if err := ctx.ReadJSON(role); err != nil {
 		_, _ = ctx.JSON(common.ApiResource(400, nil, err.Error()))
 		return
 	}
 
-	err := validates.Validate.Struct(*role)
+	err := validate.Validate.Struct(*role)
 	if err != nil {
 		errs := err.(validator.ValidationErrors)
-		for _, e := range errs.Translate(validates.ValidateTrans) {
+		for _, e := range errs.Translate(validate.ValidateTrans) {
 			if len(e) > 0 {
 				_, _ = ctx.JSON(common.ApiResource(400, nil, e))
 				return

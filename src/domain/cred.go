@@ -1,4 +1,4 @@
-package models
+package domain
 
 import (
 	"github.com/pkg/errors"
@@ -44,11 +44,12 @@ var (
 	RedisSessionTimeoutWx     = 5 * 52 * 168 * time.Hour
 )
 
-type RedisSessionV2 struct {
+type UserCredentials struct {
 	UserId       string `json:"user_id" redis:"user_id"`
 	LoginType    int    `json:"login_type" redis:"login_type"`
 	AuthType     int    `json:"auth_type" redis:"auth_type"`
 	CreationDate int64  `json:"creation_data" redis:"creation_data"`
 	ExpiresIn    int    `json:"expires_in" redis:"expires_in"`
 	Scope        uint64 `json:"scope" redis:"scope"`
+	Token        string `json:"token" redis:"token"`
 }

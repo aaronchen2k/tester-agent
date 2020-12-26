@@ -2,8 +2,9 @@ package service
 
 import (
 	"fmt"
+	"github.com/aaronchen2k/openstc/src/domain"
 	"github.com/aaronchen2k/openstc/src/middleware"
-	"github.com/aaronchen2k/openstc/src/models"
+	"github.com/aaronchen2k/openstc/src/model"
 	"github.com/aaronchen2k/openstc/src/repo"
 	"github.com/aaronchen2k/openstc/src/transformer"
 	"github.com/fatih/color"
@@ -26,13 +27,13 @@ func NewRoleService() *RoleService {
 }
 
 // RolePermissions get role's permissions
-func (s *RoleService) RolePermissions(role *models.Role) []*models.Permission {
+func (s *RoleService) RolePermissions(role *model.Role) []*model.Permission {
 	perms := s.GetPermissionsForUser(role.ID)
-	var ps []*models.Permission
+	var ps []*model.Permission
 	for _, perm := range perms {
 		if len(perm) >= 3 && len(perm[1]) > 0 && len(perm[2]) > 0 {
-			search := &models.Search{
-				Fields: []*models.Filed{
+			search := &domain.Search{
+				Fields: []*domain.Filed{
 					{
 						Key:       "name",
 						Condition: "=",
@@ -54,7 +55,7 @@ func (s *RoleService) RolePermissions(role *models.Role) []*models.Permission {
 	return ps
 }
 
-func (s *RoleService) RolesTransform(roles []*models.Role) []*transformer.Role {
+func (s *RoleService) RolesTransform(roles []*model.Role) []*transformer.Role {
 	var rs []*transformer.Role
 	for _, role := range roles {
 		r := s.RoleTransform(role)
@@ -62,7 +63,7 @@ func (s *RoleService) RolesTransform(roles []*models.Role) []*transformer.Role {
 	}
 	return rs
 }
-func (s *RoleService) RoleTransform(role *models.Role) *transformer.Role {
+func (s *RoleService) RoleTransform(role *model.Role) *transformer.Role {
 	transformerRole := &transformer.Role{}
 	g := gf.NewTransform(s, role, time.RFC3339)
 	_ = g.Transformer()
@@ -71,7 +72,7 @@ func (s *RoleService) RoleTransform(role *models.Role) *transformer.Role {
 }
 
 // CreateRole create role
-func (s *RoleService) CreateRole(role *models.Role) error {
+func (s *RoleService) CreateRole(role *model.Role) error {
 	if err := s.RoleRepo.DB.Create(role).Error; err != nil {
 		return err
 	}
@@ -82,8 +83,8 @@ func (s *RoleService) CreateRole(role *models.Role) error {
 }
 
 // UpdateRole update role
-func (s *RoleService) UpdateRole(id uint, nr *models.Role) error {
-	if err := s.RoleRepo.Update(&models.Role{}, nr, id); err != nil {
+func (s *RoleService) UpdateRole(id uint, nr *model.Role) error {
+	if err := s.RoleRepo.Update(&model.Role{}, nr, id); err != nil {
 		return err
 	}
 
@@ -103,13 +104,13 @@ func (s *RoleService) GetRolesForUser(uid uint) []string {
 }
 
 // addPerms add perms
-func (s *RoleService) addPerms(permIds []uint, role *models.Role) {
+func (s *RoleService) addPerms(permIds []uint, role *model.Role) {
 	if len(permIds) > 0 {
 		roleId := strconv.FormatUint(uint64(role.ID), 10)
 		if _, err := s.CasbinService.Enforcer.DeletePermissionsForUser(roleId); err != nil {
 			color.Red(fmt.Sprintf("AppendPermsErr:%s \n", err))
 		}
-		var perms []models.Permission
+		var perms []model.Permission
 		s.RoleRepo.DB.Where("id in (?)", permIds).Find(&perms)
 		for _, perm := range perms {
 			if _, err := s.CasbinService.Enforcer.AddPolicy(roleId, perm.Name, perm.Act); err != nil {

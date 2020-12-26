@@ -2,8 +2,8 @@ package repo
 
 import (
 	"fmt"
-	redisUtils "github.com/aaronchen2k/openstc/src/libs/redis"
-	"github.com/aaronchen2k/openstc/src/models"
+	"github.com/aaronchen2k/openstc/src/domain"
+	"github.com/aaronchen2k/openstc/src/libs/redis"
 	"github.com/gomodule/redigo/redis"
 	"gorm.io/gorm"
 	"strings"
@@ -19,12 +19,23 @@ func NewTokenRepo() *TokenRepo {
 	return &TokenRepo{}
 }
 
-func (r *TokenRepo) GetRedisSessionV2(conn *redisUtils.RedisCluster, token string) (*models.RedisSessionV2, error) {
-	sKey := models.ZXW_SESSION_TOKEN_PREFIX + token
+func (r *TokenRepo) GetRedisSession(conn *redisUtils.RedisCluster, token string) (*domain.UserCredentials, error) {
+	sKey := domain.ZXW_SESSION_TOKEN_PREFIX + token
 	if !conn.Exists(sKey) {
-		return nil, models.ERR_TOKEN_INVALID
+		return nil, domain.ERR_TOKEN_INVALID
 	}
-	pp := new(models.RedisSessionV2)
+	pp := new(domain.UserCredentials)
+	if err := r.loadRedisHashToStruct(conn, sKey, pp); err != nil {
+		return nil, err
+	}
+	return pp, nil
+}
+func (r *TokenRepo) GetWebSession(conn *redisUtils.RedisCluster, token string) (*domain.UserCredentials, error) {
+	sKey := domain.ZXW_SESSION_TOKEN_PREFIX + token
+	if !conn.Exists(sKey) {
+		return nil, domain.ERR_TOKEN_INVALID
+	}
+	pp := new(domain.UserCredentials)
 	if err := r.loadRedisHashToStruct(conn, sKey, pp); err != nil {
 		return nil, err
 	}
@@ -53,7 +64,7 @@ func (r *TokenRepo) IsUserTokenOver(userId string) bool {
 }
 
 func (r *TokenRepo) getUserTokenCount(conn *redisUtils.RedisCluster, userId string) int {
-	count, err := redis.Int(conn.Scard(models.ZXW_SESSION_USER_PREFIX + userId))
+	count, err := redis.Int(conn.Scard(domain.ZXW_SESSION_USER_PREFIX + userId))
 	if err != nil {
 		fmt.Println(fmt.Sprintf("getUserTokenCount error :%+v", err))
 		return 0
@@ -62,9 +73,9 @@ func (r *TokenRepo) getUserTokenCount(conn *redisUtils.RedisCluster, userId stri
 }
 
 func (r *TokenRepo) getUserTokenMaxCount(conn *redisUtils.RedisCluster) int {
-	count, err := redis.Int(conn.GetKey(models.ZXW_SESSION_USER_MAX_TOKEN_PREFIX))
+	count, err := redis.Int(conn.GetKey(domain.ZXW_SESSION_USER_MAX_TOKEN_PREFIX))
 	if err != nil {
-		return models.ZXW_SESSION_USER_MAX_TOKEN_DEFAULT
+		return domain.ZXW_SESSION_USER_MAX_TOKEN_DEFAULT
 	}
 	return count
 }
@@ -73,14 +84,14 @@ func (r *TokenRepo) UserTokenExpired(token string) {
 	conn := redisUtils.GetRedisClusterClient()
 	defer conn.Close()
 
-	uKey := models.ZXW_SESSION_BIND_USER_PREFIX + token
+	uKey := domain.ZXW_SESSION_BIND_USER_PREFIX + token
 	sKeys, err := redis.Strings(conn.Members(uKey))
 	if err != nil {
 		fmt.Println(fmt.Sprintf("conn.Members key %s error :%+v", uKey, err))
 		return
 	}
 	for _, v := range sKeys {
-		if !strings.Contains(v, models.ZXW_SESSION_USER_PREFIX) {
+		if !strings.Contains(v, domain.ZXW_SESSION_USER_PREFIX) {
 			continue
 		}
 		_, err := conn.Do("SREM", v, token)
@@ -98,35 +109,35 @@ func (r *TokenRepo) UserTokenExpired(token string) {
 func (r *TokenRepo) GetUserScope(userType string) uint64 {
 	switch userType {
 	case "admin":
-		return models.AdminScope
+		return domain.AdminScope
 	}
-	return models.NoneScope
+	return domain.NoneScope
 }
 
-func (r *TokenRepo) ToCache(conn *redisUtils.RedisCluster, rs models.RedisSessionV2, token string) error {
-	sKey := models.ZXW_SESSION_TOKEN_PREFIX + token
+func (r *TokenRepo) CacheToRedis(conn *redisUtils.RedisCluster, cred domain.UserCredentials, token string) error {
+	sKey := domain.ZXW_SESSION_TOKEN_PREFIX + token
 
 	if _, err := conn.HMSet(sKey,
-		"user_id", rs.UserId,
-		"login_type", rs.LoginType,
-		"auth_type", rs.AuthType,
-		"creation_data", rs.CreationDate,
-		"expires_in", rs.ExpiresIn,
-		"scope", rs.Scope,
+		"user_id", cred.UserId,
+		"login_type", cred.LoginType,
+		"auth_type", cred.AuthType,
+		"creation_data", cred.CreationDate,
+		"expires_in", cred.ExpiresIn,
+		"scope", cred.Scope,
 	); err != nil {
-		fmt.Println(fmt.Sprintf("conn.ToCache error :%+v", err))
+		fmt.Println(fmt.Sprintf("conn.CacheToRedis error :%+v", err))
 		return err
 	}
 	return nil
 }
 
-func (r *TokenRepo) SyncUserTokenCache(conn *redisUtils.RedisCluster, rs models.RedisSessionV2, token string) error {
-	sKey := models.ZXW_SESSION_USER_PREFIX + token
+func (r *TokenRepo) SyncUserTokenCache(conn *redisUtils.RedisCluster, cred domain.UserCredentials, token string) error {
+	sKey := domain.ZXW_SESSION_USER_PREFIX + token
 	if _, err := conn.Sadd(sKey, token); err != nil {
 		fmt.Println(fmt.Sprintf("conn.SyncUserTokenCache1 error :%+v", err))
 		return err
 	}
-	sKey2 := models.ZXW_SESSION_BIND_USER_PREFIX + token
+	sKey2 := domain.ZXW_SESSION_BIND_USER_PREFIX + token
 	_, err := conn.Sadd(sKey2, sKey)
 	if err != nil {
 		fmt.Println(fmt.Sprintf("conn.SyncUserTokenCache2 error :%+v", err))
@@ -135,28 +146,28 @@ func (r *TokenRepo) SyncUserTokenCache(conn *redisUtils.RedisCluster, rs models.
 	return nil
 }
 
-func (r *TokenRepo) UpdateUserTokenCacheExpire(conn *redisUtils.RedisCluster, rs models.RedisSessionV2, token string) error {
-	if _, err := conn.Expire(models.ZXW_SESSION_TOKEN_PREFIX+token, int(r.GetTokenExpire(rs).Seconds())); err != nil {
+func (r *TokenRepo) UpdateUserTokenCacheExpire(conn *redisUtils.RedisCluster, rs domain.UserCredentials, token string) error {
+	if _, err := conn.Expire(domain.ZXW_SESSION_TOKEN_PREFIX+token, int(r.GetTokenExpire(rs).Seconds())); err != nil {
 		fmt.Println(fmt.Sprintf("conn.UpdateUserTokenCacheExpire error :%+v", err))
 		return err
 	}
 	return nil
 }
 
-func (r *TokenRepo) GetTokenExpire(rs models.RedisSessionV2) time.Duration {
-	timeout := models.RedisSessionTimeoutApp
-	if rs.LoginType == models.LoginTypeWeb {
-		timeout = models.RedisSessionTimeoutWeb
-	} else if rs.LoginType == models.LoginTypeWx {
-		timeout = models.RedisSessionTimeoutWx
-	} else if rs.LoginType == models.LoginTypeAlipay {
-		timeout = models.RedisSessionTimeoutWx
+func (r *TokenRepo) GetTokenExpire(rs domain.UserCredentials) time.Duration {
+	timeout := domain.RedisSessionTimeoutApp
+	if rs.LoginType == domain.LoginTypeWeb {
+		timeout = domain.RedisSessionTimeoutWeb
+	} else if rs.LoginType == domain.LoginTypeWx {
+		timeout = domain.RedisSessionTimeoutWx
+	} else if rs.LoginType == domain.LoginTypeAlipay {
+		timeout = domain.RedisSessionTimeoutWx
 	}
 	return timeout
 }
 
-func (r *TokenRepo) DelUserTokenCache(conn *redisUtils.RedisCluster, rs models.RedisSessionV2, token string) error {
-	sKey := models.ZXW_SESSION_USER_PREFIX + rs.UserId
+func (r *TokenRepo) DelUserTokenCache(conn *redisUtils.RedisCluster, rs domain.UserCredentials, token string) error {
+	sKey := domain.ZXW_SESSION_USER_PREFIX + rs.UserId
 	_, err := conn.Do("SREM", sKey, token)
 	if err != nil {
 		fmt.Println(fmt.Sprintf("conn.DelUserTokenCache1 error :%+v", err))
@@ -170,14 +181,14 @@ func (r *TokenRepo) DelUserTokenCache(conn *redisUtils.RedisCluster, rs models.R
 
 	return nil
 }
-func (r *TokenRepo) DelTokenCache(conn *redisUtils.RedisCluster, rs models.RedisSessionV2, token string) error {
-	sKey2 := models.ZXW_SESSION_BIND_USER_PREFIX + token
+func (r *TokenRepo) DelTokenCache(conn *redisUtils.RedisCluster, rs domain.UserCredentials, token string) error {
+	sKey2 := domain.ZXW_SESSION_BIND_USER_PREFIX + token
 	_, err := conn.Del(sKey2)
 	if err != nil {
 		fmt.Println(fmt.Sprintf("conn.DelUserTokenCache2 error :%+v", err))
 		return err
 	}
-	sKey3 := models.ZXW_SESSION_TOKEN_PREFIX + token
+	sKey3 := domain.ZXW_SESSION_TOKEN_PREFIX + token
 	_, err = conn.Del(sKey3)
 	if err != nil {
 		fmt.Println(fmt.Sprintf("conn.DelUserTokenCache3 error :%+v", err))
@@ -187,8 +198,8 @@ func (r *TokenRepo) DelTokenCache(conn *redisUtils.RedisCluster, rs models.Redis
 	return nil
 }
 
-func (r *TokenRepo) CleanUserTokenCache(conn *redisUtils.RedisCluster, rs models.RedisSessionV2) error {
-	sKey := models.ZXW_SESSION_USER_PREFIX + rs.UserId
+func (r *TokenRepo) CleanUserTokenCache(conn *redisUtils.RedisCluster, rs domain.UserCredentials) error {
+	sKey := domain.ZXW_SESSION_USER_PREFIX + rs.UserId
 	allTokens, err := redis.Strings(conn.Members(sKey))
 	if err != nil {
 		fmt.Println(fmt.Sprintf("conn.CleanUserTokenCache1 error :%+v", err))

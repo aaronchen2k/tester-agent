@@ -2,9 +2,8 @@ package repo
 
 import (
 	"fmt"
-	"github.com/aaronchen2k/openstc/src/models"
-	"time"
-
+	"github.com/aaronchen2k/openstc/src/domain"
+	"github.com/aaronchen2k/openstc/src/model"
 	"github.com/fatih/color"
 	"gorm.io/gorm"
 )
@@ -18,17 +17,12 @@ func NewRoleRepo() *RoleRepo {
 	return &RoleRepo{}
 }
 
-func (r *RoleRepo) NewRole() *models.Role {
-	return &models.Role{
-		Model: gorm.Model{
-			CreatedAt: time.Now(),
-			UpdatedAt: time.Now(),
-		},
-	}
+func (r *RoleRepo) NewRole() *model.Role {
+	return &model.Role{}
 }
 
 // GetRole get role
-func (r *RoleRepo) GetRole(search *models.Search) (*models.Role, error) {
+func (r *RoleRepo) GetRole(search *domain.Search) (*model.Role, error) {
 	t := r.NewRole()
 	//err := r.Found(search).First(t).Error
 	//if !r.IsNotFound(err) {
@@ -65,8 +59,8 @@ func (r *RoleRepo) DeleteRoleById(id uint) error {
 }
 
 // GetAllRoles get all roles
-func (r *RoleRepo) GetAllRoles(s *models.Search) ([]*models.Role, int64, error) {
-	var roles []*models.Role
+func (r *RoleRepo) GetAllRoles(s *domain.Search) ([]*model.Role, int64, error) {
+	var roles []*model.Role
 	var count int64
 	//all := r.GetAll(&models.Role{}, s)
 	//all = all.Scopes(r.Relation(s.Relations))

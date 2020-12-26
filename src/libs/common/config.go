@@ -11,8 +11,8 @@ import (
 )
 
 var Config = struct {
-	LogLevel string `yaml:"logLevel" default:"info" env:"LogLevel"`
-	Debug    bool   `yaml:"debug" default:"true" env:"Debug"`
+	LogLevel string `yaml:"logLevel" env:"LogLevel" default:"info"`
+	Debug    bool   `yaml:"debug" env:"Debug" default:"false"`
 	BinData  bool   `default:"true" env:"BinData"`
 	Https    bool   `default:"false" env:"Https"`
 	CertPath string `default:"" env:"CertPath"`
@@ -28,9 +28,10 @@ var Config = struct {
 	} `yaml:"admin,flow"`
 	DB    DBConfig `yaml:"db,flow"`
 	Redis struct {
-		Host string `env:"RedisHost" default:"localhost"`
-		Port string `env:"RedisPort" default:"6379"`
-		Pwd  string `env:"RedisPwd" default:""`
+		Enable bool   `env:"RedisDisable" default:"false"`
+		Host   string `env:"RedisHost" default:"localhost"`
+		Port   string `env:"RedisPort" default:"6379"`
+		Pwd    string `env:"RedisPwd" default:""`
 	} `yaml:"redis,flow"`
 
 	Limit struct {
@@ -50,7 +51,7 @@ var Config = struct {
 type DBConfig struct {
 	Prefix   string `yaml:"prefix" env:"DBPrefix" default:"openstc_"`
 	Name     string `yaml:"name" env:"DBName" default:"openstc"`
-	Adapter  string `yaml:"adapter" env:"DBAdapter" default:"mysql"`
+	Adapter  string `yaml:"adapter" env:"DBAdapter" default:"sqlite3"`
 	Host     string `yaml:"host" env:"DBHost" default:"localhost"`
 	Port     string `yaml:"port" env:"DBPort" default:"3306"`
 	User     string `yaml:"user" env:"DBUser" default:"root"`

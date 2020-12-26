@@ -3,9 +3,9 @@ package repo
 import (
 	"errors"
 	"fmt"
+	"github.com/aaronchen2k/openstc/src/domain"
 	"github.com/aaronchen2k/openstc/src/libs/common"
 	"github.com/aaronchen2k/openstc/src/libs/db"
-	"github.com/aaronchen2k/openstc/src/models"
 	"github.com/fatih/color"
 	"gorm.io/gorm"
 	"strings"
@@ -17,9 +17,18 @@ type CommonRepo struct {
 func NewCommonRepo() *CommonRepo {
 	return &CommonRepo{}
 }
+func (r *CommonRepo) Defer(tx *gorm.DB, code *int) {
+	if *code == 1 {
+		//提交事务
+		tx.Commit()
+	} else {
+		//回滚
+		tx.Rollback()
+	}
+}
 
 // GetAll 批量查询
-func (r *CommonRepo) GetAll(model interface{}, s *models.Search) *gorm.DB {
+func (r *CommonRepo) GetAll(model interface{}, s *domain.Search) *gorm.DB {
 	db := db.GetInst().DB().Model(model)
 	sort := "desc"
 	orderBy := "created_at"
@@ -38,7 +47,7 @@ func (r *CommonRepo) GetAll(model interface{}, s *models.Search) *gorm.DB {
 }
 
 // Found 查询条件
-func (r *CommonRepo) Found(s *models.Search) *gorm.DB {
+func (r *CommonRepo) Found(s *domain.Search) *gorm.DB {
 	return db.GetInst().DB().Scopes(r.Relation(s.Relations), r.FoundByWhere(s.Fields))
 }
 
@@ -61,7 +70,7 @@ func (r *CommonRepo) Update(v, d interface{}, id uint) error {
 }
 
 // Relation 加载关联关系
-func (r *CommonRepo) Relation(relates []*models.Relate) func(db *gorm.DB) *gorm.DB {
+func (r *CommonRepo) Relation(relates []*domain.Relate) func(db *gorm.DB) *gorm.DB {
 	return func(db *gorm.DB) *gorm.DB {
 		if len(relates) > 0 {
 			for _, re := range relates {
@@ -80,7 +89,7 @@ func (r *CommonRepo) Relation(relates []*models.Relate) func(db *gorm.DB) *gorm.
 }
 
 // FoundByWhere 查询条件
-func (r *CommonRepo) FoundByWhere(fields []*models.Filed) func(db *gorm.DB) *gorm.DB {
+func (r *CommonRepo) FoundByWhere(fields []*domain.Filed) func(db *gorm.DB) *gorm.DB {
 	return func(db *gorm.DB) *gorm.DB {
 		if len(fields) > 0 {
 			for _, field := range fields {
@@ -119,12 +128,12 @@ func (r *CommonRepo) FoundByWhere(fields []*models.Filed) func(db *gorm.DB) *gor
 }
 
 // GetRelations 转换前端获取关联关系为 []*Relate
-func (r *CommonRepo) GetRelations(relation string, fs map[string]interface{}) []*models.Relate {
-	var relates []*models.Relate
+func (r *CommonRepo) GetRelations(relation string, fs map[string]interface{}) []*domain.Relate {
+	var relates []*domain.Relate
 	if len(relation) > 0 {
 		arr := strings.Split(relation, ";")
 		for _, item := range arr {
-			relate := &models.Relate{
+			relate := &domain.Relate{
 				Value: item,
 			}
 			// 增加关联过滤
@@ -142,7 +151,7 @@ func (r *CommonRepo) GetRelations(relation string, fs map[string]interface{}) []
 }
 
 // GetSearch 转换前端查询关系为 *Filed
-func (r *CommonRepo) GetSearch(key, search string) *models.Filed {
+func (r *CommonRepo) GetSearch(key, search string) *domain.Filed {
 	if len(search) > 0 {
 		if strings.Contains(search, ":") {
 			searches := strings.Split(search, ":")
@@ -152,21 +161,21 @@ func (r *CommonRepo) GetSearch(key, search string) *models.Filed {
 					value = fmt.Sprintf("%%%s%%", searches[0])
 				}
 
-				return &models.Filed{
+				return &domain.Filed{
 					Condition: searches[1],
 					Key:       key,
 					Value:     value,
 				}
 
 			} else if len(searches) == 1 {
-				return &models.Filed{
+				return &domain.Filed{
 					Condition: "=",
 					Key:       key,
 					Value:     searches[0],
 				}
 			}
 		} else {
-			return &models.Filed{
+			return &domain.Filed{
 				Condition: "=",
 				Key:       key,
 				Value:     search,

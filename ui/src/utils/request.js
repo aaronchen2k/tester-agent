@@ -1,6 +1,7 @@
 import axios from 'axios'
 import store from '@/store'
 import storage from 'store'
+import router from '../router'
 import notification from 'ant-design-vue/es/notification'
 import { VueAxios } from './axios'
 import { ACCESS_TOKEN } from '@/store/mutation-types'
@@ -36,6 +37,8 @@ const errorHandler = (error) => {
           }, 1500)
         })
       }
+
+      router.push({ path: '/user/login' })
     }
   }
   return Promise.reject(error)
@@ -43,7 +46,7 @@ const errorHandler = (error) => {
 
 // request interceptor
 request.interceptors.request.use(config => {
-  console.log('===Axios Request===', config.url, config.data)
+  console.log('===Request===', config.url, config.data)
 
   const token = storage.get(ACCESS_TOKEN)
   console.log('add token in request header', token)
@@ -57,6 +60,13 @@ request.interceptors.request.use(config => {
 
 // response interceptor
 request.interceptors.response.use((response) => {
+  console.log('===Response===', response)
+
+  if (response.data.code !== 200) {
+    router.push({ path: '/user/login' })
+    return
+  }
+
   return response.data
 }, errorHandler)
 

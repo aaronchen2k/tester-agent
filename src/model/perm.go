@@ -1,11 +1,7 @@
-package models
-
-import (
-	"gorm.io/gorm"
-)
+package model
 
 type Permission struct {
-	gorm.Model
+	BaseModel
 
 	Name        string `gorm:"not null ;type:varchar(256)" json:"name" validate:"required,gte=4,lte=50" comment:"名称"`
 	DisplayName string `gorm:"type:varchar(256)" json:"display_name" comment:"显示名称"`

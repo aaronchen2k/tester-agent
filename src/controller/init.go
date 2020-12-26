@@ -1,4 +1,4 @@
-package controllers
+package controller
 
 import (
 	"github.com/aaronchen2k/openstc/src/libs/common"

@@ -1,11 +1,11 @@
-package controllers
+package controller
 
 import (
 	"fmt"
 	"github.com/aaronchen2k/openstc/src/libs/common"
-	"github.com/aaronchen2k/openstc/src/models"
+	"github.com/aaronchen2k/openstc/src/model"
 	"github.com/aaronchen2k/openstc/src/repo"
-	"github.com/aaronchen2k/openstc/src/validates"
+	"github.com/aaronchen2k/openstc/src/validate"
 	"github.com/go-playground/validator/v10"
 	"github.com/kataras/iris/v12"
 )
@@ -63,15 +63,15 @@ func (c *PermController) GetPermission(ctx iris.Context) {
 func (c *PermController) CreatePermission(ctx iris.Context) {
 
 	ctx.StatusCode(iris.StatusOK)
-	perm := new(models.Permission)
+	perm := new(model.Permission)
 	if err := ctx.ReadJSON(perm); err != nil {
 		_, _ = ctx.JSON(common.ApiResource(400, nil, err.Error()))
 		return
 	}
-	err := validates.Validate.Struct(*perm)
+	err := validate.Validate.Struct(*perm)
 	if err != nil {
 		errs := err.(validator.ValidationErrors)
-		for _, e := range errs.Translate(validates.ValidateTrans) {
+		for _, e := range errs.Translate(validate.ValidateTrans) {
 			if len(e) > 0 {
 				_, _ = ctx.JSON(common.ApiResource(400, nil, e))
 				return
@@ -112,16 +112,16 @@ func (c *PermController) CreatePermission(ctx iris.Context) {
 func (c *PermController) UpdatePermission(ctx iris.Context) {
 
 	ctx.StatusCode(iris.StatusOK)
-	aul := new(models.Permission)
+	aul := new(model.Permission)
 
 	if err := ctx.ReadJSON(aul); err != nil {
 		_, _ = ctx.JSON(common.ApiResource(400, nil, err.Error()))
 		return
 	}
-	err := validates.Validate.Struct(*aul)
+	err := validate.Validate.Struct(*aul)
 	if err != nil {
 		errs := err.(validator.ValidationErrors)
-		for _, e := range errs.Translate(validates.ValidateTrans) {
+		for _, e := range errs.Translate(validate.ValidateTrans) {
 			if len(e) > 0 {
 				_, _ = ctx.JSON(common.ApiResource(400, nil, e))
 				return

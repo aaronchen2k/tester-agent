@@ -5,7 +5,7 @@ package tests
 import (
 	"flag"
 	"github.com/aaronchen2k/openstc/src/libs/common"
-	"github.com/aaronchen2k/openstc/src/models"
+	"github.com/aaronchen2k/openstc/src/model"
 	"github.com/aaronchen2k/openstc/src/server"
 	"github.com/aaronchen2k/openstc/src/service"
 	"github.com/aaronchen2k/openstc/tests/mock"
@@ -34,7 +34,7 @@ func TestMain(m *testing.M) {
 
 	exitCode := m.Run()
 
-	models.DropTables() // 删除测试数据表，保持测试环境
+	model.DropTables() // 删除测试数据表，保持测试环境
 	os.Exit(exitCode)
 }
 
@@ -123,13 +123,13 @@ func delete(t *testing.T, url string, StatusCode int, Code int, Msg string) (e *
 	return
 }
 
-func CreatePermission() (*models.Permission, error) {
+func CreatePermission() (*model.Permission, error) {
 	m := mock.Permission{}
 	err := faker.FakeData(&m)
 	if err != nil {
 		return nil, err
 	}
-	perm := &models.Permission{
+	perm := &model.Permission{
 		Name:        m.Name,
 		DisplayName: m.DisplayName,
 		Description: m.Description,
@@ -144,13 +144,13 @@ func CreatePermission() (*models.Permission, error) {
 
 }
 
-func CreateRole() (*models.Role, error) {
+func CreateRole() (*model.Role, error) {
 	m := mock.Role{}
 	err := faker.FakeData(&m)
 	if err != nil {
 		return nil, err
 	}
-	role := &models.Role{
+	role := &model.Role{
 		Name:        m.Name,
 		DisplayName: m.DisplayName,
 		Description: m.Description,
@@ -163,7 +163,7 @@ func CreateRole() (*models.Role, error) {
 	return role, nil
 }
 
-func CreateUser() (*models.User, error) {
+func CreateUser() (*model.User, error) {
 	r, err := CreateRole()
 	if err != nil {
 		return nil, err
@@ -173,7 +173,7 @@ func CreateUser() (*models.User, error) {
 	if err != nil {
 		return nil, err
 	}
-	user := &models.User{
+	user := &model.User{
 		Username: m.Username,
 		Password: m.Password,
 		Name:     m.Name,

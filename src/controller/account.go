@@ -1,12 +1,13 @@
-package controllers
+package controller
 
 import (
+	"github.com/aaronchen2k/openstc/src/domain"
 	"github.com/aaronchen2k/openstc/src/libs/common"
 	"github.com/aaronchen2k/openstc/src/libs/redis"
-	"github.com/aaronchen2k/openstc/src/models"
+	"github.com/aaronchen2k/openstc/src/libs/session"
 	"github.com/aaronchen2k/openstc/src/repo"
 	"github.com/aaronchen2k/openstc/src/service"
-	"github.com/aaronchen2k/openstc/src/validates"
+	"github.com/aaronchen2k/openstc/src/validate"
 	"github.com/go-playground/validator/v10"
 	"github.com/iris-contrib/middleware/jwt"
 	"github.com/kataras/iris/v12"
@@ -41,17 +42,17 @@ func NewAccountController() *AccountController {
  */
 func (c *AccountController) UserLogin(ctx iris.Context) {
 	ctx.StatusCode(iris.StatusOK)
-	aul := new(validates.LoginRequest)
+	aul := new(validate.LoginRequest)
 
 	if err := ctx.ReadJSON(aul); err != nil {
 		_, _ = ctx.JSON(common.ApiResource(400, nil, err.Error()))
 		return
 	}
 
-	err := validates.Validate.Struct(*aul)
+	err := validate.Validate.Struct(*aul)
 	if err != nil {
 		errs := err.(validator.ValidationErrors)
-		for _, e := range errs.Translate(validates.ValidateTrans) {
+		for _, e := range errs.Translate(validate.ValidateTrans) {
 			if len(e) > 0 {
 				_, _ = ctx.JSON(common.ApiResource(400, nil, e))
 				return
@@ -61,8 +62,8 @@ func (c *AccountController) UserLogin(ctx iris.Context) {
 
 	ctx.Application().Logger().Infof("%s 登录系统", aul.Username)
 
-	search := &models.Search{
-		Fields: []*models.Filed{
+	search := &domain.Search{
+		Fields: []*domain.Filed{
 			{
 				Key:       "username",
 				Condition: "=",
@@ -76,7 +77,7 @@ func (c *AccountController) UserLogin(ctx iris.Context) {
 		return
 	}
 
-	response, code, msg := c.UserService.CheckLogin(user, aul.Password)
+	response, code, msg := c.UserService.CheckLogin(ctx, user, aul.Password)
 
 	_, _ = ctx.JSON(common.ApiResource(code, response, msg))
 }
@@ -94,24 +95,39 @@ func (c *AccountController) UserLogin(ctx iris.Context) {
 * @apiPermission null
  */
 func (c *AccountController) UserLogout(ctx iris.Context) {
-
 	ctx.StatusCode(iris.StatusOK)
 	value := ctx.Values().Get("jwt").(*jwt.Token)
-	conn := redisUtils.GetRedisClusterClient()
-	defer conn.Close()
-	sess, err := c.TokenRepo.GetRedisSessionV2(conn, value.Raw)
-	if err != nil {
-		_, _ = ctx.JSON(common.ApiResource(400, nil, err.Error()))
-		return
-	}
-	if sess != nil {
-		if err := c.TokenRepo.DelUserTokenCache(conn, *sess, value.Raw); err != nil {
+
+	var (
+		credentials *domain.UserCredentials
+		err         error
+	)
+	if common.Config.Redis.Enable {
+		conn := redisUtils.GetRedisClusterClient()
+		defer conn.Close()
+
+		credentials, err = c.TokenRepo.GetRedisSession(conn, value.Raw)
+		if err != nil {
 			_, _ = ctx.JSON(common.ApiResource(400, nil, err.Error()))
 			return
 		}
+		if credentials != nil {
+			if err := c.TokenRepo.DelUserTokenCache(conn, *credentials, value.Raw); err != nil {
+				_, _ = ctx.JSON(common.ApiResource(400, nil, err.Error()))
+				return
+			}
+		}
+	} else {
+		credentials = sessionUtils.GetCredentials(ctx)
+		if credentials == nil {
+			_, _ = ctx.JSON(common.ApiResource(400, nil, err.Error()))
+			return
+		} else {
+			sessionUtils.RemoveCredentials(ctx)
+		}
 	}
 
-	ctx.Application().Logger().Infof("%d 退出系统", sess.UserId)
+	ctx.Application().Logger().Infof("%d 退出系统", credentials.UserId)
 	_, _ = ctx.JSON(common.ApiResource(200, nil, "退出"))
 }
 
@@ -133,7 +149,7 @@ func (c *AccountController) UserExpire(ctx iris.Context) {
 	value := ctx.Values().Get("jwt").(*jwt.Token)
 	conn := redisUtils.GetRedisClusterClient()
 	defer conn.Close()
-	sess, err := c.TokenRepo.GetRedisSessionV2(conn, value.Raw)
+	sess, err := c.TokenRepo.GetRedisSession(conn, value.Raw)
 	if err != nil {
 		_, _ = ctx.JSON(common.ApiResource(400, nil, err.Error()))
 		return

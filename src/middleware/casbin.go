@@ -3,8 +3,10 @@ package middleware
 import (
 	"errors"
 	"fmt"
+	"github.com/aaronchen2k/openstc/src/domain"
 	"github.com/aaronchen2k/openstc/src/libs/common"
-	redisUtils "github.com/aaronchen2k/openstc/src/libs/redis"
+	"github.com/aaronchen2k/openstc/src/libs/redis"
+	"github.com/aaronchen2k/openstc/src/libs/session"
 	"github.com/aaronchen2k/openstc/src/repo"
 	"github.com/casbin/casbin/v2"
 	"github.com/fatih/color"
@@ -22,33 +24,43 @@ func NewCasbinService() *CasbinService {
 	return &CasbinService{}
 }
 
-func (c *CasbinService) ServeHTTP(ctx iris.Context) {
+func (m *CasbinService) ServeHTTP(ctx iris.Context) {
 	ctx.StatusCode(http.StatusOK)
 	value := ctx.Values().Get("jwt").(*jwt.Token)
 
-	conn := redisUtils.GetRedisClusterClient()
-	defer conn.Close()
+	var (
+		credentials *domain.UserCredentials
+		err         error
+	)
 
-	sess, err := c.TokenRepo.GetRedisSessionV2(conn, value.Raw)
-	if err != nil {
-		c.TokenRepo.UserTokenExpired(value.Raw)
-		_, _ = ctx.JSON(common.ApiResource(401, nil, ""))
-		ctx.StopExecution()
-		return
+	if common.Config.Redis.Enable {
+		conn := redisUtils.GetRedisClusterClient()
+		defer conn.Close()
+
+		credentials, err = m.TokenRepo.GetRedisSession(conn, value.Raw)
+		if err != nil {
+			m.TokenRepo.UserTokenExpired(value.Raw)
+			_, _ = ctx.JSON(common.ApiResource(401, nil, ""))
+			ctx.StopExecution()
+			return
+		}
+	} else {
+		credentials = sessionUtils.GetCredentials(ctx)
 	}
-	if sess == nil {
+
+	if credentials == nil {
 		ctx.StopExecution()
 		_, _ = ctx.JSON(common.ApiResource(401, nil, ""))
 		ctx.StopExecution()
 		return
 	} else {
-		check, err := c.Check(ctx.Request(), sess.UserId)
+		check, err := m.Check(ctx.Request(), credentials.UserId)
 		if !check {
 			_, _ = ctx.JSON(common.ApiResource(403, nil, err.Error()))
 			ctx.StopExecution()
 			return
 		} else {
-			ctx.Values().Set("sess", sess)
+			ctx.Values().Set("sess", credentials)
 		}
 	}
 

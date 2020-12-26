@@ -1,16 +1,18 @@
-package controllers
+package controller
 
 import (
+	"github.com/aaronchen2k/openstc/src/domain"
 	"github.com/aaronchen2k/openstc/src/libs/common"
-	"github.com/aaronchen2k/openstc/src/models"
+	sessionUtils "github.com/aaronchen2k/openstc/src/libs/session"
+	"github.com/aaronchen2k/openstc/src/model"
 	"github.com/aaronchen2k/openstc/src/repo"
 	"github.com/aaronchen2k/openstc/src/service"
 	"github.com/aaronchen2k/openstc/src/transformer"
-	"github.com/aaronchen2k/openstc/src/validates"
+	"github.com/aaronchen2k/openstc/src/validate"
+	"github.com/go-playground/validator/v10"
 	"strconv"
 	"time"
 
-	"github.com/go-playground/validator/v10"
 	"github.com/kataras/iris/v12"
 	gf "github.com/snowlyg/gotransformer"
 )
@@ -40,10 +42,15 @@ func NewUserController() *UserController {
  */
 func (c *UserController) GetProfile(ctx iris.Context) {
 	ctx.StatusCode(iris.StatusOK)
-	sess := ctx.Values().Get("sess").(*models.RedisSessionV2)
-	id := uint(common.ParseInt(sess.UserId, 10))
-	s := &models.Search{
-		Fields: []*models.Filed{
+	cred := sessionUtils.GetCredentials(ctx)
+	if cred == nil {
+		_, _ = ctx.JSON(common.ApiResource(401, nil, "not login"))
+		return
+	}
+
+	id := uint(common.ParseInt(cred.UserId, 10))
+	s := &domain.Search{
+		Fields: []*domain.Filed{
 			{
 				Key:       "id",
 				Condition: "=",
@@ -96,19 +103,19 @@ func (c *UserController) GetAdminInfo(ctx iris.Context) {
  */
 func (c *UserController) ChangeAvatar(ctx iris.Context) {
 	ctx.StatusCode(iris.StatusOK)
-	sess := ctx.Values().Get("sess").(*models.RedisSessionV2)
+	sess := sessionUtils.GetCredentials(ctx)
 	id := uint(common.ParseInt(sess.UserId, 10))
 
-	avatar := new(models.Avatar)
+	avatar := new(model.Avatar)
 	if err := ctx.ReadJSON(avatar); err != nil {
 		_, _ = ctx.JSON(common.ApiResource(400, nil, err.Error()))
 		return
 	}
 
-	err := validates.Validate.Struct(*avatar)
+	err := validate.Validate.Struct(*avatar)
 	if err != nil {
 		errs := err.(validator.ValidationErrors)
-		for _, e := range errs.Translate(validates.ValidateTrans) {
+		for _, e := range errs.Translate(validate.ValidateTrans) {
 			if len(e) > 0 {
 				_, _ = ctx.JSON(common.ApiResource(400, nil, e))
 				return
@@ -167,16 +174,16 @@ func (c *UserController) GetUser(ctx iris.Context) {
  */
 func (c *UserController) CreateUser(ctx iris.Context) {
 	ctx.StatusCode(iris.StatusOK)
-	user := new(models.User)
+	user := new(model.User)
 	if err := ctx.ReadJSON(user); err != nil {
 		_, _ = ctx.JSON(common.ApiResource(400, nil, err.Error()))
 		return
 	}
 
-	err := validates.Validate.Struct(*user)
+	err := validate.Validate.Struct(*user)
 	if err != nil {
 		errs := err.(validator.ValidationErrors)
-		for _, e := range errs.Translate(validates.ValidateTrans) {
+		for _, e := range errs.Translate(validate.ValidateTrans) {
 			if len(e) > 0 {
 				_, _ = ctx.JSON(common.ApiResource(400, nil, e))
 				return
@@ -215,16 +222,16 @@ func (c *UserController) CreateUser(ctx iris.Context) {
  */
 func (c *UserController) UpdateUser(ctx iris.Context) {
 	ctx.StatusCode(iris.StatusOK)
-	user := new(models.User)
+	user := new(model.User)
 
 	if err := ctx.ReadJSON(user); err != nil {
 		_, _ = ctx.JSON(common.ApiResource(400, nil, err.Error()))
 	}
 
-	err := validates.Validate.Struct(*user)
+	err := validate.Validate.Struct(*user)
 	if err != nil {
 		errs := err.(validator.ValidationErrors)
-		for _, e := range errs.Translate(validates.ValidateTrans) {
+		for _, e := range errs.Translate(validate.ValidateTrans) {
 			if len(e) > 0 {
 				_, _ = ctx.JSON(common.ApiResource(400, nil, e))
 				return
@@ -298,7 +305,7 @@ func (c *UserController) GetAllUsers(ctx iris.Context) {
 
 }
 
-func (c *UserController) usersTransform(users []*models.User) []*transformer.User {
+func (c *UserController) usersTransform(users []*model.User) []*transformer.User {
 	var us []*transformer.User
 	for _, user := range users {
 		u := c.userTransform(user)
@@ -307,7 +314,7 @@ func (c *UserController) usersTransform(users []*models.User) []*transformer.Use
 	return us
 }
 
-func (c *UserController) userTransform(user *models.User) *transformer.User {
+func (c *UserController) userTransform(user *model.User) *transformer.User {
 	u := &transformer.User{}
 	g := gf.NewTransform(u, user, time.RFC3339)
 	_ = g.Transformer()

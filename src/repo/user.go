@@ -3,11 +3,10 @@ package repo
 import (
 	"errors"
 	"fmt"
-	"github.com/aaronchen2k/openstc/src/models"
-	"gorm.io/gorm"
-	"time"
-
+	"github.com/aaronchen2k/openstc/src/domain"
+	"github.com/aaronchen2k/openstc/src/model"
 	"github.com/fatih/color"
+	"gorm.io/gorm"
 )
 
 type UserRepo struct {
@@ -19,17 +18,12 @@ func NewUserRepo() *UserRepo {
 	return &UserRepo{}
 }
 
-func (r *UserRepo) NewUser() *models.User {
-	return &models.User{
-		Model: gorm.Model{
-			CreatedAt: time.Now(),
-			UpdatedAt: time.Now(),
-		},
-	}
+func (r *UserRepo) NewUser() *model.User {
+	return &model.User{}
 }
 
 // GetUser get user
-func (r *UserRepo) GetUser(search *models.Search) (*models.User, error) {
+func (r *UserRepo) GetUser(search *domain.Search) (*model.User, error) {
 	t := r.NewUser()
 	err := r.Found(search).First(t).Error
 	if !r.IsNotFound(err) {
@@ -40,8 +34,8 @@ func (r *UserRepo) GetUser(search *models.Search) (*models.User, error) {
 
 // DeleteUser del user . if user's username is username ,can't del it.
 func (r *UserRepo) DeleteUser(id uint) error {
-	s := &models.Search{
-		Fields: []*models.Filed{
+	s := &domain.Search{
+		Fields: []*domain.Filed{
 			{
 				Key:       "id",
 				Condition: "=",
@@ -65,10 +59,10 @@ func (r *UserRepo) DeleteUser(id uint) error {
 }
 
 // GetAllUsers get all users
-func (r *UserRepo) GetAllUsers(s *models.Search) ([]*models.User, int64, error) {
-	var users []*models.User
+func (r *UserRepo) GetAllUsers(s *domain.Search) ([]*model.User, int64, error) {
+	var users []*model.User
 	var count int64
-	q := r.GetAll(&models.User{}, s)
+	q := r.GetAll(&model.User{}, s)
 	if err := q.Count(&count).Error; err != nil {
 		return nil, count, err
 	}

@@ -1,5 +1,5 @@
-logLevel: debug  #日志级别 info debug
-debug: true #调试模式
+logLevel: info  #日志级别 info debug
+debug: false #调试模式
 binData: false #二进制模式
 https: false #https
 host: 127.0.0.1
@@ -20,6 +20,7 @@ db:
   password: P2ssw0rd #数据库密码
 
 redis:
+  enable: false
   host: localhost
   port: 6379
   pwd:

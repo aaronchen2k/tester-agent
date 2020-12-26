@@ -1,7 +1,7 @@
 package routes
 
 import (
-	"github.com/aaronchen2k/openstc/src/controllers"
+	"github.com/aaronchen2k/openstc/src/controller"
 	"github.com/aaronchen2k/openstc/src/libs/common"
 	"github.com/aaronchen2k/openstc/src/middleware"
 	"github.com/aaronchen2k/openstc/src/repo"
@@ -13,11 +13,11 @@ type Router struct {
 
 	CasbinService *middleware.CasbinService `inject:""`
 
-	InitCtrl    *controllers.InitController    `inject:""`
-	AccountCtrl *controllers.AccountController `inject:""`
-	UserCtrl    *controllers.UserController    `inject:""`
-	RoleCtrl    *controllers.RoleController    `inject:""`
-	PermCtrl    *controllers.PermController    `inject:""`
+	InitCtrl    *controller.InitController    `inject:""`
+	AccountCtrl *controller.AccountController `inject:""`
+	UserCtrl    *controller.UserController    `inject:""`
+	RoleCtrl    *controller.RoleController    `inject:""`
+	PermCtrl    *controller.PermController    `inject:""`
 
 	TokenRepo *repo.TokenRepo `inject:""`
 }

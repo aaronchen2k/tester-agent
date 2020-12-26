@@ -1,4 +1,4 @@
-package validates
+package validate
 
 type LoginRequest struct {
 	Username string `json:"username" validate:"required,gte=2,lte=50" comment:"用户名"`

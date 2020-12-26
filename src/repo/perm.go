@@ -2,7 +2,8 @@ package repo
 
 import (
 	"fmt"
-	"github.com/aaronchen2k/openstc/src/models"
+	"github.com/aaronchen2k/openstc/src/domain"
+	"github.com/aaronchen2k/openstc/src/model"
 	"github.com/aaronchen2k/openstc/src/transformer"
 	gf "github.com/snowlyg/gotransformer"
 	"time"
@@ -20,17 +21,12 @@ func NewPermRepo() *PermRepo {
 	return &PermRepo{}
 }
 
-func (r *PermRepo) NewPermission() *models.Permission {
-	return &models.Permission{
-		Model: gorm.Model{
-			CreatedAt: time.Now(),
-			UpdatedAt: time.Now(),
-		},
-	}
+func (r *PermRepo) NewPermission() *model.Permission {
+	return &model.Permission{}
 }
 
 // GetPermission get permission
-func (r *PermRepo) GetPermission(search *models.Search) (*models.Permission, error) {
+func (r *PermRepo) GetPermission(search *domain.Search) (*model.Permission, error) {
 	t := r.NewPermission()
 	err := r.Found(search).First(t).Error
 	if !r.IsNotFound(err) {
@@ -51,10 +47,10 @@ func (r *PermRepo) DeletePermissionById(id uint) error {
 }
 
 // GetAllPermissions get all permissions
-func (r *PermRepo) GetAllPermissions(s *models.Search) ([]*models.Permission, int64, error) {
-	var permissions []*models.Permission
+func (r *PermRepo) GetAllPermissions(s *domain.Search) ([]*model.Permission, int64, error) {
+	var permissions []*model.Permission
 	var count int64
-	all := r.GetAll(&models.Permission{}, s)
+	all := r.GetAll(&model.Permission{}, s)
 
 	all = all.Scopes(r.Relation(s.Relations))
 
@@ -72,7 +68,7 @@ func (r *PermRepo) GetAllPermissions(s *models.Search) ([]*models.Permission, in
 }
 
 // CreatePermission create permission
-func (r *PermRepo) CreatePermission(perm *models.Permission) error {
+func (r *PermRepo) CreatePermission(perm *model.Permission) error {
 	if err := r.DB.Create(perm).Error; err != nil {
 		return err
 	}
@@ -80,14 +76,14 @@ func (r *PermRepo) CreatePermission(perm *models.Permission) error {
 }
 
 // UpdatePermission update permission
-func (r *PermRepo) UpdatePermission(id uint, pj *models.Permission) error {
-	if err := r.Update(&models.Permission{}, pj, id); err != nil {
+func (r *PermRepo) UpdatePermission(id uint, pj *model.Permission) error {
+	if err := r.Update(&model.Permission{}, pj, id); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (r *PermRepo) PermsTransform(perms []*models.Permission) []*transformer.Permission {
+func (r *PermRepo) PermsTransform(perms []*model.Permission) []*transformer.Permission {
 	var rs []*transformer.Permission
 	for _, perm := range perms {
 		r := r.PermTransform(perm)
@@ -96,7 +92,7 @@ func (r *PermRepo) PermsTransform(perms []*models.Permission) []*transformer.Per
 	return rs
 }
 
-func (r *PermRepo) PermTransform(perm *models.Permission) *transformer.Permission {
+func (r *PermRepo) PermTransform(perm *model.Permission) *transformer.Permission {
 	p := &transformer.Permission{}
 	g := gf.NewTransform(r, perm, time.RFC3339)
 	_ = g.Transformer()
