@@ -4,6 +4,7 @@ package main
 import (
 	"flag"
 	"fmt"
+	_logUtils "github.com/aaronchen2k/openstc-common/src/libs/log"
 	"github.com/aaronchen2k/openstc/src/libs/common"
 	"github.com/aaronchen2k/openstc/src/server"
 	"os"
@@ -36,6 +37,7 @@ func main() {
 	}
 	flag.Parse()
 
+	_logUtils.InitLogger()
 	common.InitConfig(*configPath)
 	server.Init(version, printVersion, printRouter)
 }

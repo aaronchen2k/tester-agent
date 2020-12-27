@@ -40,7 +40,7 @@ func (m *CasbinService) ServeHTTP(ctx iris.Context) {
 		credentials, err = m.TokenRepo.GetRedisSession(conn, value.Raw)
 		if err != nil || credentials == nil {
 			m.TokenRepo.UserTokenExpired(value.Raw)
-			_, _ = ctx.JSON(common.ApiResource(401, nil, ""))
+			_, _ = ctx.JSON(common.ApiRes(401, "", nil))
 			ctx.StopExecution()
 			return
 		}
@@ -50,13 +50,13 @@ func (m *CasbinService) ServeHTTP(ctx iris.Context) {
 
 	if credentials == nil {
 		ctx.StopExecution()
-		_, _ = ctx.JSON(common.ApiResource(401, nil, ""))
+		_, _ = ctx.JSON(common.ApiRes(401, "", nil))
 		ctx.StopExecution()
 		return
 	} else {
 		check, err := m.Check(ctx.Request(), credentials.UserId)
 		if !check {
-			_, _ = ctx.JSON(common.ApiResource(403, nil, err.Error()))
+			_, _ = ctx.JSON(common.ApiRes(403, err.Error(), nil))
 			ctx.StopExecution()
 			return
 		} else {

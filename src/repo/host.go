@@ -31,8 +31,18 @@ func (r *HostRepo) Register(host _domain.Host) (po model.Host, err error) {
 	}
 }
 
-func (r *HostRepo) Query() (hosts []*model.Host) {
-	r.DB.Where("true").Find(hosts)
+func (r *HostRepo) Query(keywords string, pageNo, pageSize int) (hosts []model.Host, total int64, err error) {
+	query := r.DB.Select("*")
+	if keywords != "" {
+		query = query.Where("title LIKE ?", "%"+keywords+"%")
+	}
+	if pageNo > 0 {
+		query = query.Offset((pageNo - 1) * pageSize).Limit(pageSize)
+	}
+
+	err = query.Find(&hosts).Error
+	err = r.DB.Model(&model.Host{}).Count(&total).Error
+
 	return
 }
 

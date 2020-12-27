@@ -20,5 +20,5 @@ func (c *InitController) InitData(ctx iris.Context) {
 	c.SeederService.Run()
 	c.SeederService.AddPerm()
 
-	_, _ = ctx.JSON(common.ApiResource(200, nil, "请求成功"))
+	_, _ = ctx.JSON(common.ApiRes(200, "请求成功", nil))
 }

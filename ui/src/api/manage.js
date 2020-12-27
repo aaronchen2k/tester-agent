@@ -27,7 +27,7 @@ export function listHost (parameter) {
   return request({
     url: api.hosts,
     method: 'get',
-    data: parameter
+    params: parameter
   })
 }
 

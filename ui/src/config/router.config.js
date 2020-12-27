@@ -24,6 +24,7 @@ export const asyncRouterMap = [
         redirect: '/task/execution/list',
         component: RouteView,
         meta: { title: 'menu.task', keepAlive: true, icon: bxAnaalyse, permission: [ 'task' ] },
+        hideChildrenInMenu: false,
         children: [
           {
             path: '/task/execution/list',
@@ -45,6 +46,7 @@ export const asyncRouterMap = [
         redirect: '/res/node/list',
         component: RouteView,
         meta: { title: 'menu.res', icon: bxAnaalyse, permission: [ 'res' ] },
+        hideChildrenInMenu: false,
         children: [
           {
             path: '/res/node/list',

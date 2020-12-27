@@ -209,7 +209,7 @@ export default {
         console.log('loadData request parameters:', requestParameters)
         return listHost(requestParameters)
           .then(res => {
-            return res.result
+            return res
           })
       },
       selectedRowKeys: [],
@@ -225,7 +225,6 @@ export default {
     }
   },
   created () {
-    listHost({ t: new Date() })
   },
   computed: {
     rowSelection () {

@@ -45,7 +45,7 @@ func (c *AccountController) UserLogin(ctx iris.Context) {
 	aul := new(validate.LoginRequest)
 
 	if err := ctx.ReadJSON(aul); err != nil {
-		_, _ = ctx.JSON(common.ApiResource(400, nil, err.Error()))
+		_, _ = ctx.JSON(common.ApiRes(400, err.Error(), nil))
 		return
 	}
 
@@ -54,7 +54,7 @@ func (c *AccountController) UserLogin(ctx iris.Context) {
 		errs := err.(validator.ValidationErrors)
 		for _, e := range errs.Translate(validate.ValidateTrans) {
 			if len(e) > 0 {
-				_, _ = ctx.JSON(common.ApiResource(400, nil, e))
+				_, _ = ctx.JSON(common.ApiRes(400, e, nil))
 				return
 			}
 		}
@@ -73,13 +73,13 @@ func (c *AccountController) UserLogin(ctx iris.Context) {
 	}
 	user, err := c.UserRepo.GetUser(search)
 	if err != nil {
-		_, _ = ctx.JSON(common.ApiResource(400, nil, err.Error()))
+		_, _ = ctx.JSON(common.ApiRes(400, err.Error(), nil))
 		return
 	}
 
 	response, code, msg := c.UserService.CheckLogin(ctx, user, aul.Password)
 
-	_, _ = ctx.JSON(common.ApiResource(code, response, msg))
+	_, _ = ctx.JSON(common.ApiRes(code, msg, response))
 }
 
 /**
@@ -108,19 +108,19 @@ func (c *AccountController) UserLogout(ctx iris.Context) {
 
 		credentials, err = c.TokenRepo.GetRedisSession(conn, value.Raw)
 		if err != nil {
-			_, _ = ctx.JSON(common.ApiResource(400, nil, err.Error()))
+			_, _ = ctx.JSON(common.ApiRes(400, err.Error(), nil))
 			return
 		}
 		if credentials != nil {
 			if err := c.TokenRepo.DelUserTokenCache(conn, *credentials, value.Raw); err != nil {
-				_, _ = ctx.JSON(common.ApiResource(400, nil, err.Error()))
+				_, _ = ctx.JSON(common.ApiRes(400, err.Error(), nil))
 				return
 			}
 		}
 	} else {
 		credentials = sessionUtils.GetCredentials(ctx)
 		if credentials == nil {
-			_, _ = ctx.JSON(common.ApiResource(400, nil, err.Error()))
+			_, _ = ctx.JSON(common.ApiRes(400, err.Error(), nil))
 			return
 		} else {
 			sessionUtils.RemoveCredentials(ctx)
@@ -128,7 +128,7 @@ func (c *AccountController) UserLogout(ctx iris.Context) {
 	}
 
 	ctx.Application().Logger().Infof("%d 退出系统", credentials.UserId)
-	_, _ = ctx.JSON(common.ApiResource(200, nil, "退出"))
+	_, _ = ctx.JSON(common.ApiRes(200, "退出", nil))
 }
 
 /**
@@ -151,15 +151,15 @@ func (c *AccountController) UserExpire(ctx iris.Context) {
 	defer conn.Close()
 	sess, err := c.TokenRepo.GetRedisSession(conn, value.Raw)
 	if err != nil {
-		_, _ = ctx.JSON(common.ApiResource(400, nil, err.Error()))
+		_, _ = ctx.JSON(common.ApiRes(400, err.Error(), nil))
 		return
 	}
 	if sess != nil {
 		if err := c.TokenRepo.UpdateUserTokenCacheExpire(conn, *sess, value.Raw); err != nil {
-			_, _ = ctx.JSON(common.ApiResource(400, nil, err.Error()))
+			_, _ = ctx.JSON(common.ApiRes(400, err.Error(), nil))
 			return
 		}
 	}
 
-	_, _ = ctx.JSON(common.ApiResource(200, nil, ""))
+	_, _ = ctx.JSON(common.ApiRes(200, "", nil))
 }

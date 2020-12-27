@@ -108,7 +108,8 @@ func (s *HostService) getVmsByStatus(host _domain.Host, vmNames []string) (runni
 	return
 }
 
-func (s *HostService) ListAll() (hosts []*model.Host) {
-	hosts = s.HostRepo.Query()
+func (s *HostService) ListAll(keywords string, pageNo, pageSize int) (hosts []model.Host, total int64) {
+	hosts, total, _ = s.HostRepo.Query(keywords, pageNo, pageSize)
+
 	return
 }

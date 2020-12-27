@@ -44,7 +44,7 @@ func (c *UserController) GetProfile(ctx iris.Context) {
 	ctx.StatusCode(iris.StatusOK)
 	cred := sessionUtils.GetCredentials(ctx)
 	if cred == nil {
-		_, _ = ctx.JSON(common.ApiResource(401, nil, "not login"))
+		_, _ = ctx.JSON(common.ApiRes(401, "not login", nil))
 		return
 	}
 
@@ -60,10 +60,10 @@ func (c *UserController) GetProfile(ctx iris.Context) {
 	}
 	user, err := c.UserRepo.GetUser(s)
 	if err != nil {
-		_, _ = ctx.JSON(common.ApiResource(400, nil, err.Error()))
+		_, _ = ctx.JSON(common.ApiRes(400, err.Error(), nil))
 		return
 	}
-	_, _ = ctx.JSON(common.ApiResource(200, c.userTransform(user), "请求成功"))
+	_, _ = ctx.JSON(common.ApiRes(200, "请求成功", c.userTransform(user)))
 }
 
 /**
@@ -83,10 +83,10 @@ func (c *UserController) GetAdminInfo(ctx iris.Context) {
 
 	user, err := c.UserRepo.GetUser(nil)
 	if err != nil {
-		_, _ = ctx.JSON(common.ApiResource(400, nil, err.Error()))
+		_, _ = ctx.JSON(common.ApiRes(400, err.Error(), nil))
 		return
 	}
-	_, _ = ctx.JSON(common.ApiResource(200, map[string]string{"avatar": user.Avatar}, "请求成功"))
+	_, _ = ctx.JSON(common.ApiRes(200, "请求成功", map[string]string{"avatar": user.Avatar}))
 }
 
 /**
@@ -108,7 +108,7 @@ func (c *UserController) ChangeAvatar(ctx iris.Context) {
 
 	avatar := new(model.Avatar)
 	if err := ctx.ReadJSON(avatar); err != nil {
-		_, _ = ctx.JSON(common.ApiResource(400, nil, err.Error()))
+		_, _ = ctx.JSON(common.ApiRes(400, err.Error(), nil))
 		return
 	}
 
@@ -117,7 +117,7 @@ func (c *UserController) ChangeAvatar(ctx iris.Context) {
 		errs := err.(validator.ValidationErrors)
 		for _, e := range errs.Translate(validate.ValidateTrans) {
 			if len(e) > 0 {
-				_, _ = ctx.JSON(common.ApiResource(400, nil, e))
+				_, _ = ctx.JSON(common.ApiRes(400, e, nil))
 				return
 			}
 		}
@@ -128,10 +128,10 @@ func (c *UserController) ChangeAvatar(ctx iris.Context) {
 	user.Avatar = avatar.Avatar
 	err = c.UserService.UpdateUserById(id, user)
 	if err != nil {
-		_, _ = ctx.JSON(common.ApiResource(400, nil, err.Error()))
+		_, _ = ctx.JSON(common.ApiRes(400, err.Error(), nil))
 		return
 	}
-	_, _ = ctx.JSON(common.ApiResource(200, c.userTransform(user), "请求成功"))
+	_, _ = ctx.JSON(common.ApiRes(200, "请求成功", c.userTransform(user)))
 }
 
 /**
@@ -152,10 +152,10 @@ func (c *UserController) GetUser(ctx iris.Context) {
 
 	user, err := c.UserRepo.GetUser(nil)
 	if err != nil {
-		_, _ = ctx.JSON(common.ApiResource(400, nil, err.Error()))
+		_, _ = ctx.JSON(common.ApiRes(400, err.Error(), nil))
 		return
 	}
-	_, _ = ctx.JSON(common.ApiResource(200, c.userTransform(user), "操作成功"))
+	_, _ = ctx.JSON(common.ApiRes(200, "操作成功", c.userTransform(user)))
 }
 
 /**
@@ -176,7 +176,7 @@ func (c *UserController) CreateUser(ctx iris.Context) {
 	ctx.StatusCode(iris.StatusOK)
 	user := new(model.User)
 	if err := ctx.ReadJSON(user); err != nil {
-		_, _ = ctx.JSON(common.ApiResource(400, nil, err.Error()))
+		_, _ = ctx.JSON(common.ApiRes(400, err.Error(), nil))
 		return
 	}
 
@@ -185,7 +185,7 @@ func (c *UserController) CreateUser(ctx iris.Context) {
 		errs := err.(validator.ValidationErrors)
 		for _, e := range errs.Translate(validate.ValidateTrans) {
 			if len(e) > 0 {
-				_, _ = ctx.JSON(common.ApiResource(400, nil, e))
+				_, _ = ctx.JSON(common.ApiRes(400, e, nil))
 				return
 			}
 		}
@@ -193,15 +193,15 @@ func (c *UserController) CreateUser(ctx iris.Context) {
 
 	err = c.UserService.CreateUser(user)
 	if err != nil {
-		_, _ = ctx.JSON(common.ApiResource(400, nil, err.Error()))
+		_, _ = ctx.JSON(common.ApiRes(400, err.Error(), nil))
 		return
 	}
 
 	if user.ID == 0 {
-		_, _ = ctx.JSON(common.ApiResource(400, nil, "操作失败"))
+		_, _ = ctx.JSON(common.ApiRes(400, "操作失败", nil))
 		return
 	}
-	_, _ = ctx.JSON(common.ApiResource(200, c.userTransform(user), "操作成功"))
+	_, _ = ctx.JSON(common.ApiRes(200, "操作成功", c.userTransform(user)))
 	return
 
 }
@@ -225,7 +225,7 @@ func (c *UserController) UpdateUser(ctx iris.Context) {
 	user := new(model.User)
 
 	if err := ctx.ReadJSON(user); err != nil {
-		_, _ = ctx.JSON(common.ApiResource(400, nil, err.Error()))
+		_, _ = ctx.JSON(common.ApiRes(400, err.Error(), nil))
 	}
 
 	err := validate.Validate.Struct(*user)
@@ -233,7 +233,7 @@ func (c *UserController) UpdateUser(ctx iris.Context) {
 		errs := err.(validator.ValidationErrors)
 		for _, e := range errs.Translate(validate.ValidateTrans) {
 			if len(e) > 0 {
-				_, _ = ctx.JSON(common.ApiResource(400, nil, e))
+				_, _ = ctx.JSON(common.ApiRes(400, e, nil))
 				return
 			}
 		}
@@ -241,16 +241,16 @@ func (c *UserController) UpdateUser(ctx iris.Context) {
 
 	id, _ := ctx.Params().GetUint("id")
 	if user.Username == "username" {
-		_, _ = ctx.JSON(common.ApiResource(400, nil, "不能编辑管理员"))
+		_, _ = ctx.JSON(common.ApiRes(400, "不能编辑管理员", nil))
 		return
 	}
 
 	err = c.UserService.UpdateUserById(id, user)
 	if err != nil {
-		_, _ = ctx.JSON(common.ApiResource(400, nil, err.Error()))
+		_, _ = ctx.JSON(common.ApiRes(400, err.Error(), nil))
 		return
 	}
-	_, _ = ctx.JSON(common.ApiResource(200, c.userTransform(user), "操作成功"))
+	_, _ = ctx.JSON(common.ApiRes(200, "操作成功", c.userTransform(user)))
 }
 
 /**
@@ -271,10 +271,10 @@ func (c *UserController) DeleteUser(ctx iris.Context) {
 
 	err := c.UserRepo.DeleteUser(id)
 	if err != nil {
-		_, _ = ctx.JSON(common.ApiResource(400, nil, err.Error()))
+		_, _ = ctx.JSON(common.ApiRes(400, err.Error(), nil))
 		return
 	}
-	_, _ = ctx.JSON(common.ApiResource(200, nil, "删除成功"))
+	_, _ = ctx.JSON(common.ApiRes(200, "删除成功", nil))
 }
 
 /**
@@ -295,13 +295,12 @@ func (c *UserController) GetAllUsers(ctx iris.Context) {
 
 	users, count, err := c.UserRepo.GetAllUsers(nil)
 	if err != nil {
-		_, _ = ctx.JSON(common.ApiResource(400, nil, err.Error()))
+		_, _ = ctx.JSON(common.ApiRes(400, err.Error(), nil))
 		return
 	}
 
 	transform := c.usersTransform(users)
-	_, _ = ctx.JSON(common.ApiResource(200,
-		map[string]interface{}{"items": transform, "total": count, "limit": "s.Limit"}, "操作成功"))
+	_, _ = ctx.JSON(common.ApiRes(200, "操作成功", map[string]interface{}{"items": transform, "total": count, "limit": "s.Limit"}))
 
 }
 
