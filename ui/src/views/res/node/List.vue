@@ -79,7 +79,7 @@
       <s-table
         ref="table"
         size="default"
-        rowKey="key"
+        rowKey="ID"
         :columns="columns"
         :data="loadData"
         :alert="true"
@@ -132,8 +132,8 @@ const columns = [
     scopedSlots: { customRender: 'serial' }
   },
   {
-    title: '规则编号',
-    dataIndex: 'no'
+    title: '名称',
+    dataIndex: 'name'
   },
   {
     title: '描述',
@@ -166,21 +166,13 @@ const columns = [
 ]
 
 const statusMap = {
-  0: {
-    status: 'default',
-    text: '关闭'
-  },
-  1: {
-    status: 'processing',
-    text: '运行中'
-  },
-  2: {
+  active: {
     status: 'success',
-    text: '已上线'
+    text: '在线'
   },
-  3: {
-    status: 'error',
-    text: '异常'
+  offline: {
+    status: 'warning',
+    text: '离线'
   }
 }
 
