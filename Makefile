@@ -20,7 +20,7 @@ mac: prepare_res compile_mac copy_files package
 
 prepare_res:
 	@echo 'start prepare res'
-	@go-bindata -o=res/res.go -pkg=res res/... ui/dist/...
+	@go-bindata -o=res/server/res.go -pkg=serverRes res/server/... ui/dist/...
 	@rm -rf ${BIN_DIR}
 
 compile_all: compile_win64 compile_win32 compile_linux compile_mac
@@ -43,8 +43,9 @@ compile_mac:
 
 copy_files:
 	@echo 'start copy files'
-	@cp -r {application.yml,rbac_model.conf} bin
-	@for subdir in `ls ${BIN_OUT}`; do cp -r {bin/application.yml,bin/rbac_model.conf} "${BIN_OUT}$${subdir}/openstc-web"; done
+	@cp -r {cmd/server/server.yml,cmd/server/perms.yml,cmd/server/rbac_model.conf} bin
+	@for subdir in `ls ${BIN_OUT}`;
+		do cp -r {bin/server.yml,bin/perms.yml,bin/rbac_model.conf} "${BIN_OUT}$${subdir}/openstc-web"; done
 
 package:
 	@echo 'start package'
