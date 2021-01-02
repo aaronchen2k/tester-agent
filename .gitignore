@@ -1,5 +1,5 @@
 /.idea/
-/res/res.go
 *.log
 /openstc.db
 /bin/
+/res/server/res.go
