@@ -1,7 +1,7 @@
 package model
 
 import (
-	_const "github.com/aaronchen2k/openstc/internal/pkg/libs/const"
+	_const "github.com/aaronchen2k/tester/internal/pkg/libs/const"
 	"time"
 )
 

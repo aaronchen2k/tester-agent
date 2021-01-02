@@ -1,9 +1,9 @@
 package handler
 
 import (
-	_const "github.com/aaronchen2k/openstc/internal/pkg/libs/const"
-	_dateUtils "github.com/aaronchen2k/openstc/internal/pkg/libs/date"
-	_fileUtils "github.com/aaronchen2k/openstc/internal/pkg/libs/file"
+	_const "github.com/aaronchen2k/tester/internal/pkg/libs/const"
+	_dateUtils "github.com/aaronchen2k/tester/internal/pkg/libs/date"
+	_fileUtils "github.com/aaronchen2k/tester/internal/pkg/libs/file"
 	uuid "github.com/iris-contrib/go.uuid"
 	"github.com/kataras/iris/v12"
 	"github.com/kataras/iris/v12/context"

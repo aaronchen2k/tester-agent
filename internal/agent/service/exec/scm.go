@@ -1,9 +1,9 @@
 package execService
 
 import (
-	_domain "github.com/aaronchen2k/openstc/internal/pkg/domain"
-	_fileUtils "github.com/aaronchen2k/openstc/internal/pkg/libs/file"
-	_gitUtils "github.com/aaronchen2k/openstc/internal/pkg/libs/git"
+	_domain "github.com/aaronchen2k/tester/internal/pkg/domain"
+	_fileUtils "github.com/aaronchen2k/tester/internal/pkg/libs/file"
+	_gitUtils "github.com/aaronchen2k/tester/internal/pkg/libs/git"
 	"github.com/go-git/go-git/v5"
 	"github.com/go-git/go-git/v5/plumbing/transport/http"
 	"github.com/mholt/archiver/v3"

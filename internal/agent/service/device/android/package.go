@@ -2,8 +2,8 @@ package androidService
 
 import (
 	"fmt"
-	"github.com/aaronchen2k/openstc/internal/agent/model"
-	_shellUtils "github.com/aaronchen2k/openstc/internal/pkg/libs/shell"
+	"github.com/aaronchen2k/tester/internal/agent/model"
+	_shellUtils "github.com/aaronchen2k/tester/internal/pkg/libs/shell"
 	"regexp"
 	"strings"
 )

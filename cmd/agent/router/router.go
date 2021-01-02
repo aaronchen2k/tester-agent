@@ -2,10 +2,10 @@ package router
 
 import (
 	"fmt"
-	"github.com/aaronchen2k/openstc/cmd/agent/router/handler"
-	"github.com/aaronchen2k/openstc/internal/agent/cfg"
-	_const "github.com/aaronchen2k/openstc/internal/pkg/libs/const"
-	_logUtils "github.com/aaronchen2k/openstc/internal/pkg/libs/log"
+	"github.com/aaronchen2k/tester/cmd/agent/router/handler"
+	"github.com/aaronchen2k/tester/internal/agent/cfg"
+	_const "github.com/aaronchen2k/tester/internal/pkg/libs/const"
+	_logUtils "github.com/aaronchen2k/tester/internal/pkg/libs/log"
 	"github.com/smallnest/rpcx/server"
 	"strconv"
 )

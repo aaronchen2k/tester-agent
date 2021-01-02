@@ -1,8 +1,8 @@
 package deviceCommon
 
 import (
-	"github.com/aaronchen2k/openstc/internal/agent/cfg"
-	_domain "github.com/aaronchen2k/openstc/internal/pkg/domain"
+	"github.com/aaronchen2k/tester/internal/agent/cfg"
+	_domain "github.com/aaronchen2k/tester/internal/pkg/domain"
 	"github.com/jinzhu/copier"
 )
 

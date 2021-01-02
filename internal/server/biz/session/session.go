@@ -1,8 +1,8 @@
 package sessionUtils
 
 import (
-	"github.com/aaronchen2k/openstc/internal/server/biz/domain"
-	"github.com/aaronchen2k/openstc/internal/server/cfg"
+	"github.com/aaronchen2k/tester/internal/server/biz/domain"
+	"github.com/aaronchen2k/tester/internal/server/cfg"
 	"github.com/kataras/iris/v12"
 	"github.com/kataras/iris/v12/sessions"
 )

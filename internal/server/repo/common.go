@@ -3,9 +3,9 @@ package repo
 import (
 	"errors"
 	"fmt"
-	"github.com/aaronchen2k/openstc/internal/server/biz/domain"
-	"github.com/aaronchen2k/openstc/internal/server/cfg"
-	"github.com/aaronchen2k/openstc/internal/server/db"
+	"github.com/aaronchen2k/tester/internal/server/biz/domain"
+	"github.com/aaronchen2k/tester/internal/server/cfg"
+	"github.com/aaronchen2k/tester/internal/server/db"
 	"github.com/fatih/color"
 	"gorm.io/gorm"
 	"strings"

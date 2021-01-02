@@ -1,10 +1,10 @@
 package handler
 
 import (
-	_domain "github.com/aaronchen2k/openstc/internal/pkg/domain"
-	_logUtils "github.com/aaronchen2k/openstc/internal/pkg/libs/log"
-	"github.com/aaronchen2k/openstc/internal/server/service"
-	"github.com/aaronchen2k/openstc/internal/server/utils"
+	_domain "github.com/aaronchen2k/tester/internal/pkg/domain"
+	_logUtils "github.com/aaronchen2k/tester/internal/pkg/libs/log"
+	"github.com/aaronchen2k/tester/internal/server/service"
+	"github.com/aaronchen2k/tester/internal/server/utils"
 	"github.com/kataras/iris/v12"
 	"strconv"
 )

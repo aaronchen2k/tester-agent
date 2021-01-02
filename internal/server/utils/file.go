@@ -12,7 +12,7 @@ func GetExeDir() string { // where exe file in
 	arg1 := strings.ToLower(os.Args[0])
 
 	name := filepath.Base(arg1)
-	if strings.Index(name, "openstc") == 0 && strings.Index(arg1, "go-build") < 0 {
+	if strings.Index(name, "tester") == 0 && strings.Index(arg1, "go-build") < 0 {
 		p, _ := exec.LookPath(os.Args[0])
 		if strings.Index(p, string(os.PathSeparator)) > -1 {
 			dir = p[:strings.LastIndex(p, string(os.PathSeparator))]

@@ -2,10 +2,10 @@ package seleniumService
 
 import (
 	"fmt"
-	constanct "github.com/aaronchen2k/openstc/internal/agent/libs/const"
-	commonService "github.com/aaronchen2k/openstc/internal/agent/service/common"
-	execService "github.com/aaronchen2k/openstc/internal/agent/service/exec"
-	_domain "github.com/aaronchen2k/openstc/internal/pkg/domain"
+	constanct "github.com/aaronchen2k/tester/internal/agent/libs/const"
+	commonService "github.com/aaronchen2k/tester/internal/agent/service/common"
+	execService "github.com/aaronchen2k/tester/internal/agent/service/exec"
+	_domain "github.com/aaronchen2k/tester/internal/pkg/domain"
 	"strings"
 )
 

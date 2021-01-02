@@ -15,7 +15,7 @@ db:
   adapter: sqlite3 # 数据库类型
   host: localhost # 数据库地址
   port: 3306 #数据库端口
-  name: openstc #数据库名称
+  name: tester #数据库名称
   user: root #数据库用户名
   password: P2ssw0rd #数据库密码
 

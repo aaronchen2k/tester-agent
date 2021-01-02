@@ -4,9 +4,9 @@ package main
 import (
 	"flag"
 	"fmt"
-	"github.com/aaronchen2k/openstc/cmd/server/server"
-	_logUtils "github.com/aaronchen2k/openstc/internal/pkg/libs/log"
-	"github.com/aaronchen2k/openstc/internal/server/cfg"
+	"github.com/aaronchen2k/tester/cmd/server/server"
+	_logUtils "github.com/aaronchen2k/tester/internal/pkg/libs/log"
+	"github.com/aaronchen2k/tester/internal/server/cfg"
 	"os"
 )
 

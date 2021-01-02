@@ -1,8 +1,8 @@
 package repo
 
 import (
-	_const "github.com/aaronchen2k/openstc/internal/pkg/libs/const"
-	"github.com/aaronchen2k/openstc/internal/server/model"
+	_const "github.com/aaronchen2k/tester/internal/pkg/libs/const"
+	"github.com/aaronchen2k/tester/internal/server/model"
 	"gorm.io/gorm"
 	"time"
 )

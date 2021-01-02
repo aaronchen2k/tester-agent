@@ -2,8 +2,8 @@ package handler
 
 import (
 	"encoding/json"
-	vmService "github.com/aaronchen2k/openstc/internal/agent/service/vm"
-	_domain "github.com/aaronchen2k/openstc/internal/pkg/domain"
+	vmService "github.com/aaronchen2k/tester/internal/agent/service/vm"
+	_domain "github.com/aaronchen2k/tester/internal/pkg/domain"
 	"golang.org/x/net/context"
 )
 

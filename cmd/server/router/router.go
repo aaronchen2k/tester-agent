@@ -1,10 +1,10 @@
 package router
 
 import (
-	"github.com/aaronchen2k/openstc/cmd/server/router/handler"
-	"github.com/aaronchen2k/openstc/internal/server/biz/middleware"
-	"github.com/aaronchen2k/openstc/internal/server/cfg"
-	"github.com/aaronchen2k/openstc/internal/server/repo"
+	"github.com/aaronchen2k/tester/cmd/server/router/handler"
+	"github.com/aaronchen2k/tester/internal/server/biz/middleware"
+	"github.com/aaronchen2k/tester/internal/server/cfg"
+	"github.com/aaronchen2k/tester/internal/server/repo"
 	"github.com/kataras/iris/v12"
 )
 

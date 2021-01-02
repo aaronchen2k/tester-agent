@@ -2,8 +2,8 @@ package repo
 
 import (
 	"fmt"
-	"github.com/aaronchen2k/openstc/internal/server/biz/domain"
-	"github.com/aaronchen2k/openstc/internal/server/model"
+	"github.com/aaronchen2k/tester/internal/server/biz/domain"
+	"github.com/aaronchen2k/tester/internal/server/model"
 	"github.com/fatih/color"
 	"gorm.io/gorm"
 )

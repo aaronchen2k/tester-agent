@@ -2,10 +2,10 @@ package androidService
 
 import (
 	"fmt"
-	deviceCommon "github.com/aaronchen2k/openstc/internal/agent/service/device/common"
-	_domain "github.com/aaronchen2k/openstc/internal/pkg/domain"
-	_logUtils "github.com/aaronchen2k/openstc/internal/pkg/libs/log"
-	_shellUtils "github.com/aaronchen2k/openstc/internal/pkg/libs/shell"
+	deviceCommon "github.com/aaronchen2k/tester/internal/agent/service/device/common"
+	_domain "github.com/aaronchen2k/tester/internal/pkg/domain"
+	_logUtils "github.com/aaronchen2k/tester/internal/pkg/libs/log"
+	_shellUtils "github.com/aaronchen2k/tester/internal/pkg/libs/shell"
 	"regexp"
 	"strconv"
 	"strings"

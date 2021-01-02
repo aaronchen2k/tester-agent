@@ -2,12 +2,12 @@ package appiumService
 
 import (
 	"fmt"
-	constanct "github.com/aaronchen2k/openstc/internal/agent/libs/const"
-	commonService "github.com/aaronchen2k/openstc/internal/agent/service/common"
-	deviceService "github.com/aaronchen2k/openstc/internal/agent/service/device"
-	androidService "github.com/aaronchen2k/openstc/internal/agent/service/device/android"
-	execService "github.com/aaronchen2k/openstc/internal/agent/service/exec"
-	_domain "github.com/aaronchen2k/openstc/internal/pkg/domain"
+	constanct "github.com/aaronchen2k/tester/internal/agent/libs/const"
+	commonService "github.com/aaronchen2k/tester/internal/agent/service/common"
+	deviceService "github.com/aaronchen2k/tester/internal/agent/service/device"
+	androidService "github.com/aaronchen2k/tester/internal/agent/service/device/android"
+	execService "github.com/aaronchen2k/tester/internal/agent/service/exec"
+	_domain "github.com/aaronchen2k/tester/internal/pkg/domain"
 	"strconv"
 	"strings"
 )

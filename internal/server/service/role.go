@@ -2,11 +2,11 @@ package service
 
 import (
 	"fmt"
-	"github.com/aaronchen2k/openstc/internal/server/biz/domain"
-	"github.com/aaronchen2k/openstc/internal/server/biz/middleware"
-	"github.com/aaronchen2k/openstc/internal/server/biz/transformer"
-	"github.com/aaronchen2k/openstc/internal/server/model"
-	"github.com/aaronchen2k/openstc/internal/server/repo"
+	"github.com/aaronchen2k/tester/internal/server/biz/domain"
+	"github.com/aaronchen2k/tester/internal/server/biz/middleware"
+	"github.com/aaronchen2k/tester/internal/server/biz/transformer"
+	"github.com/aaronchen2k/tester/internal/server/model"
+	"github.com/aaronchen2k/tester/internal/server/repo"
 	"github.com/fatih/color"
 	gf "github.com/snowlyg/gotransformer"
 	"strconv"

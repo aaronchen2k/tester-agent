@@ -2,8 +2,8 @@ package service
 
 import (
 	"fmt"
-	_domain "github.com/aaronchen2k/openstc/internal/pkg/domain"
-	"github.com/aaronchen2k/openstc/internal/server/repo"
+	_domain "github.com/aaronchen2k/tester/internal/pkg/domain"
+	"github.com/aaronchen2k/tester/internal/server/repo"
 )
 
 type ContainerService struct {

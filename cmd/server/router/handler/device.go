@@ -1,9 +1,9 @@
 package handler
 
 import (
-	_domain "github.com/aaronchen2k/openstc/internal/pkg/domain"
-	_logUtils "github.com/aaronchen2k/openstc/internal/pkg/libs/log"
-	"github.com/aaronchen2k/openstc/internal/server/service"
+	_domain "github.com/aaronchen2k/tester/internal/pkg/domain"
+	_logUtils "github.com/aaronchen2k/tester/internal/pkg/libs/log"
+	"github.com/aaronchen2k/tester/internal/server/service"
 	"github.com/kataras/iris/v12"
 )
 

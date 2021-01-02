@@ -1,10 +1,9 @@
-module github.com/aaronchen2k/openstc
+module github.com/aaronchen2k/tester
 
 go 1.15
 
 require (
 	github.com/Joker/hpp v1.0.0 // indirect
-	github.com/aaronchen2k/openstc-common v0.0.0-20201226093629-c3723d7a8e65 // indirect
 	github.com/azumads/faker v0.0.0-20150921074035-6cae71ddb107
 	github.com/bxcodec/faker/v3 v3.5.0
 	github.com/casbin/casbin/v2 v2.19.2

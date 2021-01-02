@@ -3,7 +3,7 @@ package _fileUtils
 import (
 	"archive/zip"
 	"fmt"
-	_errUtils "github.com/aaronchen2k/openstc/internal/pkg/libs/err"
+	_errUtils "github.com/aaronchen2k/tester/internal/pkg/libs/err"
 	"github.com/mholt/archiver/v3"
 	"strings"
 )

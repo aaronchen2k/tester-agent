@@ -1,8 +1,8 @@
 package agentUntils
 
 import (
-	"github.com/aaronchen2k/openstc/internal/agent/cfg"
-	_const "github.com/aaronchen2k/openstc/internal/pkg/libs/const"
+	"github.com/aaronchen2k/tester/internal/agent/cfg"
+	_const "github.com/aaronchen2k/tester/internal/pkg/libs/const"
 )
 
 func IsDeviceAgent() bool {

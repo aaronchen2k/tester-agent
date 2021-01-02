@@ -2,8 +2,8 @@ package repo
 
 import (
 	"fmt"
-	"github.com/aaronchen2k/openstc/internal/server/biz/domain"
-	"github.com/aaronchen2k/openstc/internal/server/biz/redis"
+	"github.com/aaronchen2k/tester/internal/server/biz/domain"
+	"github.com/aaronchen2k/tester/internal/server/biz/redis"
 	"github.com/gomodule/redigo/redis"
 	"gorm.io/gorm"
 	"strings"

@@ -1,9 +1,9 @@
 package commonService
 
 import (
-	"github.com/aaronchen2k/openstc/internal/agent/cfg"
-	_domain "github.com/aaronchen2k/openstc/internal/pkg/domain"
-	_fileUtils "github.com/aaronchen2k/openstc/internal/pkg/libs/file"
+	"github.com/aaronchen2k/tester/internal/agent/cfg"
+	_domain "github.com/aaronchen2k/tester/internal/pkg/domain"
+	_fileUtils "github.com/aaronchen2k/tester/internal/pkg/libs/file"
 	uuid "github.com/satori/go.uuid"
 	"os"
 )

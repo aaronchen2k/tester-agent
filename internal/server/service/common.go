@@ -2,8 +2,8 @@ package service
 
 import (
 	"fmt"
-	"github.com/aaronchen2k/openstc/internal/server/biz/middleware"
-	"github.com/aaronchen2k/openstc/internal/server/repo"
+	"github.com/aaronchen2k/tester/internal/server/biz/middleware"
+	"github.com/aaronchen2k/tester/internal/server/repo"
 	"github.com/fatih/color"
 	"strconv"
 )

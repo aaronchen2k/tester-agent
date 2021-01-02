@@ -1,7 +1,7 @@
 package service
 
 import (
-	"github.com/aaronchen2k/openstc/internal/server/repo"
+	"github.com/aaronchen2k/tester/internal/server/repo"
 )
 
 type PermService struct {

@@ -2,12 +2,12 @@ package main
 
 import (
 	"flag"
-	"github.com/aaronchen2k/openstc/cmd/agent/router"
-	"github.com/aaronchen2k/openstc/internal/agent/cfg"
-	"github.com/aaronchen2k/openstc/internal/agent/cron"
-	agentUntils "github.com/aaronchen2k/openstc/internal/agent/utils/common"
-	_const "github.com/aaronchen2k/openstc/internal/pkg/libs/const"
-	_logUtils "github.com/aaronchen2k/openstc/internal/pkg/libs/log"
+	"github.com/aaronchen2k/tester/cmd/agent/router"
+	"github.com/aaronchen2k/tester/internal/agent/cfg"
+	"github.com/aaronchen2k/tester/internal/agent/cron"
+	agentUntils "github.com/aaronchen2k/tester/internal/agent/utils/common"
+	_const "github.com/aaronchen2k/tester/internal/pkg/libs/const"
+	_logUtils "github.com/aaronchen2k/tester/internal/pkg/libs/log"
 	"github.com/fatih/color"
 	"os"
 	"os/signal"
@@ -29,7 +29,7 @@ func main() {
 		os.Exit(0)
 	}()
 
-	flagSet = flag.NewFlagSet("openstc", flag.ContinueOnError)
+	flagSet = flag.NewFlagSet("tester", flag.ContinueOnError)
 
 	flagSet.StringVar(&agentConf.Inst.KvmDir, "k", "kvm", "")
 	flagSet.StringVar(&agentConf.Inst.WorkDir, "w", "farm", "")

@@ -4,7 +4,7 @@ package tests
 
 import (
 	"fmt"
-	"github.com/aaronchen2k/openstc/cmd/testerserver/tests/mock"
+	"github.com/aaronchen2k/tester/cmd/testerserver/tests/mock"
 	"github.com/bxcodec/faker/v3"
 	"github.com/fatih/color"
 	"testing"

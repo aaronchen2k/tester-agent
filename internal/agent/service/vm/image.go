@@ -2,10 +2,10 @@ package vmService
 
 import (
 	"fmt"
-	"github.com/aaronchen2k/openstc/internal/agent/cfg"
-	constanct "github.com/aaronchen2k/openstc/internal/agent/libs/const"
-	_logUtils "github.com/aaronchen2k/openstc/internal/pkg/libs/log"
-	_shellUtils "github.com/aaronchen2k/openstc/internal/pkg/libs/shell"
+	"github.com/aaronchen2k/tester/internal/agent/cfg"
+	constanct "github.com/aaronchen2k/tester/internal/agent/libs/const"
+	_logUtils "github.com/aaronchen2k/tester/internal/pkg/libs/log"
+	_shellUtils "github.com/aaronchen2k/tester/internal/pkg/libs/shell"
 )
 
 func RemoveDefImage(vmUniqueName string) (err error) {

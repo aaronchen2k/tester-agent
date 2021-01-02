@@ -2,9 +2,9 @@ package cron
 
 import (
 	"fmt"
-	checkService "github.com/aaronchen2k/openstc/internal/agent/service/check"
-	_const "github.com/aaronchen2k/openstc/internal/pkg/libs/const"
-	_cronUtils "github.com/aaronchen2k/openstc/internal/pkg/libs/cron"
+	checkService "github.com/aaronchen2k/tester/internal/agent/service/check"
+	_const "github.com/aaronchen2k/tester/internal/pkg/libs/const"
+	_cronUtils "github.com/aaronchen2k/tester/internal/pkg/libs/cron"
 )
 
 func Init() {

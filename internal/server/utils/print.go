@@ -2,9 +2,9 @@ package agentUtils
 
 import (
 	"fmt"
-	_commonUtils "github.com/aaronchen2k/openstc/internal/pkg/libs/common"
-	_logUtils "github.com/aaronchen2k/openstc/internal/pkg/libs/log"
-	serverRes "github.com/aaronchen2k/openstc/res/server"
+	_commonUtils "github.com/aaronchen2k/tester/internal/pkg/libs/common"
+	_logUtils "github.com/aaronchen2k/tester/internal/pkg/libs/log"
+	serverRes "github.com/aaronchen2k/tester/res/server"
 	"github.com/fatih/color"
 	"io/ioutil"
 	"os"
@@ -19,7 +19,7 @@ func PrintUsage() {
 
 	usage := ReadResData(usageFile)
 
-	app := "openstc-agent"
+	app := "tester-agent"
 	if _commonUtils.IsWin() {
 		app += ".exe"
 	}

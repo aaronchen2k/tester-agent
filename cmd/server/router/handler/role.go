@@ -1,11 +1,11 @@
 package handler
 
 import (
-	"github.com/aaronchen2k/openstc/internal/server/biz/validate"
-	"github.com/aaronchen2k/openstc/internal/server/model"
-	"github.com/aaronchen2k/openstc/internal/server/repo"
-	"github.com/aaronchen2k/openstc/internal/server/service"
-	"github.com/aaronchen2k/openstc/internal/server/utils"
+	"github.com/aaronchen2k/tester/internal/server/biz/validate"
+	"github.com/aaronchen2k/tester/internal/server/model"
+	"github.com/aaronchen2k/tester/internal/server/repo"
+	"github.com/aaronchen2k/tester/internal/server/service"
+	"github.com/aaronchen2k/tester/internal/server/utils"
 	"github.com/go-playground/validator/v10"
 	"github.com/kataras/iris/v12"
 )

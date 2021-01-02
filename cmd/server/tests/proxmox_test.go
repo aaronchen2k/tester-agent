@@ -2,7 +2,7 @@ package tests
 
 import (
 	"fmt"
-	"github.com/aaronchen2k/openstc/vendors/github.com/joernott/go-proxmox"
+	"github.com/aaronchen2k/tester/vendors/github.com/joernott/go-proxmox"
 	"github.com/stretchr/testify/assert"
 	"log"
 	"os"

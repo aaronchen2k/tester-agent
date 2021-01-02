@@ -6,7 +6,7 @@ import (
 	"encoding/gob"
 	"encoding/hex"
 	"fmt"
-	_fileUtils "github.com/aaronchen2k/openstc/internal/pkg/libs/file"
+	_fileUtils "github.com/aaronchen2k/tester/internal/pkg/libs/file"
 	"gopkg.in/ini.v1"
 	"net"
 	"os"

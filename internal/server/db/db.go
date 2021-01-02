@@ -2,11 +2,11 @@ package db
 
 import (
 	"fmt"
-	_fileUtils "github.com/aaronchen2k/openstc/internal/pkg/libs/file"
-	"github.com/aaronchen2k/openstc/internal/pkg/libs/log"
-	"github.com/aaronchen2k/openstc/internal/server/cfg"
-	"github.com/aaronchen2k/openstc/internal/server/model"
-	"github.com/aaronchen2k/openstc/internal/server/utils"
+	_fileUtils "github.com/aaronchen2k/tester/internal/pkg/libs/file"
+	"github.com/aaronchen2k/tester/internal/pkg/libs/log"
+	"github.com/aaronchen2k/tester/internal/server/cfg"
+	"github.com/aaronchen2k/tester/internal/server/model"
+	"github.com/aaronchen2k/tester/internal/server/utils"
 	"github.com/casbin/gorm-adapter/v2"
 	"github.com/fatih/color"
 	"gorm.io/driver/mysql"

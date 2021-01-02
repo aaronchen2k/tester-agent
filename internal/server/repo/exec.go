@@ -1,7 +1,7 @@
 package repo
 
 import (
-	"github.com/aaronchen2k/openstc/internal/server/model"
+	"github.com/aaronchen2k/tester/internal/server/model"
 	"gorm.io/gorm"
 	"strings"
 )

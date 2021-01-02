@@ -2,9 +2,9 @@ package testing
 
 import (
 	"encoding/json"
-	"github.com/aaronchen2k/openstc-common/src/domain"
-	"github.com/aaronchen2k/openstc-common/src/libs/file"
-	"github.com/aaronchen2k/openstc-common/src/libs/http"
+	"github.com/aaronchen2k/tester-common/src/domain"
+	"github.com/aaronchen2k/tester-common/src/libs/file"
+	"github.com/aaronchen2k/tester-common/src/libs/http"
 	"log"
 	"testing"
 )
@@ -13,7 +13,7 @@ func TestUpdateResult(t *testing.T) {
 	url := httpUtils.GenUrl("http://localhost:8080", "build/uploadResult")
 	log.Println(url)
 
-	files := []string{"/Users/aaron/openstc/testResult.zip"}
+	files := []string{"/Users/aaron/tester/testResult.zip"}
 	extraParams := map[string]string{}
 
 	result := domain.RpcResult{}

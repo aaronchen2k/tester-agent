@@ -1,7 +1,7 @@
 package handler
 
 import (
-	"github.com/aaronchen2k/openstc/internal/server/service"
+	"github.com/aaronchen2k/tester/internal/server/service"
 	"github.com/kataras/iris/v12"
 )
 

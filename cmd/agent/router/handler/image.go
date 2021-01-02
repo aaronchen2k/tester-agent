@@ -1,7 +1,7 @@
 package handler
 
 import (
-	_domain "github.com/aaronchen2k/openstc/internal/pkg/domain"
+	_domain "github.com/aaronchen2k/tester/internal/pkg/domain"
 	"golang.org/x/net/context"
 )
 

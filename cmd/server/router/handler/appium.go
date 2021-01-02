@@ -2,11 +2,11 @@ package handler
 
 import (
 	"encoding/json"
-	_domain "github.com/aaronchen2k/openstc/internal/pkg/domain"
-	_const "github.com/aaronchen2k/openstc/internal/pkg/libs/const"
-	_dateUtils "github.com/aaronchen2k/openstc/internal/pkg/libs/date"
-	_fileUtils "github.com/aaronchen2k/openstc/internal/pkg/libs/file"
-	"github.com/aaronchen2k/openstc/internal/server/service"
+	_domain "github.com/aaronchen2k/tester/internal/pkg/domain"
+	_const "github.com/aaronchen2k/tester/internal/pkg/libs/const"
+	_dateUtils "github.com/aaronchen2k/tester/internal/pkg/libs/date"
+	_fileUtils "github.com/aaronchen2k/tester/internal/pkg/libs/file"
+	"github.com/aaronchen2k/tester/internal/server/service"
 	uuid "github.com/iris-contrib/go.uuid"
 	"github.com/kataras/iris/v12"
 	"github.com/kataras/iris/v12/context"

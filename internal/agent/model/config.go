@@ -1,6 +1,6 @@
 package model
 
-import _const "github.com/aaronchen2k/openstc/internal/pkg/libs/const"
+import _const "github.com/aaronchen2k/tester/internal/pkg/libs/const"
 
 type Config struct {
 	FarmServer string          `yaml:"FarmServer"`

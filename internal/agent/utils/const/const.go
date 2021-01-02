@@ -7,7 +7,7 @@ import (
 
 var (
 	ConfigVer  = 1
-	ConfigFile = fmt.Sprintf("conf%sopenstc.yaml", string(os.PathSeparator))
+	ConfigFile = fmt.Sprintf("conf%stester.yaml", string(os.PathSeparator))
 
 	EnRes = fmt.Sprintf("res%smessages_en.json", string(os.PathSeparator))
 	ZhRes = fmt.Sprintf("res%smessages_zh.json", string(os.PathSeparator))

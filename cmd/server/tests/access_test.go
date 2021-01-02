@@ -3,7 +3,7 @@
 package tests
 
 import (
-	"github.com/aaronchen2k/openstc/internal/server/cfg"
+	"github.com/aaronchen2k/tester/internal/server/cfg"
 	"github.com/kataras/iris/v12"
 	"testing"
 )

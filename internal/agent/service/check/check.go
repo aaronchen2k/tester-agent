@@ -1,11 +1,11 @@
 package checkService
 
 import (
-	appiumService "github.com/aaronchen2k/openstc/internal/agent/service/appium"
-	deviceService "github.com/aaronchen2k/openstc/internal/agent/service/device"
-	testService "github.com/aaronchen2k/openstc/internal/agent/service/test"
-	vmService "github.com/aaronchen2k/openstc/internal/agent/service/vm"
-	"github.com/aaronchen2k/openstc/internal/agent/utils/common"
+	appiumService "github.com/aaronchen2k/tester/internal/agent/service/appium"
+	deviceService "github.com/aaronchen2k/tester/internal/agent/service/device"
+	testService "github.com/aaronchen2k/tester/internal/agent/service/test"
+	vmService "github.com/aaronchen2k/tester/internal/agent/service/vm"
+	"github.com/aaronchen2k/tester/internal/agent/utils/common"
 )
 
 func Check() {

@@ -3,7 +3,7 @@ package _fileUtils
 import (
 	"bytes"
 	"fmt"
-	_logUtils "github.com/aaronchen2k/openstc/internal/pkg/libs/log"
+	_logUtils "github.com/aaronchen2k/tester/internal/pkg/libs/log"
 	"io"
 	"io/ioutil"
 	"mime/multipart"

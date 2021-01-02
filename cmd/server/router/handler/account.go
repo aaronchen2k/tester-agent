@@ -1,14 +1,14 @@
 package handler
 
 import (
-	"github.com/aaronchen2k/openstc/internal/server/biz/domain"
-	"github.com/aaronchen2k/openstc/internal/server/biz/redis"
-	"github.com/aaronchen2k/openstc/internal/server/biz/session"
-	"github.com/aaronchen2k/openstc/internal/server/biz/validate"
-	"github.com/aaronchen2k/openstc/internal/server/cfg"
-	"github.com/aaronchen2k/openstc/internal/server/repo"
-	"github.com/aaronchen2k/openstc/internal/server/service"
-	"github.com/aaronchen2k/openstc/internal/server/utils"
+	"github.com/aaronchen2k/tester/internal/server/biz/domain"
+	"github.com/aaronchen2k/tester/internal/server/biz/redis"
+	"github.com/aaronchen2k/tester/internal/server/biz/session"
+	"github.com/aaronchen2k/tester/internal/server/biz/validate"
+	"github.com/aaronchen2k/tester/internal/server/cfg"
+	"github.com/aaronchen2k/tester/internal/server/repo"
+	"github.com/aaronchen2k/tester/internal/server/service"
+	"github.com/aaronchen2k/tester/internal/server/utils"
 	"github.com/go-playground/validator/v10"
 	"github.com/iris-contrib/middleware/jwt"
 	"github.com/kataras/iris/v12"

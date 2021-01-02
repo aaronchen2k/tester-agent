@@ -1,9 +1,9 @@
 package repo
 
 import (
-	_domain "github.com/aaronchen2k/openstc/internal/pkg/domain"
-	_const "github.com/aaronchen2k/openstc/internal/pkg/libs/const"
-	"github.com/aaronchen2k/openstc/internal/server/model"
+	_domain "github.com/aaronchen2k/tester/internal/pkg/domain"
+	_const "github.com/aaronchen2k/tester/internal/pkg/libs/const"
+	"github.com/aaronchen2k/tester/internal/server/model"
 	"gorm.io/gorm"
 	"time"
 )

@@ -1,12 +1,12 @@
 package vmService
 
 import (
-	"github.com/aaronchen2k/openstc/internal/agent/cfg"
-	_domain "github.com/aaronchen2k/openstc/internal/pkg/domain"
-	_const "github.com/aaronchen2k/openstc/internal/pkg/libs/const"
-	_httpUtils "github.com/aaronchen2k/openstc/internal/pkg/libs/http"
-	_logUtils "github.com/aaronchen2k/openstc/internal/pkg/libs/log"
-	_shellUtils "github.com/aaronchen2k/openstc/internal/pkg/libs/shell"
+	"github.com/aaronchen2k/tester/internal/agent/cfg"
+	_domain "github.com/aaronchen2k/tester/internal/pkg/domain"
+	_const "github.com/aaronchen2k/tester/internal/pkg/libs/const"
+	_httpUtils "github.com/aaronchen2k/tester/internal/pkg/libs/http"
+	_logUtils "github.com/aaronchen2k/tester/internal/pkg/libs/log"
+	_shellUtils "github.com/aaronchen2k/tester/internal/pkg/libs/shell"
 	"strings"
 )
 

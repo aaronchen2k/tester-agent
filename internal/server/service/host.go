@@ -2,11 +2,11 @@ package service
 
 import (
 	"fmt"
-	_domain "github.com/aaronchen2k/openstc/internal/pkg/domain"
-	_const "github.com/aaronchen2k/openstc/internal/pkg/libs/const"
-	_numbUtils "github.com/aaronchen2k/openstc/internal/pkg/libs/numb"
-	"github.com/aaronchen2k/openstc/internal/server/model"
-	"github.com/aaronchen2k/openstc/internal/server/repo"
+	_domain "github.com/aaronchen2k/tester/internal/pkg/domain"
+	_const "github.com/aaronchen2k/tester/internal/pkg/libs/const"
+	_numbUtils "github.com/aaronchen2k/tester/internal/pkg/libs/numb"
+	"github.com/aaronchen2k/tester/internal/server/model"
+	"github.com/aaronchen2k/tester/internal/server/repo"
 )
 
 type HostService struct {

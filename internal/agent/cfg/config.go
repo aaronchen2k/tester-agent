@@ -1,12 +1,12 @@
 package agentConf
 
 import (
-	"github.com/aaronchen2k/openstc/internal/agent/model"
-	"github.com/aaronchen2k/openstc/internal/agent/utils/common"
-	_commonUtils "github.com/aaronchen2k/openstc/internal/pkg/libs/common"
-	_const "github.com/aaronchen2k/openstc/internal/pkg/libs/const"
-	_fileUtils "github.com/aaronchen2k/openstc/internal/pkg/libs/file"
-	_httpUtils "github.com/aaronchen2k/openstc/internal/pkg/libs/http"
+	"github.com/aaronchen2k/tester/internal/agent/model"
+	"github.com/aaronchen2k/tester/internal/agent/utils/common"
+	_commonUtils "github.com/aaronchen2k/tester/internal/pkg/libs/common"
+	_const "github.com/aaronchen2k/tester/internal/pkg/libs/const"
+	_fileUtils "github.com/aaronchen2k/tester/internal/pkg/libs/file"
+	_httpUtils "github.com/aaronchen2k/tester/internal/pkg/libs/http"
 )
 
 var (

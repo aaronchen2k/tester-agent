@@ -3,9 +3,9 @@ package service
 import (
 	"bytes"
 	"fmt"
-	_domain "github.com/aaronchen2k/openstc/internal/pkg/domain"
-	_logUtils "github.com/aaronchen2k/openstc/internal/pkg/libs/log"
-	"github.com/aaronchen2k/openstc/internal/server/model"
+	_domain "github.com/aaronchen2k/tester/internal/pkg/domain"
+	_logUtils "github.com/aaronchen2k/tester/internal/pkg/libs/log"
+	"github.com/aaronchen2k/tester/internal/server/model"
 	gateway "github.com/rpcx-ecosystem/rpcx-gateway"
 	"github.com/smallnest/rpcx/codec"
 	"io/ioutil"

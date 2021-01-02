@@ -4,11 +4,11 @@ package tests
 
 import (
 	"flag"
-	server2 "github.com/aaronchen2k/openstc/cmd/server/server"
-	"github.com/aaronchen2k/openstc/cmd/testerserver/tests/mock"
-	"github.com/aaronchen2k/openstc/internal/server/cfg"
-	"github.com/aaronchen2k/openstc/internal/server/model"
-	"github.com/aaronchen2k/openstc/internal/server/service"
+	server2 "github.com/aaronchen2k/tester/cmd/server/server"
+	"github.com/aaronchen2k/tester/cmd/testerserver/tests/mock"
+	"github.com/aaronchen2k/tester/internal/server/cfg"
+	"github.com/aaronchen2k/tester/internal/server/model"
+	"github.com/aaronchen2k/tester/internal/server/service"
 	"github.com/bxcodec/faker/v3"
 	"github.com/iris-contrib/httpexpect/v2"
 	"github.com/kataras/iris/v12"

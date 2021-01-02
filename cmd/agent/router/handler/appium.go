@@ -2,8 +2,8 @@ package handler
 
 import (
 	"fmt"
-	testService "github.com/aaronchen2k/openstc/internal/agent/service/test"
-	_domain "github.com/aaronchen2k/openstc/internal/pkg/domain"
+	testService "github.com/aaronchen2k/tester/internal/agent/service/test"
+	_domain "github.com/aaronchen2k/tester/internal/pkg/domain"
 	"golang.org/x/net/context"
 )
 

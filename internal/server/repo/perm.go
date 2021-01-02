@@ -2,9 +2,9 @@ package repo
 
 import (
 	"fmt"
-	"github.com/aaronchen2k/openstc/internal/server/biz/domain"
-	"github.com/aaronchen2k/openstc/internal/server/biz/transformer"
-	"github.com/aaronchen2k/openstc/internal/server/model"
+	"github.com/aaronchen2k/tester/internal/server/biz/domain"
+	"github.com/aaronchen2k/tester/internal/server/biz/transformer"
+	"github.com/aaronchen2k/tester/internal/server/model"
 	gf "github.com/snowlyg/gotransformer"
 	"time"
 

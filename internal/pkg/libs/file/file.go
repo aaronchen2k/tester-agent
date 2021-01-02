@@ -2,7 +2,7 @@ package _fileUtils
 
 import (
 	"fmt"
-	_commonUtils "github.com/aaronchen2k/openstc/internal/pkg/libs/common"
+	_commonUtils "github.com/aaronchen2k/tester/internal/pkg/libs/common"
 	"io"
 	"io/ioutil"
 	"os"

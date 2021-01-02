@@ -2,11 +2,11 @@ package testing
 
 import (
 	"fmt"
-	"github.com/aaronchen2k/openstc/internal/agent/cfg"
-	deviceService "github.com/aaronchen2k/openstc/internal/agent/service/device"
-	_const "github.com/aaronchen2k/openstc/internal/pkg/libs/const"
-	_httpUtils "github.com/aaronchen2k/openstc/internal/pkg/libs/http"
-	_logUtils "github.com/aaronchen2k/openstc/internal/pkg/libs/log"
+	"github.com/aaronchen2k/tester/internal/agent/cfg"
+	deviceService "github.com/aaronchen2k/tester/internal/agent/service/device"
+	_const "github.com/aaronchen2k/tester/internal/pkg/libs/const"
+	_httpUtils "github.com/aaronchen2k/tester/internal/pkg/libs/http"
+	_logUtils "github.com/aaronchen2k/tester/internal/pkg/libs/log"
 	"log"
 	"testing"
 )

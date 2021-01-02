@@ -1,11 +1,11 @@
 package deviceService
 
 import (
-	"github.com/aaronchen2k/openstc/internal/agent/cfg"
-	_domain "github.com/aaronchen2k/openstc/internal/pkg/domain"
-	_const "github.com/aaronchen2k/openstc/internal/pkg/libs/const"
-	_httpUtils "github.com/aaronchen2k/openstc/internal/pkg/libs/http"
-	_logUtils "github.com/aaronchen2k/openstc/internal/pkg/libs/log"
+	"github.com/aaronchen2k/tester/internal/agent/cfg"
+	_domain "github.com/aaronchen2k/tester/internal/pkg/domain"
+	_const "github.com/aaronchen2k/tester/internal/pkg/libs/const"
+	_httpUtils "github.com/aaronchen2k/tester/internal/pkg/libs/http"
+	_logUtils "github.com/aaronchen2k/tester/internal/pkg/libs/log"
 )
 
 func Register(devices []_domain.DeviceInst, isBusy bool) {

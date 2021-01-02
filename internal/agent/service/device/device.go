@@ -1,11 +1,11 @@
 package deviceService
 
 import (
-	androidService "github.com/aaronchen2k/openstc/internal/agent/service/device/android"
-	iosService "github.com/aaronchen2k/openstc/internal/agent/service/device/ios"
-	"github.com/aaronchen2k/openstc/internal/agent/utils/common"
-	_domain "github.com/aaronchen2k/openstc/internal/pkg/domain"
-	_const "github.com/aaronchen2k/openstc/internal/pkg/libs/const"
+	androidService "github.com/aaronchen2k/tester/internal/agent/service/device/android"
+	iosService "github.com/aaronchen2k/tester/internal/agent/service/device/ios"
+	"github.com/aaronchen2k/tester/internal/agent/utils/common"
+	_domain "github.com/aaronchen2k/tester/internal/pkg/domain"
+	_const "github.com/aaronchen2k/tester/internal/pkg/libs/const"
 )
 
 func RefreshDevices() []_domain.DeviceInst {

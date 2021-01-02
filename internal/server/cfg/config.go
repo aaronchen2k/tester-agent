@@ -2,8 +2,8 @@ package serverConf
 
 import (
 	"fmt"
-	_fileUtils "github.com/aaronchen2k/openstc/internal/pkg/libs/file"
-	"github.com/aaronchen2k/openstc/internal/server/utils"
+	_fileUtils "github.com/aaronchen2k/tester/internal/pkg/libs/file"
+	"github.com/aaronchen2k/tester/internal/server/utils"
 	"path/filepath"
 	"strings"
 
@@ -51,8 +51,8 @@ var Config = struct {
 }{}
 
 type DBConfig struct {
-	Prefix   string `yaml:"prefix" env:"DBPrefix" default:"openstc_"`
-	Name     string `yaml:"name" env:"DBName" default:"openstc"`
+	Prefix   string `yaml:"prefix" env:"DBPrefix" default:"tester_"`
+	Name     string `yaml:"name" env:"DBName" default:"tester"`
 	Adapter  string `yaml:"adapter" env:"DBAdapter" default:"sqlite3"`
 	Host     string `yaml:"host" env:"DBHost" default:"localhost"`
 	Port     string `yaml:"port" env:"DBPort" default:"3306"`

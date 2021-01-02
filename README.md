@@ -1,8 +1,7 @@
-# openstc.com
-## Open Software Test Center
-Continuous testing on on-demand virtual machines and docker containers.
+# [Tester.im](http://tester.im)
+### Continuous testing on KVM machines and Docker containers on-demand.
 
-Vue.js, Golang, MySQL, Proxmox VE, Docker
+Vue.js, Golang, MySQL, Proxmox VE, Portainer
 
 ## Quick start
 TODO
