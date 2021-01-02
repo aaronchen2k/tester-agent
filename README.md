@@ -1,5 +1,5 @@
 # [Tester.im](http://tester.im)
-## Continuous testing on diverse testing environments provided by KVM and Docker instances on-demand.
+## Continuous testing on KVM and Docker instances on-demand.
 
 Vue.js, Golang, MySQL, Proxmox VE, Portainer
 
