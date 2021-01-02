@@ -7,5 +7,4 @@ Vue.js, Golang, MySQL, Proxmox VE, Portainer
 TODO
 
 ### Licenses
-
 All SERVER SIDE source code is licensed under the [GPLv3 License](LICENSE).
