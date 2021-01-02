@@ -12,12 +12,11 @@ const locale = {
   'menu.home': 'Home',
 
   'menu.task': 'Test Task',
-  'menu.execution': 'Executing',
-  'menu.history': 'History',
+  'menu.execution': 'Test Execution',
+  'menu.history': 'Test History',
   'menu.res': 'Test Environment',
-  'menu.node': 'PVE Node',
-  'menu.vm': 'KVM Machine',
-  'menu.container': 'Docker Container',
+  'menu.machine': 'Machine',
+  'menu.templ': 'Template',
 
   'menu.dashboard': 'Dashboard',
   'menu.dashboard.analysis': 'Analysis',

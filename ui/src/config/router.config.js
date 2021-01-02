@@ -41,7 +41,7 @@ export const asyncRouterMap = [
         ]
       },
       {
-        path: '/资源',
+        path: '/res',
         name: 'res',
         redirect: '/res/node/list',
         component: RouteView,
@@ -50,21 +50,15 @@ export const asyncRouterMap = [
         children: [
           {
             path: '/res/node/list',
-            name: 'node-list',
-            component: () => import('@/views/res/node/List'),
-            meta: { title: 'menu.node', permission: [ 'res' ] }
+            name: 'machine-list',
+            component: () => import('@/views/res/machine/List'),
+            meta: { title: 'menu.machine', permission: [ 'res' ] }
           },
           {
-            path: '/task/vm/list',
-            name: 'vm-list',
-            component: () => import('@/views/res/vm/List'),
-            meta: { title: 'menu.vm', permission: [ 'res' ] }
-          },
-          {
-            path: '/res/container/list',
-            name: 'container-list',
-            component: () => import('@/views/res/container/List'),
-            meta: { title: 'menu.container', permission: [ 'res' ] }
+            path: '/task/templ/list',
+            name: 'templ-list',
+            component: () => import('@/views/res/templ/List'),
+            meta: { title: 'menu.templ', permission: [ 'res' ] }
           }
         ]
       },

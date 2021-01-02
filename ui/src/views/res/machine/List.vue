@@ -177,7 +177,7 @@ const statusMap = {
 }
 
 export default {
-  name: 'ResList',
+  name: 'MachineList',
   components: {
     STable,
     Ellipsis,

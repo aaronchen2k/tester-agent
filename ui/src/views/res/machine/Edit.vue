@@ -5,7 +5,7 @@
 <script>
 
 export default {
-  name: 'VmList',
+  name: 'MachineEdit',
   components: {
   },
   data () {

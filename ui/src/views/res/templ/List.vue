@@ -5,7 +5,7 @@
 <script>
 
 export default {
-  name: 'VmList',
+  name: 'TemplateList',
   components: {
   },
   data () {

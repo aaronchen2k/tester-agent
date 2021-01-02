@@ -13,11 +13,10 @@ const locale = {
 
   'menu.task': '测试任务',
   'menu.execution': '执行中',
-  'menu.history': '历史',
+  'menu.history': '执行历史',
   'menu.res': '测试资源',
-  'menu.node': 'PVE节点',
-  'menu.vm': '虚拟机',
-  'menu.container': '容器',
+  'menu.machine': '测试机',
+  'menu.templ': '模板',
 
   'menu.dashboard': '仪表盘',
   'menu.dashboard.analysis': '分析页',
