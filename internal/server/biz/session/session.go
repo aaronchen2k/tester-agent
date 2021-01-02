@@ -8,8 +8,8 @@ import (
 )
 
 var (
-	SessionID = "OpenSTC_SessionID"
-	CredKey   = "OpenSTC_Credentials"
+	SessionID = "Tester_SessionID"
+	CredKey   = "Tester_Credentials"
 	session   = sessions.New(sessions.Config{Cookie: SessionID})
 )
 
