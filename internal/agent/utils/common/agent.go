@@ -2,7 +2,7 @@ package agentUntils
 
 import (
 	"github.com/aaronchen2k/tester/internal/agent/cfg"
-	_const "github.com/aaronchen2k/tester/internal/pkg/libs/const"
+	_const "github.com/aaronchen2k/tester/internal/pkg/const"
 )
 
 func IsDeviceAgent() bool {

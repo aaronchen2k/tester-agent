@@ -1,10 +1,10 @@
-package testing
+package test
 
 import (
 	"fmt"
 	"github.com/aaronchen2k/tester/internal/agent/cfg"
 	deviceService "github.com/aaronchen2k/tester/internal/agent/service/device"
-	_const "github.com/aaronchen2k/tester/internal/pkg/libs/const"
+	_const "github.com/aaronchen2k/tester/internal/pkg/const"
 	_httpUtils "github.com/aaronchen2k/tester/internal/pkg/libs/http"
 	_logUtils "github.com/aaronchen2k/tester/internal/pkg/libs/log"
 	"log"
@@ -12,7 +12,7 @@ import (
 )
 
 func TestRegister(t *testing.T) {
-	_logUtils.InitLogger()
+	_logUtils.Init()
 	url := _httpUtils.GenUrl("http://localhost:8848", "device/register")
 	log.Println(url)
 

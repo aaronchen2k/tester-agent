@@ -132,6 +132,7 @@ func injectObj(router *router.Router) {
 		&inject.Object{Value: handler.NewAppiumController()},
 		&inject.Object{Value: handler.NewDeviceController()},
 		&inject.Object{Value: handler.NewFileController()},
+		&inject.Object{Value: handler.NewMachineController()},
 		&inject.Object{Value: handler.NewHostController()},
 		&inject.Object{Value: handler.NewImageController()},
 		&inject.Object{Value: handler.NewInitController()},

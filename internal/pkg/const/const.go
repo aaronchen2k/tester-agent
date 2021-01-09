@@ -1,5 +1,7 @@
 package _const
 
+import "os"
+
 const (
 	RegisterExpireTime = 5  // min
 	WaitForExecTime    = 60 // min
@@ -25,4 +27,8 @@ const (
 	Build_Command_Param_SeleniumDriver = "${driverPath}"
 
 	PageSize = 15
+)
+
+var (
+	PthSep = string(os.PathSeparator)
 )

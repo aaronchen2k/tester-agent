@@ -1,7 +1,7 @@
 package model
 
 import (
-	_const "github.com/aaronchen2k/tester/internal/pkg/libs/const"
+	_const "github.com/aaronchen2k/tester/internal/pkg/const"
 	"time"
 )
 
@@ -22,12 +22,15 @@ type Host struct {
 	Port    int    `json:"port"`
 	WorkDir string `json:"workDir,omitempty"`
 
+	Username string `gorm:"username" json:"username"`
+	Password string `gorm:"password" json:"password"`
+
 	SshPort int               `json:"sshPort,omitempty"`
 	VncPort int               `json:"vncPort,omitempty"`
 	Status  _const.HostStatus `json:"status"`
 
-	TaskCount        int       `json:"taskCount"`
 	LastRegisterDate time.Time `json:"lastRegisterDate"`
+	TaskCount        int       `gorm:"-" json:"taskCount"`
 }
 
 func NewHost() Host {

@@ -7,8 +7,6 @@ import (
 	"strings"
 )
 
-var ()
-
 func Info(str string) {
 	logger.Infoln(str)
 }
@@ -34,7 +32,16 @@ func Print(str string) {
 	logger.Println(str)
 }
 func Printf(str string, args ...interface{}) {
-	logger.Printf(str, args)
+	msg := fmt.Sprintf(str, args)
+	Print(msg)
+}
+
+func PrintColor(msg string, attr color.Attribute) {
+	if attr < 0 {
+		Print(msg)
+	} else {
+		color.New(attr).Fprintf(color.Output, msg+"\n")
+	}
 }
 
 func PrintUnicode(str []byte) {
@@ -51,15 +58,5 @@ func PrintUnicode(str []byte) {
 		msg = temp
 	}
 
-	logger.Println(msg)
-}
-
-func PrintToWithColor(msg string, attr color.Attribute) {
-	output := color.Output
-
-	if attr == -1 {
-		fmt.Fprint(output, msg+"\n")
-	} else {
-		color.New(attr).Fprintf(output, msg+"\n")
-	}
+	Print(msg)
 }

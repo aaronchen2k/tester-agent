@@ -1,7 +1,7 @@
 package repo
 
 import (
-	_const "github.com/aaronchen2k/tester/internal/pkg/libs/const"
+	_const "github.com/aaronchen2k/tester/internal/pkg/const"
 	"github.com/aaronchen2k/tester/internal/server/model"
 	"gorm.io/gorm"
 	"strings"

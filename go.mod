@@ -34,6 +34,7 @@ require (
 	github.com/jinzhu/copier v0.1.0
 	github.com/jinzhu/gorm v1.9.12
 	github.com/k0kubun/colorstring v0.0.0-20150214042306-9440f1994b88 // indirect
+	github.com/kardianos/service v1.2.0 // indirect
 	github.com/kataras/iris/v12 v12.2.0-alpha.0.20201113181155-4d09475c290d
 	github.com/lestrrat/go-file-rotatelogs v0.0.0-20180223000712-d3151e2a480f
 	github.com/lib/pq v1.8.0 // indirect
@@ -44,6 +45,7 @@ require (
 	github.com/mna/redisc v1.1.7
 	github.com/nxadm/tail v1.4.5 // indirect
 	github.com/pkg/errors v0.9.1
+	github.com/rifflock/lfshook v0.0.0-20180920164130-b9218ef580f5
 	github.com/robfig/cron/v3 v3.0.1
 	github.com/rpcx-ecosystem/rpcx-gateway v0.0.0-20200521025828-a39934d3752d
 	github.com/russross/blackfriday/v2 v2.1.0 // indirect

@@ -15,7 +15,7 @@ var (
 )
 
 func PrintUsage() {
-	_logUtils.PrintToWithColor("Usage: ", color.FgCyan)
+	_logUtils.PrintColor("Usage: ", color.FgCyan)
 
 	usage := ReadResData(usageFile)
 

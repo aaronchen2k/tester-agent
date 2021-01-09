@@ -3,8 +3,8 @@ package service
 import (
 	"crypto/rand"
 	"fmt"
+	_const "github.com/aaronchen2k/tester/internal/pkg/const"
 	_domain "github.com/aaronchen2k/tester/internal/pkg/domain"
-	_const "github.com/aaronchen2k/tester/internal/pkg/libs/const"
 	_stringUtils "github.com/aaronchen2k/tester/internal/pkg/libs/string"
 	"github.com/aaronchen2k/tester/internal/server/model"
 	"github.com/aaronchen2k/tester/internal/server/repo"

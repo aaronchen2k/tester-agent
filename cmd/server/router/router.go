@@ -17,6 +17,7 @@ type Router struct {
 	AppiumCtrl  *handler.AppiumController  `inject:""`
 	DeviceCtrl  *handler.DeviceController  `inject:""`
 	FileCtrl    *handler.FileController    `inject:""`
+	MachineCtrl *handler.MachineController `inject:""`
 	HostCtrl    *handler.HostController    `inject:""`
 	ImageCtrl   *handler.ImageController   `inject:""`
 	InitCtrl    *handler.InitController    `inject:""`
@@ -60,9 +61,13 @@ func (r *Router) App() {
 				admin.Get("/expire", r.AccountCtrl.UserExpire).Name = "刷新 token"
 				admin.Get("/profile", r.UserCtrl.GetProfile).Name = "个人信息"
 
+				admin.PartyFunc("/machines", func(hosts iris.Party) {
+					hosts.Get("/", r.MachineCtrl.List).Name = "树状测试机列表"
+				})
+
 				admin.PartyFunc("/hosts", func(hosts iris.Party) {
 					hosts.Get("/", r.HostCtrl.List).Name = "PVE节点列表"
-					hosts.Get("/{id:uint}", r.HostCtrl.Get).Name = "用户详情"
+					hosts.Get("/{id:uint}", r.HostCtrl.Get).Name = "PVE节点详情"
 				})
 
 				admin.PartyFunc("/users", func(users iris.Party) {

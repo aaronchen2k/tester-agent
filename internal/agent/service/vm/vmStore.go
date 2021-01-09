@@ -1,8 +1,8 @@
 package vmService
 
 import (
+	_const "github.com/aaronchen2k/tester/internal/pkg/const"
 	_domain "github.com/aaronchen2k/tester/internal/pkg/domain"
-	_const "github.com/aaronchen2k/tester/internal/pkg/libs/const"
 	"time"
 )
 

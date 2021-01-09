@@ -20,7 +20,7 @@ var Config = struct {
 	CertPath string `default:"" env:"CertPath"`
 	CertKey  string `default:"" env:"CertKey"`
 	Port     int    `default:"8085" env:"Port"`
-	Host     string `default:"127.0.0.1" env:"Host"`
+	Host     string `default:"127.0.0.1" env:"HostId"`
 	Admin    struct {
 		UserName        string `env:"AdminUserName" default:"admin"`
 		Name            string `env:"AdminName" default:"admin"`

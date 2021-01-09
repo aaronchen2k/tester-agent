@@ -108,6 +108,7 @@ const (
 	WinXP  OsType = "winxp"
 	Ubuntu OsType = "ubuntu"
 	CentOS OsType = "centos"
+	Debian OsType = "debian"
 	Mac    OsType = "mac"
 	Virtio OsType = "virtio"
 )
@@ -132,4 +133,14 @@ const (
 	Firefox BrowserType = "firefox"
 	Edge    BrowserType = "edge"
 	IE      BrowserType = "ie"
+)
+
+type ResType string
+
+const (
+	ResRoot      ResType = "root"
+	ResHost      ResType = "host"
+	ResNode      ResType = "node"
+	ResVm        ResType = "vm"
+	ResContainer ResType = "container"
 )

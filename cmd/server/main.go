@@ -37,7 +37,7 @@ func main() {
 	}
 	flag.Parse()
 
-	_logUtils.InitLogger()
+	_logUtils.Init()
 	serverConf.InitConfig(*configPath)
 	server.Init(version, printVersion, printRouter)
 }

@@ -1,8 +1,8 @@
 package service
 
 import (
+	_const "github.com/aaronchen2k/tester/internal/pkg/const"
 	_domain "github.com/aaronchen2k/tester/internal/pkg/domain"
-	_const "github.com/aaronchen2k/tester/internal/pkg/libs/const"
 	"github.com/aaronchen2k/tester/internal/server/model"
 	"github.com/aaronchen2k/tester/internal/server/repo"
 	"github.com/mitchellh/mapstructure"

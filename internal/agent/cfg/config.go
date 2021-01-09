@@ -3,8 +3,8 @@ package agentConf
 import (
 	"github.com/aaronchen2k/tester/internal/agent/model"
 	"github.com/aaronchen2k/tester/internal/agent/utils/common"
+	_const "github.com/aaronchen2k/tester/internal/pkg/const"
 	_commonUtils "github.com/aaronchen2k/tester/internal/pkg/libs/common"
-	_const "github.com/aaronchen2k/tester/internal/pkg/libs/const"
 	_fileUtils "github.com/aaronchen2k/tester/internal/pkg/libs/file"
 	_httpUtils "github.com/aaronchen2k/tester/internal/pkg/libs/http"
 )

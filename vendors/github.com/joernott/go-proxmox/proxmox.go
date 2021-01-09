@@ -127,7 +127,7 @@ func (proxmox ProxMox) Nodes() (NodeList, error) {
 	for _, v0 := range results {
 		v := v0.(map[string]interface{})
 		if val, ok := v["uptime"]; !ok || val == nil {
-			fmt.Println("Node probably down. Skipping.")
+			fmt.Println("NodeId probably down. Skipping.")
 			continue
 		}
 		node = Node{

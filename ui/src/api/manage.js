@@ -4,6 +4,7 @@ const prefix = '/v1/admin'
 
 const api = {
   profile: `${prefix}/profile`,
+  machines: `${prefix}/machines`,
   hosts: `${prefix}/hosts`,
 
   user: `${prefix}/user`,
@@ -21,6 +22,13 @@ export function getProfile (parameter) {
     url: api.profile,
     method: 'get',
     data: parameter
+  })
+}
+export function listMachine () {
+  return request({
+    url: api.machines,
+    method: 'get',
+    params: {}
   })
 }
 export function listHost (parameter) {

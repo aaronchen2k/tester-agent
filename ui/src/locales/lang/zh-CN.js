@@ -16,7 +16,7 @@ const locale = {
   'menu.history': '执行历史',
   'menu.res': '测试资源',
   'menu.machine': '测试机',
-  'menu.templ': '模板',
+  'menu.templ': '模板机',
 
   'menu.dashboard': '仪表盘',
   'menu.dashboard.analysis': '分析页',

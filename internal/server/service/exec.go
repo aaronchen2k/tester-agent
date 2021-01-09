@@ -1,7 +1,7 @@
 package service
 
 import (
-	_const "github.com/aaronchen2k/tester/internal/pkg/libs/const"
+	_const "github.com/aaronchen2k/tester/internal/pkg/const"
 	"github.com/aaronchen2k/tester/internal/server/model"
 	"github.com/aaronchen2k/tester/internal/server/repo"
 )

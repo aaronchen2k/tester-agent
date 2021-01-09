@@ -1,45 +1,79 @@
 package _logUtils
 
 import (
-	"fmt"
-	rotatelogs "github.com/lestrrat/go-file-rotatelogs"
+	_vari "github.com/aaronchen2k/tester/internal/pkg/vari"
+	"github.com/rifflock/lfshook"
 	"github.com/sirupsen/logrus"
-	"io"
+	"github.com/smallnest/rpcx/log"
+	"io/ioutil"
 	"os"
-	"runtime"
+	"os/user"
+	"path"
 	"strings"
 )
 
 var logger *logrus.Logger
 
-func InitLogger() *logrus.Logger {
+func Init() {
 	if logger != nil {
-		return logger
+		return
 	}
+
+	usr, _ := user.Current()
+	log.Warn("run as user " + usr.Username)
+
+	_vari.WorkDir = addPathSepIfNeeded(path.Join(usr.HomeDir, "tester-manager"))
+	logDir := addPathSepIfNeeded(path.Join(_vari.WorkDir, "log"))
+	MkDirIfNeeded(logDir)
+	log.Warn("log dir is " + logDir)
 
 	logger = logrus.New()
+	logger.Out = ioutil.Discard
 
-	logPath, _ := os.Getwd()
-	logName := logPath + "/%Y%m%d.log"
-	r, _ := rotatelogs.New(logName)
-	mw := io.MultiWriter(os.Stdout, r)
-	logger.SetOutput(mw)
-
-	logger.SetReportCaller(true)
-	formatter := &logrus.TextFormatter{
-		TimestampFormat:        "02-01-2006 15:04:05",
-		FullTimestamp:          true,
-		DisableLevelTruncation: true,
-		CallerPrettyfier: func(f *runtime.Frame) (string, string) {
-			return "", fmt.Sprintf("%s:%d", formatFilePath(f.File), f.Line)
-		},
+	pathMap := lfshook.PathMap{
+		logrus.WarnLevel:  logDir + "log.txt",
+		logrus.ErrorLevel: logDir + "result.txt",
 	}
-	logger.SetFormatter(formatter)
 
-	return logger
+	logger.Hooks.Add(lfshook.NewHook(
+		pathMap,
+		&MyFormatter{},
+	))
+
+	logger.SetFormatter(&MyFormatter{})
+
+	return
 }
 
-func formatFilePath(path string) string {
-	index := strings.Index(path, "src")
-	return path[index:]
+type MyFormatter struct {
+	logrus.TextFormatter
+}
+
+func (f *MyFormatter) Format(entry *logrus.Entry) ([]byte, error) {
+	return []byte(entry.Message + "\n"), nil
+}
+
+func addPathSepIfNeeded(pth string) string {
+	sepa := string(os.PathSeparator)
+
+	if strings.LastIndex(pth, sepa) < len(pth)-1 {
+		pth += sepa
+	}
+	return pth
+}
+
+func MkDirIfNeeded(dir string) error {
+	if !FileExist(dir) {
+		err := os.MkdirAll(dir, os.ModePerm)
+		return err
+	}
+
+	return nil
+}
+func FileExist(path string) bool {
+	var exist = true
+	if _, err := os.Stat(path); os.IsNotExist(err) {
+		exist = false
+	}
+	return exist
 }

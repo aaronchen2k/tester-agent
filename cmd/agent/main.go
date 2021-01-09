@@ -6,7 +6,7 @@ import (
 	"github.com/aaronchen2k/tester/internal/agent/cfg"
 	"github.com/aaronchen2k/tester/internal/agent/cron"
 	agentUntils "github.com/aaronchen2k/tester/internal/agent/utils/common"
-	_const "github.com/aaronchen2k/tester/internal/pkg/libs/const"
+	_const "github.com/aaronchen2k/tester/internal/pkg/const"
 	_logUtils "github.com/aaronchen2k/tester/internal/pkg/libs/log"
 	"github.com/fatih/color"
 	"os"
@@ -77,7 +77,7 @@ func start(args []string) {
 
 func init() {
 	cleanup()
-	_logUtils.InitLogger()
+	_logUtils.Init()
 }
 
 func cleanup() {

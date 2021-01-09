@@ -1,7 +1,7 @@
 package handler
 
 import (
-	_const "github.com/aaronchen2k/tester/internal/pkg/libs/const"
+	_const "github.com/aaronchen2k/tester/internal/pkg/const"
 	_dateUtils "github.com/aaronchen2k/tester/internal/pkg/libs/date"
 	_fileUtils "github.com/aaronchen2k/tester/internal/pkg/libs/file"
 	uuid "github.com/iris-contrib/go.uuid"

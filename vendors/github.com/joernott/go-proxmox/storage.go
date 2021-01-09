@@ -29,7 +29,7 @@ func (storage Storage) CreateVolume(FileName string, DiskSize string, VmId strin
 
 	form = url.Values{
 		"filename": {FileName},
-		//		"node":     {storage.node.Node},
+		//		"node":     {storage.node.NodeId},
 		"size":   {DiskSize},
 		"format": {"qcow2"},
 		"vmid":   {VmId},
