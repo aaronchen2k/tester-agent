@@ -12,8 +12,8 @@
           <a-tree
             ref="machineTree"
             class="draggable-tree"
-            :show-line="true"
-            :show-icon="false"
+            :show-line="false"
+            :show-icon="true"
             :expandedKeys.sync="openKeys"
             :selectedKeys.sync="selectedKeys"
             :tree-data="[treeData]"
@@ -21,7 +21,11 @@
             @select="onSelect"
             @rightClick="onRightClick"
             :draggable="false"
-          />
+          >
+            <a-icon slot="cluster" type="cluster" />
+            <a-icon slot="cloud-server" type="cloud-server" />
+            <a-icon slot="desktop" type="desktop" />
+          </a-tree>
         </div>
 
         <div v-if="rightClickNode" :style="rightMenuStyle" class="tree-context-menu">
@@ -182,15 +186,31 @@ export default {
       this.getOpenKeys(this.treeData, this.expanded)
     },
     getOpenKeys (node, expanded) {
-      if (!node || (!expanded && (node.type === 'node' || node.type === 'vm'))) return
+      if (!node) return
 
-      this.openKeys.push(node.key)
-      this.nodeMap[node.key] = node
+      if (node.type === 'host') {
+        node.slots = {
+          icon: 'cluster'
+        }
+      } else if (node.type === 'node') {
+        node.slots = {
+          icon: 'cloud-server'
+        }
+      } else if (node.type === 'vm') {
+        node.slots = {
+          icon: 'desktop'
+        }
+      }
 
-      if (node.children) {
-        node.children.forEach((item) => {
-          this.getOpenKeys(item, expanded)
-        })
+      if (expanded || (node.type !== 'node' && node.type !== 'vm')) {
+        this.openKeys.push(node.key)
+        this.nodeMap[node.key] = node
+
+        if (node.children) {
+          node.children.forEach((item) => {
+            this.getOpenKeys(item, expanded)
+          })
+        }
       }
     }
 
