@@ -31,7 +31,7 @@ export function listVm () {
     params: {}
   })
 }
-export function listContainers (parameter) {
+export function listContainer (parameter) {
   return request({
     url: api.containers,
     method: 'get',

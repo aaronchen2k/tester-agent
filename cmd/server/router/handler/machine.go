@@ -21,7 +21,7 @@ func (c *MachineController) ListVm(ctx iris.Context) {
 }
 
 func (c *MachineController) ListContainers(ctx iris.Context) {
-	rootNode := c.MachineService.ListVm()
+	rootNode := c.MachineService.ListContainers()
 	_, _ = ctx.JSON(agentUtils.ApiRes(200, "请求成功", rootNode))
 }
 

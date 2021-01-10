@@ -10,9 +10,9 @@ import (
 
 type VmController struct {
 	Ctx          iris.Context
-	VmService    *service.VmService    `inject:""`
-	ImageService *service.ImageService `inject:""`
-	HostService  *service.HostService  `inject:""`
+	VmService    *service.VmService      `inject:""`
+	ImageService *service.ImageService   `inject:""`
+	HostService  *service.ClusterService `inject:""`
 }
 
 func NewVmController() *VmController {

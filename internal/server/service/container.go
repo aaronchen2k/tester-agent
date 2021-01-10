@@ -10,7 +10,7 @@ type ContainerService struct {
 	RpcService *RpcService `inject:""`
 
 	ContainerRepo *repo.ContainerRepo `inject:""`
-	HostRepo      *repo.HostRepo      `inject:""`
+	ClusterRepo   *repo.ClusterRepo   `inject:""`
 	ImageRepo     *repo.ImageRepo     `inject:""`
 	IsoRepo       *repo.IsoRepo       `inject:""`
 	QueueRepo     *repo.QueueRepo     `inject:""`

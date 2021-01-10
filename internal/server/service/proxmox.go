@@ -7,8 +7,8 @@ import (
 type ProxmoxService struct {
 }
 
-func NewProxmoxService() *HostService {
-	return &HostService{}
+func NewProxmoxService() *ClusterService {
+	return &ClusterService{}
 }
 
 func (s *ProxmoxService) Register(host _domain.Host) (result _domain.RpcResult) {

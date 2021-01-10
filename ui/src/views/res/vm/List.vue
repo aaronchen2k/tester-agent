@@ -45,7 +45,7 @@
           </a-menu>
         </div>
       </div>
-      <div  class="right" :style="{height: colHeight}">
+      <div class="right" :style="{height: colHeight}">
 
       </div>
     </div>

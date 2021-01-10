@@ -1,7 +1,6 @@
 package service
 
 import (
-	"fmt"
 	_const "github.com/aaronchen2k/tester/internal/pkg/const"
 	_domain "github.com/aaronchen2k/tester/internal/pkg/domain"
 	_numbUtils "github.com/aaronchen2k/tester/internal/pkg/libs/numb"
@@ -9,28 +8,17 @@ import (
 	"github.com/aaronchen2k/tester/internal/server/repo"
 )
 
-type HostService struct {
-	HostRepo  *repo.HostRepo  `inject:""`
-	ImageRepo *repo.ImageRepo `inject:""`
-	VmRepo    *repo.VmRepo    `inject:""`
+type ClusterService struct {
+	HostRepo  *repo.ClusterRepo `inject:""`
+	ImageRepo *repo.ImageRepo   `inject:""`
+	VmRepo    *repo.VmRepo      `inject:""`
 }
 
-func NewHostService() *HostService {
-	return &HostService{}
+func NewHostService() *ClusterService {
+	return &ClusterService{}
 }
 
-func (s *HostService) Register(host _domain.Host) (result _domain.RpcResult) {
-	hostPo, err := s.HostRepo.Register(host)
-	if err != nil {
-		result.Fail(fmt.Sprintf("fail to register host %s ", host.Ip))
-	}
-
-	s.updateVmsStatus(host, hostPo.ID)
-
-	return
-}
-
-func (s *HostService) GetValidForQueue(queue model.Queue) (hostId, backingImageId int) {
+func (s *ClusterService) GetValidForQueue(queue model.Queue) (hostId, backingImageId int) {
 	imageIds1 := s.ImageRepo.QueryByOs(queue.OsPlatform, queue.OsType, queue.OsLang)
 	imageIds2 := s.ImageRepo.QueryByBrowser(queue.BrowserType, queue.BrowserVersion)
 
@@ -55,7 +43,7 @@ func (s *HostService) GetValidForQueue(queue model.Queue) (hostId, backingImageI
 	return
 }
 
-func (s *HostService) getIdleHost() (ids []int) {
+func (s *ClusterService) getIdleHost() (ids []int) {
 	// keys: hostId, vmCount
 	hostToVmCountList := s.HostRepo.QueryIdle(_const.MaxVmOnHost)
 
@@ -68,7 +56,7 @@ func (s *HostService) getIdleHost() (ids []int) {
 	return hostIds
 }
 
-func (s *HostService) updateVmsStatus(host _domain.Host, hostId uint) {
+func (s *ClusterService) updateVmsStatus(host _domain.Host, hostId uint) {
 	vmNames := make([]string, 0)
 	runningVms, destroyVms, unknownVms := s.getVmsByStatus(host, vmNames)
 
@@ -88,7 +76,7 @@ func (s *HostService) updateVmsStatus(host _domain.Host, hostId uint) {
 	return
 }
 
-func (s *HostService) getVmsByStatus(host _domain.Host, vmNames []string) (runningVms, destroyVms, unknownVms []string) {
+func (s *ClusterService) getVmsByStatus(host _domain.Host, vmNames []string) (runningVms, destroyVms, unknownVms []string) {
 	vms := host.Vms
 
 	for _, vm := range vms {
@@ -108,7 +96,13 @@ func (s *HostService) getVmsByStatus(host _domain.Host, vmNames []string) (runni
 	return
 }
 
-func (s *HostService) ListAll(keywords string, pageNo, pageSize int) (hosts []model.Host, total int64) {
+func (s *ClusterService) ListByType(tp string) (hosts []model.Cluster) {
+	hosts, _ = s.HostRepo.QueryByType(tp)
+
+	return
+}
+
+func (s *ClusterService) ListAll(keywords string, pageNo, pageSize int) (hosts []model.Cluster, total int64) {
 	hosts, total, _ = s.HostRepo.Query(keywords, pageNo, pageSize)
 
 	return

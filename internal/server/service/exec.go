@@ -12,7 +12,7 @@ type ExecService struct {
 	AppiumService   *AppiumService   `inject:""`
 	SeleniumService *SeleniumService `inject:""`
 	TaskService     *TaskService     `inject:""`
-	HostService     *HostService     `inject:""`
+	HostService     *ClusterService  `inject:""`
 
 	ExecRepo   *repo.ExecRepo   `inject:""`
 	QueueRepo  *repo.QueueRepo  `inject:""`

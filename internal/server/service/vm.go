@@ -14,11 +14,11 @@ import (
 type VmService struct {
 	RpcService *RpcService `inject:""`
 
-	VmRepo    *repo.VmRepo    `inject:""`
-	HostRepo  *repo.HostRepo  `inject:""`
-	ImageRepo *repo.ImageRepo `inject:""`
-	IsoRepo   *repo.IsoRepo   `inject:""`
-	QueueRepo *repo.QueueRepo `inject:""`
+	VmRepo      *repo.VmRepo      `inject:""`
+	ClusterRepo *repo.ClusterRepo `inject:""`
+	ImageRepo   *repo.ImageRepo   `inject:""`
+	IsoRepo     *repo.IsoRepo     `inject:""`
+	QueueRepo   *repo.QueueRepo   `inject:""`
 }
 
 func NewVmService() *VmService {
@@ -34,7 +34,7 @@ func (s *VmService) Register(vm _domain.Vm) (result _domain.RpcResult) {
 }
 
 func (s *VmService) CreateRemote(hostId, backingImageId, queueId int) (result _domain.RpcResult) {
-	host := s.HostRepo.Get(hostId)
+	host := s.ClusterRepo.Get(hostId)
 	backingImage := s.ImageRepo.Get(backingImageId)
 	sysIso := s.IsoRepo.Get(backingImage.SysIsoId)
 	sysIsoPath := sysIso.Path

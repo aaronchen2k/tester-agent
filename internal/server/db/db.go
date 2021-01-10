@@ -109,7 +109,7 @@ func (i *Instance) Migrate() {
 		&model.Build{},
 		&model.Container{},
 		&model.Device{},
-		&model.Host{},
+		&model.Cluster{},
 		&model.Image{},
 		&model.Iso{},
 		&model.Permission{},

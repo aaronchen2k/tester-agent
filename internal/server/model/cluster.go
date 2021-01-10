@@ -5,10 +5,11 @@ import (
 	"time"
 )
 
-type Host struct {
+type Cluster struct {
 	BaseModel
 
 	Name string `json:"name"`
+	Type string `json:"type"`
 
 	OsPlatform _const.OsPlatform `json:"osPlatform,omitempty"`
 	OsType     _const.OsType     `json:"osType,omitempty"`
@@ -33,11 +34,11 @@ type Host struct {
 	TaskCount        int       `gorm:"-" json:"taskCount"`
 }
 
-func NewHost() Host {
-	host := Host{}
-	return host
+func NewCluster() Cluster {
+	cluster := Cluster{}
+	return cluster
 }
 
-func (Host) TableName() string {
-	return "biz_host"
+func (Cluster) TableName() string {
+	return "biz_cluster"
 }

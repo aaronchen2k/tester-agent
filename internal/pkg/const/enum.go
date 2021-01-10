@@ -143,4 +143,5 @@ const (
 	ResNode      ResType = "node"
 	ResVm        ResType = "vm"
 	ResContainer ResType = "container"
+	ResFolder    ResType = "folder"
 )
