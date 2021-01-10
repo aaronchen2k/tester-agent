@@ -15,8 +15,8 @@ const locale = {
   'menu.execution': 'Test Execution',
   'menu.history': 'Test History',
   'menu.res': 'Test Environment',
-  'menu.machine': 'Machine',
-  'menu.templ': 'Template',
+  'menu.vm': 'VM',
+  'menu.container': 'Container',
 
   'menu.dashboard': 'Dashboard',
   'menu.dashboard.analysis': 'Analysis',

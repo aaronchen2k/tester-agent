@@ -5,7 +5,7 @@
 <script>
 
 export default {
-  name: 'TemplateList',
+  name: 'VmEdit',
   components: {
   },
   data () {

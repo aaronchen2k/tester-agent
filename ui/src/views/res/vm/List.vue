@@ -22,9 +22,12 @@
             @rightClick="onRightClick"
             :draggable="false"
           >
-            <a-icon slot="cluster" type="cluster" />
-            <a-icon slot="cloud-server" type="cloud-server" />
-            <a-icon slot="desktop" type="desktop" />
+            <template slot="custom" slot-scope="{ type,isTemplate }">
+              <a-icon v-if="type=='host'" type="cluster" />
+              <a-icon v-else-if="type=='node'" type="cloud-server" />
+              <a-icon v-else-if="type=='vm' && !isTemplate" type="desktop" />
+              <a-icon v-else-if="type=='vm' && isTemplate" type="build" />
+            </template>
           </a-tree>
         </div>
 
@@ -52,10 +55,10 @@
 
 <script>
 
-import { listMachine } from '@/api/manage'
+import { listVm } from '@/api/manage'
 
 export default {
-  name: 'TaskList',
+  name: 'VmList',
   components: {
   },
   data () {
@@ -87,8 +90,8 @@ export default {
   },
   created () {
     console.log('created')
-    listMachine().then(json => {
-      console.log('listMachine', json)
+    listVm().then(json => {
+      console.log('listVm', json)
       this.treeData = json.data
       this.loadTreeCallback(this.treeData, '')
     })
@@ -188,18 +191,8 @@ export default {
     getOpenKeys (node, expanded) {
       if (!node) return
 
-      if (node.type === 'host') {
-        node.slots = {
-          icon: 'cluster'
-        }
-      } else if (node.type === 'node') {
-        node.slots = {
-          icon: 'cloud-server'
-        }
-      } else if (node.type === 'vm') {
-        node.slots = {
-          icon: 'desktop'
-        }
+      node.scopedSlots = {
+        icon: 'custom'
       }
 
       if (expanded || (node.type !== 'node' && node.type !== 'vm')) {

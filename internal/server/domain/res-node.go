@@ -9,6 +9,7 @@ type ResNode struct {
 	Key      string         `json:"key"`
 	Children []*ResNode     `json:"children"`
 
-	HostId string `json:"hostId,omitempty"`
-	NodeId string `json:"nodeId,omitempty"`
+	IsTemplate bool   `json:"isTemplate"`
+	HostId     string `json:"hostId,omitempty"`
+	NodeId     string `json:"nodeId,omitempty"`
 }

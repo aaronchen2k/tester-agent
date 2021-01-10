@@ -5,7 +5,7 @@
 <script>
 
 export default {
-  name: 'MachineEdit',
+  name: 'ContainerEdit',
   components: {
   },
   data () {

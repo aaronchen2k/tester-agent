@@ -5,7 +5,7 @@
 <script>
 
 export default {
-  name: 'TemplateEdit',
+  name: 'ContainerList',
   components: {
   },
   data () {

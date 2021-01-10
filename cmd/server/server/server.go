@@ -126,6 +126,7 @@ func injectObj(router *router.Router) {
 		&inject.Object{Value: service.NewTaskService()},
 		&inject.Object{Value: service.NewUserService()},
 		&inject.Object{Value: service.NewVmService()},
+		&inject.Object{Value: service.NewMachineService()},
 
 		// controller
 		&inject.Object{Value: handler.NewAccountController()},

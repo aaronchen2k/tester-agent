@@ -61,8 +61,11 @@ func (r *Router) App() {
 				admin.Get("/expire", r.AccountCtrl.UserExpire).Name = "刷新 token"
 				admin.Get("/profile", r.UserCtrl.GetProfile).Name = "个人信息"
 
-				admin.PartyFunc("/machines", func(hosts iris.Party) {
-					hosts.Get("/", r.MachineCtrl.List).Name = "树状测试机列表"
+				admin.PartyFunc("/vms", func(hosts iris.Party) {
+					hosts.Get("/", r.MachineCtrl.ListVm).Name = "虚拟机树状列表"
+				})
+				admin.PartyFunc("/containers", func(hosts iris.Party) {
+					hosts.Get("/", r.MachineCtrl.ListContainers).Name = "重启树状列表"
 				})
 
 				admin.PartyFunc("/hosts", func(hosts iris.Party) {
