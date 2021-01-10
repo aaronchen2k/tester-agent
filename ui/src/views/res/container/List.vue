@@ -22,11 +22,11 @@
             @rightClick="onRightClick"
             :draggable="false"
           >
-            <template slot="custom" slot-scope="{ type,isTemplate }">
-              <a-icon v-if="type=='host'" type="cluster" />
+            <template slot="custom" slot-scope="{ type }">
+              <a-icon v-if="type=='cluster'" type="cluster" />
               <a-icon v-else-if="type=='node'" type="cloud-server" />
-              <a-icon v-else-if="type=='vm' && !isTemplate" type="desktop" />
-              <a-icon v-else-if="type=='vm' && isTemplate" type="build" />
+              <a-icon v-else-if="type=='container'" type="desktop" />
+              <a-icon v-else-if="type=='image'" type="build" />
             </template>
           </a-tree>
         </div>
@@ -195,7 +195,7 @@ export default {
           icon: 'custom'
         }
 
-        if (expanded || (node.type !== 'node' && node.type !== 'vm')) {
+        if (expanded || node.type === 'root' || node.type === 'cluster') {
           this.openKeys.push(node.key)
           this.nodeMap[node.key] = node
 
@@ -218,7 +218,7 @@ export default {
   background-color: #ffffff;
 
   .left {
-    width: 260px;
+    width: 360px;
     border-right: 1px solid #DDDDDD;
   }
   .right {

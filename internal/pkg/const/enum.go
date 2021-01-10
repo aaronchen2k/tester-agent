@@ -139,9 +139,10 @@ type ResType string
 
 const (
 	ResRoot      ResType = "root"
-	ResHost      ResType = "host"
+	ResCluster   ResType = "cluster"
 	ResNode      ResType = "node"
 	ResVm        ResType = "vm"
 	ResContainer ResType = "container"
+	ResImage     ResType = "image"
 	ResFolder    ResType = "folder"
 )

@@ -72,3 +72,16 @@ type Container struct {
 		Propagation string `json:"Propagation"`
 	} `json:"Mounts"`
 }
+
+type Image struct {
+	Containers  int         `json:"Containers"`
+	Created     int         `json:"Created"`
+	ID          string      `json:"Id"`
+	Labels      interface{} `json:"Labels"`
+	ParentID    string      `json:"ParentId"`
+	RepoDigests []string    `json:"RepoDigests"`
+	RepoTags    []string    `json:"RepoTags"`
+	SharedSize  int         `json:"SharedSize"`
+	Size        int         `json:"Size"`
+	VirtualSize int         `json:"VirtualSize"`
+}

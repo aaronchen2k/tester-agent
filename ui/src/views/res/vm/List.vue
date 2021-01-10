@@ -23,7 +23,7 @@
             :draggable="false"
           >
             <template slot="custom" slot-scope="{ type,isTemplate }">
-              <a-icon v-if="type=='host'" type="cluster" />
+              <a-icon v-if="type=='cluster'" type="cluster" />
               <a-icon v-else-if="type=='node'" type="cloud-server" />
               <a-icon v-else-if="type=='vm' && !isTemplate" type="desktop" />
               <a-icon v-else-if="type=='vm' && isTemplate" type="build" />
@@ -195,7 +195,7 @@ export default {
         icon: 'custom'
       }
 
-      if (expanded || (node.type !== 'node' && node.type !== 'vm')) {
+      if (expanded || node.type === 'root' || node.type === 'cluster') {
         this.openKeys.push(node.key)
         this.nodeMap[node.key] = node
 

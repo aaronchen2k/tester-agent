@@ -63,6 +63,25 @@ func (p *Portainer) ListEndpoints() ([]Endpoint, error) {
 	return endpoints, err
 }
 
+func (p *Portainer) ListImages(e int32) (images []Image, err error) {
+	url := fmt.Sprintf("/endpoints/%d/docker/images/json", e)
+	urlargs := make(map[string]string)
+	urlargs["all"] = "1"
+	res, err := p.makeRequest("GET", url, nil, urlargs)
+	if err != nil {
+		log.Printf("http.Do() error: %v\n", err)
+		return nil, err
+	}
+	data, err := ioutil.ReadAll(res.Body)
+	_ = res.Body.Close()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	err = json.Unmarshal(data, &images)
+	return
+}
+
 func (p *Portainer) ListContainers(e int32) ([]Container, error) {
 	url := fmt.Sprintf("/endpoints/%d/docker/containers/json", e)
 	urlargs := make(map[string]string)

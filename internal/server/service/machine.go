@@ -26,8 +26,8 @@ func (s *MachineService) ListVm() (rootNode *domain.ResNode) {
 	for _, host := range hosts {
 		id := strconv.Itoa(int(host.ID))
 
-		hostNode := &domain.ResNode{Name: host.Name + "(集群)", Type: _const.ResHost,
-			Id: id, Key: string(_const.ResHost) + "-" + id}
+		hostNode := &domain.ResNode{Name: host.Name + "(集群)", Type: _const.ResCluster,
+			Id: id, Key: string(_const.ResCluster) + "-" + id}
 		rootNode.Children = append(rootNode.Children, hostNode)
 
 		var err error
@@ -84,8 +84,8 @@ func (s *MachineService) ListContainers() (rootNode *domain.ResNode) {
 	for _, host := range hosts {
 		id := strconv.Itoa(int(host.ID))
 
-		hostNode := &domain.ResNode{Name: host.Name + "(集群)", Type: _const.ResHost,
-			Id: id, Key: string(_const.ResHost) + "-" + id}
+		hostNode := &domain.ResNode{Name: host.Name + "(集群)", Type: _const.ResCluster,
+			Id: id, Key: string(_const.ResCluster) + "-" + id}
 		rootNode.Children = append(rootNode.Children, hostNode)
 
 		config := go_portainer.Config{
@@ -111,18 +111,61 @@ func (s *MachineService) ListContainers() (rootNode *domain.ResNode) {
 				Id: id, HostId: hostNode.Id, Key: string(_const.ResNode) + "-" + id}
 			hostNode.Children = append(hostNode.Children, nodeNode)
 
-			containers, _ := portainer.ListContainers(endpoint.Id)
+			containerFolderNode := &domain.ResNode{Name: "实例", Type: _const.ResFolder,
+				Id: id + "-folder-vms", Key: id + "-folder-container"}
+			nodeNode.Children = append(nodeNode.Children, containerFolderNode)
 
+			imageFolderNode := &domain.ResNode{Name: "镜像", Type: _const.ResFolder,
+				Id: id + "-folder-templs", Key: id + "-folder-image"}
+			nodeNode.Children = append(nodeNode.Children, imageFolderNode)
+
+			containers, _ := portainer.ListContainers(endpoint.Id)
 			for _, container := range containers {
 				containerId := container.ID
+				name := getContainerName(strings.Join(container.Names, "/"))
 
-				vmNode := &domain.ResNode{Name: strings.Join(container.Names, "/"), Type: _const.ResVm, IsTemplate: false,
+				vmNode := &domain.ResNode{Name: name, Type: _const.ResContainer, IsTemplate: false,
 					Id: container.ID, HostId: hostNode.Id, NodeId: nodeNode.Id,
 					Key: string(_const.ResContainer) + "-" + containerId}
-				nodeNode.Children = append(nodeNode.Children, vmNode)
+				containerFolderNode.Children = append(containerFolderNode.Children, vmNode)
+			}
+
+			images, _ := portainer.ListImages(endpoint.Id)
+			for _, image := range images {
+				containerId := image.ID
+
+				path := ""
+				if len(image.RepoTags) > 0 {
+					path = strings.Join(image.RepoTags, "/")
+				} else if len(image.RepoDigests) > 0 {
+					path = strings.Join(image.RepoDigests, "/")
+				}
+				name := getImageName(path)
+
+				vmNode := &domain.ResNode{Name: name, Path: path, Type: _const.ResImage, IsTemplate: false,
+					Id: image.ID, HostId: hostNode.Id, NodeId: nodeNode.Id,
+					Key: string(_const.ResContainer) + "-" + containerId}
+				imageFolderNode.Children = append(imageFolderNode.Children, vmNode)
 			}
 		}
 	}
 
 	return
+}
+
+func getContainerName(path string) string {
+	if string(path[0]) == "/" {
+		return path[1:]
+	}
+	return path
+}
+
+func getImageName(path string) string {
+	arr := strings.Split(path, "/")
+	if len(arr) <= 2 {
+		return path
+	}
+
+	name := strings.Join(arr[len(arr)-2:], "/")
+	return name
 }

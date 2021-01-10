@@ -5,6 +5,7 @@ import _const "github.com/aaronchen2k/tester/internal/pkg/const"
 type ResNode struct {
 	Id       string         `json:"id"`
 	Name     string         `json:"name"`
+	Path     string         `json:"path"`
 	Type     _const.ResType `json:"type"`
 	Key      string         `json:"key"`
 	Children []*ResNode     `json:"children"`
