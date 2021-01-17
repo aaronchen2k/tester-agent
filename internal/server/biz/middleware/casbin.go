@@ -3,51 +3,30 @@ package middleware
 import (
 	"errors"
 	"fmt"
-	"github.com/aaronchen2k/tester/internal/server/biz/domain"
-	"github.com/aaronchen2k/tester/internal/server/biz/redis"
-	"github.com/aaronchen2k/tester/internal/server/biz/session"
-	"github.com/aaronchen2k/tester/internal/server/cfg"
 	"github.com/aaronchen2k/tester/internal/server/repo"
 	"github.com/aaronchen2k/tester/internal/server/utils"
 	"github.com/casbin/casbin/v2"
 	"github.com/fatih/color"
-	"github.com/iris-contrib/middleware/jwt"
 	"github.com/kataras/iris/v12"
 	"net/http"
 )
 
 type CasbinService struct {
-	Enforcer  *casbin.Enforcer `inject:""`
-	TokenRepo *repo.TokenRepo  `inject:""`
+	TokenService *TokenService    `inject:""`
+	Enforcer     *casbin.Enforcer `inject:""`
+	UserRepo     *repo.UserRepo   `inject:""`
+	TokenRepo    *repo.TokenRepo  `inject:""`
 }
 
 func NewCasbinService() *CasbinService {
 	return &CasbinService{}
 }
 
-func (m *CasbinService) ServeHTTP(ctx iris.Context) {
+func (m *CasbinService) Serve(ctx iris.Context) {
 	ctx.StatusCode(http.StatusOK)
-	value := ctx.Values().Get("jwt").(*jwt.Token)
+	value := m.TokenService.Get(ctx)
 
-	var (
-		credentials *domain.UserCredentials
-		err         error
-	)
-
-	if serverConf.Config.Redis.Enable {
-		conn := redisUtils.GetRedisClusterClient()
-		defer conn.Close()
-
-		credentials, err = m.TokenRepo.GetRedisSession(conn, value.Raw)
-		if err != nil || credentials == nil {
-			m.TokenRepo.UserTokenExpired(value.Raw)
-			_, _ = ctx.JSON(agentUtils.ApiRes(401, "", nil))
-			ctx.StopExecution()
-			return
-		}
-	} else {
-		credentials = sessionUtils.GetCredentials(ctx)
-	}
+	credentials, _ := m.TokenService.GetCredentials(value, ctx)
 
 	if credentials == nil {
 		ctx.StopExecution()

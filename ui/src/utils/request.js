@@ -54,13 +54,13 @@ request.interceptors.request.use(config => {
   }
   console.log('===Request===', config)
 
-  const token = storage.get(ACCESS_TOKEN)
-  console.log('add token in request header', token)
-  // 如果 token 存在
-  // 让每个请求携带自定义 token 请根据实际情况自行修改
-  if (token) {
-    config.headers['Authorization'] = 'Bearer ' + token
+  const jwtToken = storage.get(ACCESS_TOKEN)
+  console.log('add token in request header', jwtToken)
+
+  if (jwtToken) {
+    config.headers['Authorization'] = 'Bearer ' + jwtToken
   }
+
   return config
 }, errorHandler)
 

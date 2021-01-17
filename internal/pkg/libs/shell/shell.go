@@ -15,14 +15,11 @@ import (
 func ExeShell(cmdStr string) (string, error) {
 	return ExeShellInDir(cmdStr, "")
 }
-func ExeShellWithOutput(cmdStr string) ([]string, error) {
-	return ExeShellWithOutputInDir(cmdStr, "")
-}
 
 func ExeShellInDir(cmdStr string, dir string) (string, error) {
 	var cmd *exec.Cmd
 	if _commonUtils.IsWin() {
-		cmd = exec.Command(cmdStr)
+		cmd = exec.Command("cmd", "/C", cmdStr)
 	} else {
 		cmd = exec.Command("/bin/bash", "-c", cmdStr)
 	}
@@ -40,6 +37,10 @@ func ExeShellInDir(cmdStr string, dir string) (string, error) {
 
 	str := _stringUtils.TrimAll(out.String())
 	return str, err
+}
+
+func ExeShellWithOutput(cmdStr string) ([]string, error) {
+	return ExeShellWithOutputInDir(cmdStr, "")
 }
 
 func ExeShellWithOutputInDir(cmdStr string, dir string) ([]string, error) {

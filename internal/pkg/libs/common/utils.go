@@ -3,6 +3,7 @@ package _commonUtils
 import (
 	"github.com/emirpasic/gods/maps"
 	"os"
+	"os/user"
 	"path"
 	"path/filepath"
 	"regexp"
@@ -45,14 +46,6 @@ func IsMac() bool {
 	return GetOs() == "mac"
 }
 
-func IsRelease() bool {
-	if _, err := os.Stat("res"); os.IsNotExist(err) {
-		return true
-	}
-
-	return false
-}
-
 func UpdateUrl(url string) string {
 	if strings.LastIndex(url, "/") < len(url)-1 {
 		url += "/"
@@ -82,4 +75,15 @@ func LinkedMapToMap(mp maps.Map) map[string]string {
 	}
 
 	return ret
+}
+
+func IsRelease() bool {
+	arg1 := strings.ToLower(os.Args[0])
+	return strings.Index(arg1, "go-build") < 0
+}
+
+func GetUserHome() string {
+	userProfile, _ := user.Current()
+	home := userProfile.HomeDir
+	return home
 }

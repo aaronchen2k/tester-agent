@@ -7,6 +7,7 @@ import (
 	"github.com/aaronchen2k/tester/internal/server/model"
 	"github.com/fatih/color"
 	"gorm.io/gorm"
+	"time"
 )
 
 type UserRepo struct {
@@ -72,4 +73,16 @@ func (r *UserRepo) GetAllUsers(s *domain.Search) ([]*model.User, int64, error) {
 		return nil, count, err
 	}
 	return users, count, nil
+}
+
+func (r *UserRepo) UpdateRefreshToken(id uint, token string) {
+	r.DB.Model(&model.User{}).
+		Where("id=?", id).
+		Updates(map[string]interface{}{"token": token, "token_updated_time": time.Now()})
+}
+
+func (r *UserRepo) GetByToken(token string) (model.User, error) {
+	user := model.User{}
+	err := r.DB.Model(&user).Where("token", token).First(&user).Error
+	return user, err
 }

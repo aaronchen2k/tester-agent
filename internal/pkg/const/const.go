@@ -1,8 +1,17 @@
 package _const
 
-import "os"
+import (
+	"fmt"
+	"os"
+)
 
 const (
+	AppServer  = "tester-server"
+	AppAgent   = "tester-agent"
+	AppManager = "tester-manager"
+
+	UserTokenExpireTime = 365 * 24 * 60 * 60 * 1000
+
 	RegisterExpireTime = 5  // min
 	WaitForExecTime    = 60 // min
 	WaitForResultTime  = 30 // min
@@ -31,4 +40,10 @@ const (
 
 var (
 	PthSep = string(os.PathSeparator)
+
+	LanguageDefault = "en"
+	LanguageEN      = "en"
+	LanguageZH      = "zh"
+	EnRes           = fmt.Sprintf("res%sen%smessages.json", string(os.PathSeparator), string(os.PathSeparator))
+	ZhRes           = fmt.Sprintf("res%szh%smessages.json", string(os.PathSeparator), string(os.PathSeparator))
 )

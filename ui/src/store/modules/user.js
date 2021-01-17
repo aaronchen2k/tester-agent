@@ -39,7 +39,11 @@ const user = {
         login(userInfo).then(response => {
           console.log('login response', response)
           const data = response.data
-          storage.set(ACCESS_TOKEN, data.token, 7 * 24 * 60 * 60 * 1000)
+
+          let day = 1
+          if (data.rememberMe) day = 365
+          storage.set(ACCESS_TOKEN, data.token, day * 24 * 60 * 60 * 1000)
+
           console.log('set token in store', data.token)
           commit('SET_TOKEN', data.token)
           resolve()

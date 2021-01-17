@@ -1,15 +1,15 @@
 VERSION=1.0.0
-PROJECT=tester-agent
+PROJECT=tester-manager
 PACKAGE=${PROJECT}-${VERSION}
-BINARY=tester-agent
+BINARY=tester-manager
 BIN_DIR=bin
 BIN_ZIP_DIR=${BIN_DIR}/zip/${PROJECT}/${VERSION}/
 BIN_ZIP_RELAT=../../../zip/${PROJECT}/${VERSION}/
 BIN_OUT=${BIN_DIR}/${PROJECT}/${VERSION}/
-BIN_WIN64=${BIN_OUT}win64/tester-agent/
-BIN_WIN32=${BIN_OUT}win32/tester-agent/
-BIN_LINUX=${BIN_OUT}linux/tester-agent/
-BIN_MAC=${BIN_OUT}mac/tester-agent/
+BIN_WIN64=${BIN_OUT}win64/tester-manager/
+BIN_WIN32=${BIN_OUT}win32/tester-manager/
+BIN_LINUX=${BIN_OUT}linux/tester-manager/
+BIN_MAC=${BIN_OUT}mac/tester-manager/
 
 default: prepare_res compile_all copy_files package
 
@@ -20,32 +20,29 @@ mac: prepare_res compile_mac copy_files package
 
 prepare_res:
 	@echo 'start prepare res'
-	@go-bindata -o=res/agent/res.go -pkg=agentRes res/agent/...
+	@go-bindata -o=res/manager/res.go -pkg=managerRes res/manager/...
 	@rm -rf ${BIN_DIR}
 
 compile_all: compile_win64 compile_win32 compile_linux compile_mac
 
 compile_win64:
 	@echo 'start compile win64'
-	@CGO_ENABLED=0 GOOS=windows GOARCH=amd64 go build -o ${BIN_WIN64}tester-agent.exe src/main.go
+	@CGO_ENABLED=0 GOOS=windows GOARCH=amd64 go build -o ${BIN_WIN64}tester-manager.exe src/main.go
 
 compile_win32:
 	@echo 'start compile win32'
-	@CGO_ENABLED=0 GOOS=windows GOARCH=386 go build -o ${BIN_WIN32}tester-agent.exe src/main.go
+	@CGO_ENABLED=0 GOOS=windows GOARCH=386 go build -o ${BIN_WIN32}tester-manager.exe src/main.go
 
 compile_linux:
 	@echo 'start compile linux'
-	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o ${BIN_LINUX}tester-agent src/main.go
+	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o ${BIN_LINUX}tester-manager src/main.go
 
 compile_mac:
 	@echo 'start compile mac'
-	@CGO_ENABLED=0 GOOS=darwin GOARCH=amd64 go build -o ${BIN_MAC}tester-agent src/main.go
+	@CGO_ENABLED=0 GOOS=darwin GOARCH=amd64 go build -o ${BIN_MAC}tester-manager src/main.go
 
 copy_files:
 	@echo 'start copy files'
-	@cp -r {cmd/server/server.yml,cmd/server/perms.yml,cmd/server/rbac_model.conf} bin
-	@for subdir in `ls ${BIN_OUT}`;
-		do cp -r {bin/server.yml,bin/perms.yml,bin/rbac_model.conf} "${BIN_OUT}$${subdir}/tester-agent"; done
 
 package:
 	@echo 'start package'

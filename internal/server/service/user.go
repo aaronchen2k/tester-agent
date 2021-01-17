@@ -117,3 +117,7 @@ func (s *UserService) addRoles(user *model.User) {
 		}
 	}
 }
+
+func (s *UserService) UpdateRefreshToken(id uint, token string) {
+	s.UserRepo.UpdateRefreshToken(id, token)
+}

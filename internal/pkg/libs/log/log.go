@@ -32,7 +32,7 @@ func Init() {
 
 	pathMap := lfshook.PathMap{
 		logrus.WarnLevel:  logDir + "log.txt",
-		logrus.ErrorLevel: logDir + "result.txt",
+		logrus.ErrorLevel: logDir + "error.txt",
 	}
 
 	logger.Hooks.Add(lfshook.NewHook(

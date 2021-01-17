@@ -8,7 +8,10 @@ require (
 	github.com/bxcodec/faker/v3 v3.5.0
 	github.com/casbin/casbin/v2 v2.19.2
 	github.com/casbin/gorm-adapter/v2 v2.1.0
+	github.com/coreos/etcd v3.3.13+incompatible
 	github.com/denisenkom/go-mssqldb v0.9.0 // indirect
+	github.com/dgrijalva/jwt-go v3.2.0+incompatible
+	github.com/easysoft/zmanager v0.0.0-20210113092058-fb8dd8b2608e // indirect
 	github.com/emirpasic/gods v1.12.0
 	github.com/facebookgo/inject v0.0.0-20180706035515-f23751cae28b
 	github.com/facebookgo/structtag v0.0.0-20150214074306-217e25fb9691 // indirect
@@ -27,7 +30,7 @@ require (
 	github.com/iris-contrib/go.uuid v2.0.0+incompatible
 	github.com/iris-contrib/httpexpect/v2 v2.0.5
 	github.com/iris-contrib/middleware/cors v0.0.0-20201115103636-07e8bced147f
-	github.com/iris-contrib/middleware/jwt v0.0.0-20201115103636-07e8bced147f
+	github.com/iris-contrib/middleware/jwt v0.0.0-20210110101738-6d0a4d799b5d
 	github.com/jackc/pgx/v4 v4.9.2 // indirect
 	github.com/jameskeane/bcrypt v0.0.0-20120420032655-c3cd44c1e20f
 	github.com/jinzhu/configor v1.2.1
@@ -35,7 +38,7 @@ require (
 	github.com/jinzhu/gorm v1.9.12
 	github.com/k0kubun/colorstring v0.0.0-20150214042306-9440f1994b88 // indirect
 	github.com/kardianos/service v1.2.0 // indirect
-	github.com/kataras/iris/v12 v12.2.0-alpha.0.20201113181155-4d09475c290d
+	github.com/kataras/iris/v12 v12.2.0-alpha2
 	github.com/lestrrat/go-file-rotatelogs v0.0.0-20180223000712-d3151e2a480f
 	github.com/lib/pq v1.8.0 // indirect
 	github.com/manveru/gobdd v0.0.0-20131210092515-f1a17fdd710b // indirect
@@ -63,6 +66,7 @@ require (
 	github.com/yudai/pp v2.0.1+incompatible // indirect
 	golang.org/x/crypto v0.0.0-20201124201722-c8d3bf9c5392 // indirect
 	golang.org/x/net v0.0.0-20201216054612-986b41b23924
+	golang.org/x/text v0.3.5
 	golang.org/x/xerrors v0.0.0-20200804184101-5ec99f83aff1 // indirect
 	gopkg.in/ini.v1 v1.62.0
 	gorm.io/driver/mysql v1.0.3

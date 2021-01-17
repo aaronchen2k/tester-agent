@@ -5,6 +5,7 @@ import (
 	"github.com/aaronchen2k/tester/cmd/server/router"
 	"github.com/aaronchen2k/tester/cmd/server/router/handler"
 	"github.com/aaronchen2k/tester/internal/server/biz/middleware"
+	middlewareUtils "github.com/aaronchen2k/tester/internal/server/biz/middleware/misc"
 	"github.com/aaronchen2k/tester/internal/server/biz/redis"
 	"github.com/aaronchen2k/tester/internal/server/cfg"
 	"github.com/aaronchen2k/tester/internal/server/db"
@@ -89,9 +90,6 @@ func injectObj(router *router.Router) {
 		// db
 		&inject.Object{Value: db.GetInst().DB()},
 
-		&inject.Object{Value: middleware.NewEnforcer()},
-		&inject.Object{Value: middleware.NewCasbinService()},
-
 		// repo
 		&inject.Object{Value: repo.NewBuildRepo()},
 		&inject.Object{Value: repo.NewCommonRepo()},
@@ -107,6 +105,12 @@ func injectObj(router *router.Router) {
 		&inject.Object{Value: repo.NewTokenRepo()},
 		&inject.Object{Value: repo.NewUserRepo()},
 		&inject.Object{Value: repo.NewVmRepo()},
+
+		// middleware
+		&inject.Object{Value: middlewareUtils.NewEnforcer()},
+		&inject.Object{Value: middleware.NewJwtService()},
+		&inject.Object{Value: middleware.NewTokenService()},
+		&inject.Object{Value: middleware.NewCasbinService()},
 
 		// service
 		&inject.Object{Value: service.NewAppiumService()},

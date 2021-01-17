@@ -3,6 +3,7 @@ package router
 import (
 	"github.com/aaronchen2k/tester/cmd/server/router/handler"
 	"github.com/aaronchen2k/tester/internal/server/biz/middleware"
+	middlewareUtils "github.com/aaronchen2k/tester/internal/server/biz/middleware/misc"
 	"github.com/aaronchen2k/tester/internal/server/cfg"
 	"github.com/aaronchen2k/tester/internal/server/repo"
 	"github.com/kataras/iris/v12"
@@ -11,6 +12,8 @@ import (
 type Router struct {
 	api *iris.Application
 
+	JwtService    *middleware.JwtService    `inject:""`
+	TokenService  *middleware.TokenService  `inject:""`
 	CasbinService *middleware.CasbinService `inject:""`
 
 	AccountCtrl *handler.AccountController `inject:""`
@@ -38,7 +41,7 @@ func NewRouter(app *iris.Application) *Router {
 }
 
 func (r *Router) App() {
-	r.api.UseRouter(middleware.CrsAuth())
+	r.api.UseRouter(middlewareUtils.CrsAuth())
 
 	app := r.api.Party("/api").AllowMethods(iris.MethodOptions)
 	{
@@ -55,7 +58,8 @@ func (r *Router) App() {
 			v1.Post("/admin/login", r.AccountCtrl.UserLogin)
 
 			v1.PartyFunc("/admin", func(admin iris.Party) { // <- IMPORTANT, register the middleware.
-				admin.Use(middleware.JwtHandler().Serve, r.CasbinService.ServeHTTP) //登录验证
+				//登录验证
+				admin.Use(r.JwtService.Serve, r.TokenService.Serve, r.CasbinService.Serve)
 
 				admin.Post("/logout", r.AccountCtrl.UserLogout).Name = "退出"
 				admin.Get("/expire", r.AccountCtrl.UserExpire).Name = "刷新 token"

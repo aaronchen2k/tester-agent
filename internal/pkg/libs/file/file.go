@@ -59,6 +59,14 @@ func MkDirIfNeeded(dir string) error {
 
 	return nil
 }
+func RmDir(dir string) error {
+	if FileExist(dir) {
+		err := os.RemoveAll(dir)
+		return err
+	}
+
+	return nil
+}
 
 func IsDir(f string) bool {
 	fi, e := os.Stat(f)
@@ -185,4 +193,23 @@ func GetExtName(pathOrUrl string) string {
 	index := strings.LastIndex(pathOrUrl, ".")
 
 	return pathOrUrl[index:]
+}
+
+func GetAbosutePath(pth string) string {
+	if !IsAbosutePath(pth) {
+		pth, _ = filepath.Abs(pth)
+	}
+
+	pth = AddSepIfNeeded(pth)
+
+	return pth
+}
+
+func AddSepIfNeeded(pth string) string {
+	sepa := string(os.PathSeparator)
+
+	if strings.LastIndex(pth, sepa) < len(pth)-1 {
+		pth += sepa
+	}
+	return pth
 }

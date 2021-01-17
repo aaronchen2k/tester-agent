@@ -220,9 +220,11 @@ export default {
     .left {
       width: 260px;
       border-right: 1px solid #DDDDDD;
+      overflow: auto;
     }
     .right {
       flex: 1;
+      overflow: auto;
     }
   }
 </style>

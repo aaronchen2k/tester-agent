@@ -79,6 +79,14 @@ func (c *AccountController) UserLogin(ctx iris.Context) {
 	}
 
 	response, code, msg := c.UserService.CheckLogin(ctx, user, aul.Password)
+	response.RememberMe = aul.RememberMe
+
+	refreshToken := ""
+	if code == 200 && aul.RememberMe {
+		refreshToken = response.Token
+	}
+
+	c.UserService.UpdateRefreshToken(user.ID, refreshToken)
 
 	_, _ = ctx.JSON(agentUtils.ApiRes(code, msg, response))
 }
