@@ -1,7 +1,12 @@
 package serviceInterface
 
-import "github.com/aaronchen2k/tester/internal/server/domain"
+import (
+	"github.com/aaronchen2k/tester/internal/server/domain"
+	"github.com/aaronchen2k/tester/internal/server/model"
+)
 
 type ContainerInterface interface {
-	List(hostNode *domain.ResNode) (domain.ResNode, error)
+	MachineInterface
+
+	ListContainer(hostNode *domain.ResNode) ([]*model.Container, error)
 }

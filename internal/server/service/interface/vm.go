@@ -1,7 +1,12 @@
 package serviceInterface
 
-import "github.com/aaronchen2k/tester/internal/server/domain"
+import (
+	"github.com/aaronchen2k/tester/internal/server/domain"
+	"github.com/aaronchen2k/tester/internal/server/model"
+)
 
 type VmInterface interface {
-	List(hostNode *domain.ResNode) (domain.ResNode, error)
+	MachineInterface
+
+	ListVm(hostNode *domain.ResNode) ([]*model.Vm, error)
 }

@@ -4,6 +4,7 @@ import (
 	_const "github.com/aaronchen2k/tester/internal/pkg/const"
 	_logUtils "github.com/aaronchen2k/tester/internal/pkg/libs/log"
 	"github.com/aaronchen2k/tester/internal/server/domain"
+	"github.com/aaronchen2k/tester/internal/server/model"
 	go_portainer "github.com/aaronchen2k/tester/vendors/github.com/leidruid/go-portainer"
 	"strconv"
 	"strings"
@@ -16,7 +17,13 @@ func NewPortainerService() *PortainerService {
 	return &PortainerService{}
 }
 
-func (s *PortainerService) List(hostNode *domain.ResNode) (root domain.ResNode, err error) {
+func (s *PortainerService) ListContainer(hostNode *domain.ResNode) (containers []*model.Container, err error) {
+	s.GetNodeTree(hostNode)
+
+	return
+}
+
+func (s *PortainerService) GetNodeTree(hostNode *domain.ResNode) (root domain.ResNode, err error) {
 	config := go_portainer.Config{
 		Host:     hostNode.Ip,
 		Port:     hostNode.Port,

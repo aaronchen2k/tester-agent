@@ -46,7 +46,7 @@ func (s *MachineService) ListVm() (rootNode *domain.ResNode) {
 
 		rootNode.Children = append(rootNode.Children, hostNode)
 
-		s.VmService.List(hostNode)
+		s.VmService.GetNodeTree(hostNode)
 	}
 
 	return
@@ -65,7 +65,7 @@ func (s *MachineService) ListContainers() (rootNode *domain.ResNode) {
 			Username: host.Username, Password: host.Password}
 		rootNode.Children = append(rootNode.Children, hostNode)
 
-		s.ContainerService.List(hostNode)
+		s.ContainerService.GetNodeTree(hostNode)
 	}
 
 	return

@@ -5,6 +5,7 @@ import (
 	_const "github.com/aaronchen2k/tester/internal/pkg/const"
 	_logUtils "github.com/aaronchen2k/tester/internal/pkg/libs/log"
 	"github.com/aaronchen2k/tester/internal/server/domain"
+	"github.com/aaronchen2k/tester/internal/server/model"
 	go_proxmox "github.com/aaronchen2k/tester/vendors/github.com/joernott/go-proxmox"
 	"strconv"
 )
@@ -16,7 +17,13 @@ func NewPveService() *PveService {
 	return &PveService{}
 }
 
-func (s *PveService) List(hostNode *domain.ResNode) (root domain.ResNode, err error) {
+func (s *PveService) ListVm(hostNode *domain.ResNode) (vms []*model.Vm, err error) {
+	s.GetNodeTree(hostNode)
+
+	return
+}
+
+func (s *PveService) GetNodeTree(hostNode *domain.ResNode) (root domain.ResNode, err error) {
 	address := fmt.Sprintf("%s:%d", hostNode.Ip, hostNode.Port)
 	go_proxmox.Proxmox, err = go_proxmox.NewProxMox(address, hostNode.Username, hostNode.Password)
 	if err != nil {
