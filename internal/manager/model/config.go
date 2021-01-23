@@ -1,7 +1,8 @@
 package managerModel
 
 type Config struct {
-	AgentVersion string
+	ZTFVersion string
+	ZDVersion  string
 
 	Interval int64
 	Language string

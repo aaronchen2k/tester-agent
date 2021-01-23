@@ -2,6 +2,7 @@ package service
 
 import (
 	"fmt"
+	"github.com/aaronchen2k/tester/internal/pkg/utils"
 	"github.com/aaronchen2k/tester/internal/server/biz/domain"
 	"github.com/aaronchen2k/tester/internal/server/biz/middleware"
 	"github.com/aaronchen2k/tester/internal/server/biz/redis"
@@ -9,7 +10,6 @@ import (
 	"github.com/aaronchen2k/tester/internal/server/cfg"
 	"github.com/aaronchen2k/tester/internal/server/model"
 	"github.com/aaronchen2k/tester/internal/server/repo"
-	"github.com/aaronchen2k/tester/internal/server/utils"
 	"github.com/fatih/color"
 	"github.com/iris-contrib/middleware/jwt"
 	"github.com/jameskeane/bcrypt"
@@ -78,7 +78,7 @@ func (s *UserService) CheckLogin(ctx iris.Context, u *model.User, password strin
 
 // CreateUser create user
 func (s *UserService) CreateUser(u *model.User) error {
-	u.Password = agentUtils.HashPassword(u.Password)
+	u.Password = utils.HashPassword(u.Password)
 	if err := s.UserRepo.DB.Create(u).Error; err != nil {
 		return err
 	}
@@ -91,7 +91,7 @@ func (s *UserService) CreateUser(u *model.User) error {
 // UpdateUserById update user by id
 func (s *UserService) UpdateUserById(id uint, nu *model.User) error {
 	if len(nu.Password) > 0 {
-		nu.Password = agentUtils.HashPassword(nu.Password)
+		nu.Password = utils.HashPassword(nu.Password)
 	}
 	if err := s.UserRepo.Update(&model.User{}, nu, id); err != nil {
 		return err

@@ -1,33 +1,40 @@
 package manageService
 
 import (
-	_managerVari "github.com/aaronchen2k/tester/internal/manager/utils/var"
-	_const "github.com/aaronchen2k/tester/internal/pkg/const"
-	_commonUtils "github.com/aaronchen2k/tester/internal/pkg/libs/common"
+	commonUtils "github.com/easysoft/zmanager/pkg/utils/common"
+	constant "github.com/easysoft/zmanager/pkg/utils/const"
+	shellUtils "github.com/easysoft/zmanager/pkg/utils/shell"
+	"github.com/easysoft/zmanager/pkg/utils/vari"
 	"strings"
 )
 
 func CheckStatus(app string) {
-	output, _ := GetAgentProcess(app)
+	output, _ := shellUtils.GetProcess(app)
 	output = strings.TrimSpace(output)
 
 	if output != "" {
 		return
 	}
 
-	version := _managerVari.Config.AgentVersion
+	version := ""
+	if app == constant.ZTF {
+		version = vari.Config.ZTFVersion
+	} else if app == constant.ZenData {
+		version = vari.Config.ZDVersion
+	}
+
 	startApp(app, version)
 }
 
 func startApp(app string, version string) (err error) {
-	appDir := _managerVari.WorkDir + app + _const.PthSep
+	appDir := vari.WorkDir + app + constant.PthSep
 
-	newExePath := appDir + version + _const.PthSep + app + _const.PthSep + app
-	if _commonUtils.IsWin() {
+	newExePath := appDir + version + constant.PthSep + app + constant.PthSep + app
+	if commonUtils.IsWin() {
 		newExePath += ".exe"
 	}
 
-	StartAgentProcess(newExePath, app)
+	shellUtils.StartProcess(newExePath, app)
 
 	return
 }

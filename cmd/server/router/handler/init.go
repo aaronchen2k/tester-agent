@@ -1,8 +1,8 @@
 package handler
 
 import (
+	"github.com/aaronchen2k/tester/internal/pkg/utils"
 	"github.com/aaronchen2k/tester/internal/server/service"
-	"github.com/aaronchen2k/tester/internal/server/utils"
 	"github.com/kataras/iris/v12"
 )
 
@@ -18,7 +18,6 @@ func (c *InitController) InitData(ctx iris.Context) {
 	ctx.StatusCode(iris.StatusOK)
 
 	c.SeederService.Run()
-	c.SeederService.AddPerm()
 
-	_, _ = ctx.JSON(agentUtils.ApiRes(200, "请求成功", nil))
+	_, _ = ctx.JSON(utils.ApiRes(200, "请求成功", nil))
 }

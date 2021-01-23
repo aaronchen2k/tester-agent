@@ -7,11 +7,10 @@ require (
 	github.com/azumads/faker v0.0.0-20150921074035-6cae71ddb107
 	github.com/bxcodec/faker/v3 v3.5.0
 	github.com/casbin/casbin/v2 v2.19.2
-	github.com/casbin/gorm-adapter/v2 v2.1.0
 	github.com/coreos/etcd v3.3.13+incompatible
 	github.com/denisenkom/go-mssqldb v0.9.0 // indirect
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
-	github.com/easysoft/zmanager v0.0.0-20210113092058-fb8dd8b2608e // indirect
+	github.com/easysoft/zmanager v0.0.0-20210113092058-fb8dd8b2608e
 	github.com/emirpasic/gods v1.12.0
 	github.com/facebookgo/inject v0.0.0-20180706035515-f23751cae28b
 	github.com/facebookgo/structtag v0.0.0-20150214074306-217e25fb9691 // indirect
@@ -37,7 +36,7 @@ require (
 	github.com/jinzhu/copier v0.1.0
 	github.com/jinzhu/gorm v1.9.12
 	github.com/k0kubun/colorstring v0.0.0-20150214042306-9440f1994b88 // indirect
-	github.com/kardianos/service v1.2.0 // indirect
+	github.com/kardianos/service v1.2.0
 	github.com/kataras/iris/v12 v12.2.0-alpha2
 	github.com/lestrrat/go-file-rotatelogs v0.0.0-20180223000712-d3151e2a480f
 	github.com/lib/pq v1.8.0 // indirect

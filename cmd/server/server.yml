@@ -5,6 +5,10 @@ https: false #https
 host: 127.0.0.1
 port: 8085 #端口
 
+adapter: # 虚拟化类型
+  vmPlatform: pve
+  containerPlatform: portainer
+
 admin: # 管理员账号信息，用于数据填充
   username: admin
   rolename: administrator

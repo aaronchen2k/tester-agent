@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/aaronchen2k/tester/cmd/server/router"
 	"github.com/aaronchen2k/tester/cmd/server/router/handler"
+	"github.com/aaronchen2k/tester/internal/pkg/utils"
 	"github.com/aaronchen2k/tester/internal/server/biz/middleware"
 	middlewareUtils "github.com/aaronchen2k/tester/internal/server/biz/middleware/misc"
 	"github.com/aaronchen2k/tester/internal/server/biz/redis"
@@ -12,7 +13,6 @@ import (
 	"github.com/aaronchen2k/tester/internal/server/model"
 	"github.com/aaronchen2k/tester/internal/server/repo"
 	"github.com/aaronchen2k/tester/internal/server/service"
-	"github.com/aaronchen2k/tester/internal/server/utils"
 	"github.com/facebookgo/inject"
 	"github.com/kataras/iris/v12"
 	"github.com/sirupsen/logrus"
@@ -26,7 +26,6 @@ import (
 func Init(version string, printVersion, printRouter *bool) {
 
 	db.InitDB()
-	db.GetInst().Migrate()
 
 	// irisServer := server.NewServer(AssetFile()) // 加载前端文件
 	irisServer := NewServer(nil)
@@ -42,6 +41,7 @@ func Init(version string, printVersion, printRouter *bool) {
 
 	router := router.NewRouter(irisServer.App)
 	injectObj(router)
+	router.InitService.Init()
 	router.App()
 
 	if serverConf.Config.Redis.Enable {
@@ -70,7 +70,7 @@ func Init(version string, printVersion, printRouter *bool) {
 		}
 	}
 
-	if agentUtils.IsPortInUse(serverConf.Config.Port) {
+	if utils.IsPortInUse(serverConf.Config.Port) {
 		panic(fmt.Sprintf("端口 %d 已被使用", serverConf.Config.Port))
 	}
 

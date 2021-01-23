@@ -13,4 +13,9 @@ type ResNode struct {
 	IsTemplate bool   `json:"isTemplate"`
 	HostId     string `json:"hostId,omitempty"`
 	NodeId     string `json:"nodeId,omitempty"`
+
+	Ip       string `json:"ip,omitempty"`
+	Port     int    `json:"port,omitempty"`
+	Username string `json:"-"`
+	Password string `json:"-"`
 }

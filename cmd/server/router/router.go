@@ -6,12 +6,14 @@ import (
 	middlewareUtils "github.com/aaronchen2k/tester/internal/server/biz/middleware/misc"
 	"github.com/aaronchen2k/tester/internal/server/cfg"
 	"github.com/aaronchen2k/tester/internal/server/repo"
+	"github.com/aaronchen2k/tester/internal/server/service"
 	"github.com/kataras/iris/v12"
 )
 
 type Router struct {
 	api *iris.Application
 
+	InitService   *service.InitService      `inject:""`
 	JwtService    *middleware.JwtService    `inject:""`
 	TokenService  *middleware.TokenService  `inject:""`
 	CasbinService *middleware.CasbinService `inject:""`

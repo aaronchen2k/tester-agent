@@ -4,11 +4,8 @@ import (
 	"fmt"
 	_fileUtils "github.com/aaronchen2k/tester/internal/pkg/libs/file"
 	"github.com/aaronchen2k/tester/internal/pkg/libs/log"
+	"github.com/aaronchen2k/tester/internal/pkg/utils"
 	"github.com/aaronchen2k/tester/internal/server/cfg"
-	"github.com/aaronchen2k/tester/internal/server/model"
-	"github.com/aaronchen2k/tester/internal/server/utils"
-	"github.com/casbin/gorm-adapter/v2"
-	"github.com/fatih/color"
 	"gorm.io/driver/mysql"
 	"gorm.io/driver/postgres"
 	"gorm.io/driver/sqlite"
@@ -104,29 +101,6 @@ func (i *Instance) Close() error {
 	return nil
 }
 
-func (i *Instance) Migrate() {
-	err := i.DB().AutoMigrate(
-		&model.Build{},
-		&model.Container{},
-		&model.Device{},
-		&model.Cluster{},
-		&model.Image{},
-		&model.Iso{},
-		&model.Permission{},
-		&model.Queue{},
-		&model.Role{},
-		&model.Task{},
-		&model.User{},
-		&model.Vm{},
-
-		&gormadapter.CasbinRule{},
-	)
-
-	if err != nil {
-		color.Yellow(fmt.Sprintf("初始化数据表错误 ：%+v", err))
-	}
-}
-
 func DBFile() string {
 	if FlagVarDBFile != "" {
 		return FlagVarDBFile
@@ -135,10 +109,10 @@ func DBFile() string {
 		return DBFileDev()
 	}
 
-	path := filepath.Join(agentUtils.GetExeDir(), strings.ToLower(serverConf.Config.DB.Name+".db"))
+	path := filepath.Join(utils.GetExeDir(), strings.ToLower(serverConf.Config.DB.Name+".db"))
 	return path
 }
 
 func DBFileDev() string {
-	return filepath.Join(agentUtils.CWD(), strings.ToLower(agentUtils.EXEName())+".dev.db")
+	return filepath.Join(utils.CWD(), strings.ToLower(utils.EXEName())+".dev.db")
 }

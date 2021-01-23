@@ -1,4 +1,4 @@
-package agentUtils
+package utils
 
 import (
 	"fmt"

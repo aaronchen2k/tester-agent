@@ -3,12 +3,11 @@ package service
 import (
 	"fmt"
 	_fileUtils "github.com/aaronchen2k/tester/internal/pkg/libs/file"
+	"github.com/aaronchen2k/tester/internal/pkg/utils"
 	"github.com/aaronchen2k/tester/internal/server/biz/domain"
 	"github.com/aaronchen2k/tester/internal/server/cfg"
-	"github.com/aaronchen2k/tester/internal/server/db"
 	"github.com/aaronchen2k/tester/internal/server/model"
 	"github.com/aaronchen2k/tester/internal/server/repo"
-	"github.com/aaronchen2k/tester/internal/server/utils"
 	logger "github.com/sirupsen/logrus"
 	"math/rand"
 	"path/filepath"
@@ -19,6 +18,7 @@ import (
 )
 
 type SeederService struct {
+	InitService *InitService `inject:""`
 	RoleService *RoleService `inject:""`
 	UserService *UserService `inject:""`
 
@@ -52,7 +52,7 @@ func (s *SeederService) init() {
 	Fake.Rand = rand.New(rand.NewSource(42))
 	rand.Seed(time.Now().UnixNano())
 
-	exeDir := agentUtils.GetExeDir()
+	exeDir := utils.GetExeDir()
 	pth := filepath.Join(exeDir, "perms.yml")
 	if !_fileUtils.FileExist(pth) { // debug mode
 		pth = filepath.Join(exeDir, "cmd", "server", "perms.yml")
@@ -70,17 +70,10 @@ func (s *SeederService) init() {
 
 func (s *SeederService) Run() {
 	s.AutoMigrates()
-
-	fmt.Println(fmt.Sprintf("系统设置填充完成！！"))
-	s.CreatePerms()
-	fmt.Println(fmt.Sprintf("权限填充完成！！"))
-	s.CreateAdminRole()
-	fmt.Println(fmt.Sprintf("管理角色填充完成！！"))
-	s.CreateAdminUser()
-	fmt.Println(fmt.Sprintf("管理员填充完成！！"))
+	s.AddPerms()
 }
 
-func (s *SeederService) AddPerm() {
+func (s *SeederService) AddPerms() {
 	fmt.Println(fmt.Sprintf("开始填充权限！！"))
 	s.CreatePerms()
 	s.CreateAdminRole()
@@ -242,5 +235,5 @@ func (s *SeederService) CreateAdminUser() {
 */
 func (s *SeederService) AutoMigrates() {
 	s.CommonRepo.DropTables()
-	db.GetInst().Migrate()
+	s.InitService.Init()
 }

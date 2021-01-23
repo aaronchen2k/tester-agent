@@ -1,8 +1,8 @@
 package handler
 
 import (
+	"github.com/aaronchen2k/tester/internal/pkg/utils"
 	"github.com/aaronchen2k/tester/internal/server/service"
-	"github.com/aaronchen2k/tester/internal/server/utils"
 	"github.com/kataras/iris/v12"
 	"strconv"
 )
@@ -26,11 +26,11 @@ func (c *HostController) List(ctx iris.Context) {
 
 	hosts, total := c.HostService.ListAll(keywords, pageNo, pageSize)
 
-	_, _ = ctx.JSON(agentUtils.ApiResPage(200, "请求成功",
+	_, _ = ctx.JSON(utils.ApiResPage(200, "请求成功",
 		hosts, pageNo, pageSize, total))
 }
 
 func (c *HostController) Get(ctx iris.Context) {
 
-	_, _ = ctx.JSON(agentUtils.ApiRes(200, "请求成功", nil))
+	_, _ = ctx.JSON(utils.ApiRes(200, "请求成功", nil))
 }

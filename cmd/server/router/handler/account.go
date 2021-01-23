@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"github.com/aaronchen2k/tester/internal/pkg/utils"
 	"github.com/aaronchen2k/tester/internal/server/biz/domain"
 	"github.com/aaronchen2k/tester/internal/server/biz/redis"
 	"github.com/aaronchen2k/tester/internal/server/biz/session"
@@ -8,7 +9,6 @@ import (
 	"github.com/aaronchen2k/tester/internal/server/cfg"
 	"github.com/aaronchen2k/tester/internal/server/repo"
 	"github.com/aaronchen2k/tester/internal/server/service"
-	"github.com/aaronchen2k/tester/internal/server/utils"
 	"github.com/go-playground/validator/v10"
 	"github.com/iris-contrib/middleware/jwt"
 	"github.com/kataras/iris/v12"
@@ -46,7 +46,7 @@ func (c *AccountController) UserLogin(ctx iris.Context) {
 	aul := new(validate.LoginRequest)
 
 	if err := ctx.ReadJSON(aul); err != nil {
-		_, _ = ctx.JSON(agentUtils.ApiRes(400, err.Error(), nil))
+		_, _ = ctx.JSON(utils.ApiRes(400, err.Error(), nil))
 		return
 	}
 
@@ -55,7 +55,7 @@ func (c *AccountController) UserLogin(ctx iris.Context) {
 		errs := err.(validator.ValidationErrors)
 		for _, e := range errs.Translate(validate.ValidateTrans) {
 			if len(e) > 0 {
-				_, _ = ctx.JSON(agentUtils.ApiRes(400, e, nil))
+				_, _ = ctx.JSON(utils.ApiRes(400, e, nil))
 				return
 			}
 		}
@@ -74,7 +74,7 @@ func (c *AccountController) UserLogin(ctx iris.Context) {
 	}
 	user, err := c.UserRepo.GetUser(search)
 	if err != nil {
-		_, _ = ctx.JSON(agentUtils.ApiRes(400, err.Error(), nil))
+		_, _ = ctx.JSON(utils.ApiRes(400, err.Error(), nil))
 		return
 	}
 
@@ -88,7 +88,7 @@ func (c *AccountController) UserLogin(ctx iris.Context) {
 
 	c.UserService.UpdateRefreshToken(user.ID, refreshToken)
 
-	_, _ = ctx.JSON(agentUtils.ApiRes(code, msg, response))
+	_, _ = ctx.JSON(utils.ApiRes(code, msg, response))
 }
 
 /**
@@ -117,19 +117,19 @@ func (c *AccountController) UserLogout(ctx iris.Context) {
 
 		credentials, err = c.TokenRepo.GetRedisSession(conn, value.Raw)
 		if err != nil {
-			_, _ = ctx.JSON(agentUtils.ApiRes(400, err.Error(), nil))
+			_, _ = ctx.JSON(utils.ApiRes(400, err.Error(), nil))
 			return
 		}
 		if credentials != nil {
 			if err := c.TokenRepo.DelUserTokenCache(conn, *credentials, value.Raw); err != nil {
-				_, _ = ctx.JSON(agentUtils.ApiRes(400, err.Error(), nil))
+				_, _ = ctx.JSON(utils.ApiRes(400, err.Error(), nil))
 				return
 			}
 		}
 	} else {
 		credentials = sessionUtils.GetCredentials(ctx)
 		if credentials == nil {
-			_, _ = ctx.JSON(agentUtils.ApiRes(400, err.Error(), nil))
+			_, _ = ctx.JSON(utils.ApiRes(400, err.Error(), nil))
 			return
 		} else {
 			sessionUtils.RemoveCredentials(ctx)
@@ -137,7 +137,7 @@ func (c *AccountController) UserLogout(ctx iris.Context) {
 	}
 
 	ctx.Application().Logger().Infof("%d 退出系统", credentials.UserId)
-	_, _ = ctx.JSON(agentUtils.ApiRes(200, "退出", nil))
+	_, _ = ctx.JSON(utils.ApiRes(200, "退出", nil))
 }
 
 /**
@@ -160,15 +160,15 @@ func (c *AccountController) UserExpire(ctx iris.Context) {
 	defer conn.Close()
 	sess, err := c.TokenRepo.GetRedisSession(conn, value.Raw)
 	if err != nil {
-		_, _ = ctx.JSON(agentUtils.ApiRes(400, err.Error(), nil))
+		_, _ = ctx.JSON(utils.ApiRes(400, err.Error(), nil))
 		return
 	}
 	if sess != nil {
 		if err := c.TokenRepo.UpdateUserTokenCacheExpire(conn, *sess, value.Raw); err != nil {
-			_, _ = ctx.JSON(agentUtils.ApiRes(400, err.Error(), nil))
+			_, _ = ctx.JSON(utils.ApiRes(400, err.Error(), nil))
 			return
 		}
 	}
 
-	_, _ = ctx.JSON(agentUtils.ApiRes(200, "", nil))
+	_, _ = ctx.JSON(utils.ApiRes(200, "", nil))
 }

@@ -1,4 +1,4 @@
-package agentUtils
+package utils
 
 type Request struct {
 	PageSize int `json:"pageSize"`

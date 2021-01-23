@@ -3,6 +3,7 @@ package program
 import (
 	manageService "github.com/easysoft/zmanager/pkg/service"
 	constant "github.com/easysoft/zmanager/pkg/utils/const"
+	i118Utils "github.com/easysoft/zmanager/pkg/utils/i118"
 	logUtils "github.com/easysoft/zmanager/pkg/utils/log"
 	"github.com/easysoft/zmanager/pkg/utils/vari"
 	"github.com/kardianos/service"
@@ -19,9 +20,9 @@ var Logger service.Logger
 
 func (p *Program) Start(s service.Service) error {
 	if service.Interactive() {
-		Logger.Info("zmanager run in terminal.")
+		Logger.Info(i118Utils.I118Prt.Sprintf("launch_in_terminal"))
 	} else {
-		Logger.Info("zmanager run as service.")
+		Logger.Info(i118Utils.I118Prt.Sprintf("launch_in_service"))
 	}
 	p.exit = make(chan struct{})
 
@@ -34,13 +35,13 @@ func (p *Program) run() error {
 	defer file.Close()
 	logUtils.Init(file)
 
-	Logger.Warningf("I'm running %v.", service.Platform())
+	Logger.Warningf(i118Utils.I118Prt.Sprintf("running", service.Platform()))
 	ticker := time.NewTicker(time.Duration(vari.Config.Interval) * time.Second)
 	for {
 		select {
 		case tm := <-ticker.C:
 			_ = tm
-			Logger.Warningf("start to run.")
+			Logger.Warningf(i118Utils.I118Prt.Sprintf("start_to_run"))
 
 			for _, app := range constant.Apps {
 				log.Printf("start to check %s.", app)
@@ -57,7 +58,7 @@ func (p *Program) run() error {
 }
 func (p *Program) Stop(s service.Service) error {
 	// Any work in Stop should be quick, usually a few seconds at most.
-	Logger.Info("I'm Stopping!")
+	Logger.Info(i118Utils.I118Prt.Sprintf("stopping"))
 	close(p.exit)
 	return nil
 }

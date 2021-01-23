@@ -3,8 +3,8 @@ package middleware
 import (
 	"errors"
 	"fmt"
+	"github.com/aaronchen2k/tester/internal/pkg/utils"
 	"github.com/aaronchen2k/tester/internal/server/repo"
-	"github.com/aaronchen2k/tester/internal/server/utils"
 	"github.com/casbin/casbin/v2"
 	"github.com/fatih/color"
 	"github.com/kataras/iris/v12"
@@ -30,13 +30,13 @@ func (m *CasbinService) Serve(ctx iris.Context) {
 
 	if credentials == nil {
 		ctx.StopExecution()
-		_, _ = ctx.JSON(agentUtils.ApiRes(401, "", nil))
+		_, _ = ctx.JSON(utils.ApiRes(401, "", nil))
 		ctx.StopExecution()
 		return
 	} else {
 		check, err := m.Check(ctx.Request(), credentials.UserId)
 		if !check {
-			_, _ = ctx.JSON(agentUtils.ApiRes(403, err.Error(), nil))
+			_, _ = ctx.JSON(utils.ApiRes(403, err.Error(), nil))
 			ctx.StopExecution()
 			return
 		} else {

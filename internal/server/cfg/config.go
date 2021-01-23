@@ -3,7 +3,8 @@ package serverConf
 import (
 	"fmt"
 	_fileUtils "github.com/aaronchen2k/tester/internal/pkg/libs/file"
-	"github.com/aaronchen2k/tester/internal/server/utils"
+	"github.com/aaronchen2k/tester/internal/pkg/utils"
+	serverConst "github.com/aaronchen2k/tester/internal/server/utils/const"
 	"path/filepath"
 	"strings"
 
@@ -21,7 +22,11 @@ var Config = struct {
 	CertKey  string `default:"" env:"CertKey"`
 	Port     int    `default:"8085" env:"Port"`
 	Host     string `default:"127.0.0.1" env:"HostId"`
-	Admin    struct {
+	Adapter  struct {
+		VmPlatform        serverConst.VmPlatform        `yaml:"vmPlatform" env:"VmPlatform" default:"pve"`
+		ContainerPlatform serverConst.ContainerPlatform `yaml:"containerPlatform" env:"ContainerPlatform" default:"portainer"`
+	} `yaml:"adapter,flow"`
+	Admin struct {
 		UserName        string `env:"AdminUserName" default:"admin"`
 		Name            string `env:"AdminName" default:"admin"`
 		Password        string `env:"AdminPassword" default:"P2ssw0rd"`
@@ -65,7 +70,7 @@ func InitConfig(pth string) {
 	if pth != "" {
 		configPath = pth
 	} else {
-		exeDir := agentUtils.GetExeDir()
+		exeDir := utils.GetExeDir()
 		configPath = filepath.Join(exeDir, "server.yml")
 		if !_fileUtils.FileExist(configPath) { // debug mode
 			configPath = filepath.Join(exeDir, "cmd", "server", "server.yml")

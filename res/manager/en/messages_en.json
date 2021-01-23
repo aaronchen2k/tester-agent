@@ -2,8 +2,91 @@
   "language": "en-US",
   "messages": [
     {
-      "id": "for_example",
-      "translation": "e.g. %s"
+      "id": "usage",
+      "translation": "Usage:"
+    },
+    {
+      "id": "begin_config",
+      "translation": "Begin to config, type 'exit' to quit."
+    },
+    {
+      "id": "enter_language",
+      "translation": "1) 请选择您要使用的语言，中文请输入数字1。\n2) Please select the language. Input 2 for English."
+    },
+
+    {
+      "id": "find_new_ver",
+      "translation": "Find new version %s"
+    },
+    {
+      "id": "no_need_to_upgrade",
+      "translation": "%s is the latest version, no need to upgrade."
+    },
+    {
+      "id": "success_upgrade",
+      "translation": "Successfully upgrade from version %s to %s."
+    },
+    {
+      "id": "fail_upgrade",
+      "translation": "Fail to upgrade from version %.1f to %s., err: %s."
+    },
+
+    {
+      "id": "download_fail",
+      "translation": "Download %s fail, error: %s."
+    },
+    {
+      "id": "download_read_fail",
+      "translation": "Read download file %s fail, error: %s."
+    },
+    {
+      "id": "download_write_fail",
+      "translation": "Write download file %s fail, error: %s."
+    },
+    {
+      "id": "download_success",
+      "translation": "Successfully download %s to %s."
+    },
+    {
+      "id": "success_update_config",
+      "translation": "Successfully update config file %s."
+    },
+    {
+      "id": "perm_deny",
+      "translation": "Permission denied to file %s, please change work dir."
+    },
+    {
+      "id": "fail_unzip",
+      "translation": "Fail to unzip file %s."
+    },
+    {
+      "id": "fail_md5_check",
+      "translation": "Check file %s MD5 failed."
+    },
+
+    {
+      "id": "valid_actions",
+      "translation": "Valid actions: %q."
+    },
+    {
+      "id": "launch_in_terminal",
+      "translation": "Launched from terminal."
+    },
+    {
+      "id": "launch_in_service",
+      "translation": "Launched from system service."
+    },
+    {
+      "id": "running",
+      "translation": "I'm running on %v."
+    },
+    {
+      "id": "stopping",
+      "translation": "I'm stopping."
+    },
+    {
+      "id": "start_to_run",
+      "translation": "Start to run scheduled job."
     }
   ]
 }
