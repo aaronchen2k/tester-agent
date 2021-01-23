@@ -21,7 +21,6 @@ func (s *InitService) Init() {
 		&model.User{},
 		&model.Role{},
 		&model.Permission{},
-		&middlewareUtils.CasbinRule{},
 
 		&model.Build{},
 		&model.Container{},
@@ -33,8 +32,11 @@ func (s *InitService) Init() {
 		&model.Task{},
 		&model.Vm{},
 	)
-
 	if err != nil {
 		color.Yellow(fmt.Sprintf("初始化数据表错误 ：%+v", err))
 	}
+
+	err = db.GetInst().DB().AutoMigrate(
+		&middlewareUtils.CasbinRule{},
+	)
 }
