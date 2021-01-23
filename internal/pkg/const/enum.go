@@ -97,33 +97,20 @@ const (
 	OsWindows OsPlatform = "windows"
 	OsLinux   OsPlatform = "linux"
 	OsMac     OsPlatform = "mac"
-	OsDriver  OsPlatform = "driver"
 )
 
-type OsType string
+type OsName string
 
 const (
-	Win10  OsType = "win10"
-	Win7   OsType = "win7"
-	WinXP  OsType = "winxp"
-	Ubuntu OsType = "ubuntu"
-	CentOS OsType = "centos"
-	Debian OsType = "debian"
-	Mac    OsType = "mac"
-	Virtio OsType = "virtio"
-)
+	Win10 OsName = "win10"
+	Win7  OsName = "win7"
+	WinXP OsName = "winxp"
 
-type OsLang string
+	Ubuntu OsName = "ubuntu"
+	CentOS OsName = "centos"
+	Debian OsName = "debian"
 
-const (
-	EN_US OsLang = "en_us"
-	ZH_CN OsLang = "zh_cn"
-	ZH_TW OsLang = "zh_tw"
-	ZH_HK OsLang = "zh_hk"
-	DE_DE OsLang = "de_de"
-	JA_JP OsLang = "ja_jp"
-	FR_FR OsLang = "fr_fr"
-	RU_RU OsLang = "ru_ru"
+	Mac OsName = "mac"
 )
 
 type BrowserType string
@@ -133,6 +120,19 @@ const (
 	Firefox BrowserType = "firefox"
 	Edge    BrowserType = "edge"
 	IE      BrowserType = "ie"
+)
+
+type SysLang string
+
+const (
+	EN_US SysLang = "en_us"
+	ZH_CN SysLang = "zh_cn"
+	ZH_TW SysLang = "zh_tw"
+	ZH_HK SysLang = "zh_hk"
+	DE_DE SysLang = "de_de"
+	JA_JP SysLang = "ja_jp"
+	FR_FR SysLang = "fr_fr"
+	RU_RU SysLang = "ru_ru"
 )
 
 type ResType string

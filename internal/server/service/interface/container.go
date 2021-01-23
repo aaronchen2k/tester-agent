@@ -8,5 +8,5 @@ import (
 type ContainerInterface interface {
 	MachineInterface
 
-	ListContainer(hostNode *domain.ResNode) ([]*model.Container, error)
+	ListContainer(clusterNode *domain.ResNode) ([]*model.Container, error)
 }

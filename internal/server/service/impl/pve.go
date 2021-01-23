@@ -17,15 +17,15 @@ func NewPveService() *PveService {
 	return &PveService{}
 }
 
-func (s *PveService) ListVm(hostNode *domain.ResNode) (vms []*model.Vm, err error) {
-	s.GetNodeTree(hostNode)
+func (s *PveService) ListVm(clusterNode *domain.ResNode) (vms []*model.Vm, err error) {
+	s.GetNodeTree(clusterNode)
 
 	return
 }
 
-func (s *PveService) GetNodeTree(hostNode *domain.ResNode) (root domain.ResNode, err error) {
-	address := fmt.Sprintf("%s:%d", hostNode.Ip, hostNode.Port)
-	go_proxmox.Proxmox, err = go_proxmox.NewProxMox(address, hostNode.Username, hostNode.Password)
+func (s *PveService) GetNodeTree(clusterNode *domain.ResNode) (root domain.ResNode, err error) {
+	address := fmt.Sprintf("%s:%d", clusterNode.Ip, clusterNode.Port)
+	go_proxmox.Proxmox, err = go_proxmox.NewProxMox(address, clusterNode.Username, clusterNode.Password)
 	if err != nil {
 		_logUtils.Print("fail to connect proxmox, error: " + err.Error())
 		return
@@ -36,8 +36,8 @@ func (s *PveService) GetNodeTree(hostNode *domain.ResNode) (root domain.ResNode,
 		id := node.Id
 
 		nodeNode := &domain.ResNode{Name: node.Node + "(节点)", Type: _const.ResNode,
-			Id: id, HostId: hostNode.Id, Key: string(_const.ResNode) + "-" + id}
-		hostNode.Children = append(hostNode.Children, nodeNode)
+			Id: id, HostId: clusterNode.Id, Key: string(_const.ResNode) + "-" + id}
+		clusterNode.Children = append(clusterNode.Children, nodeNode)
 
 		vmFolderNode := &domain.ResNode{Name: "实例", Type: _const.ResFolder,
 			Id: id + "-folder-vms", Key: id + "-folder-vms"}
@@ -56,7 +56,7 @@ func (s *PveService) GetNodeTree(hostNode *domain.ResNode) (root domain.ResNode,
 			}
 
 			vmNode := &domain.ResNode{Name: vm.Name, Type: _const.ResVm, IsTemplate: isTemplate,
-				Id: vmId, HostId: hostNode.Id, NodeId: nodeNode.Id, Key: string(_const.ResVm) + "-" + vmId}
+				Id: vmId, HostId: clusterNode.Id, NodeId: nodeNode.Id, Key: string(_const.ResVm) + "-" + vmId}
 
 			if !isTemplate {
 				vmFolderNode.Children = append(vmFolderNode.Children, vmNode)

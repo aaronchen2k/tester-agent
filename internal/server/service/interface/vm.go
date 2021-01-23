@@ -8,5 +8,5 @@ import (
 type VmInterface interface {
 	MachineInterface
 
-	ListVm(hostNode *domain.ResNode) ([]*model.Vm, error)
+	ListVm(clusterNode *domain.ResNode) ([]*model.Vm, error)
 }

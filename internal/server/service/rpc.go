@@ -32,7 +32,7 @@ func (s *RpcService) AppiumTest(build model.Build) (result _domain.RpcResult) {
 func (s *RpcService) SeleniumTest(build model.Build) (result _domain.RpcResult) {
 	seleniumTestTo := model.NewTestTo(build)
 	seleniumTestTo.SeleniumDriverType = build.Queue.BrowserType
-	seleniumTestTo.SeleniumDriverVersion = build.Queue.BrowserVersion
+	seleniumTestTo.SeleniumDriverVersion = build.Queue.BrowserVer
 
 	obj := interface{}(seleniumTestTo)
 	s.Request(build.NodeIp, build.NodePort, "selenium", "SeleniumTest", &obj)

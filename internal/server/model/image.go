@@ -12,8 +12,8 @@ type Image struct {
 	Size int
 
 	OsPlatform _const.OsPlatform
-	OsType     _const.OsType
-	OsLang     _const.OsLang
+	OsType     _const.OsName
+	OsLang     _const.SysLang
 
 	OsVersion string
 	OsBuild   string

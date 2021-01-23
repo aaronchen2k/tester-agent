@@ -94,8 +94,8 @@ func (s *QueueService) GenerateSeleniumQueuesFromTask(task model.Task) (count in
 		browserVersion := sections[4]
 
 		queue := model.NewQueueDetail("", task.BuildType, groupId, task.ID, task.Priority,
-			_const.OsPlatform(osPlatform), _const.OsType(osType),
-			_const.OsLang(osLang), _const.BrowserType(browserType), browserVersion,
+			_const.OsPlatform(osPlatform), _const.OsName(osType),
+			_const.SysLang(osLang), _const.BrowserType(browserType), browserVersion,
 			task.ScriptUrl, task.ScmAddress, task.ScmAccount, task.ScmPassword,
 			task.ResultFiles, task.KeepResultFiles, task.TaskName, task.UserName,
 			"", task.BuildCommands)

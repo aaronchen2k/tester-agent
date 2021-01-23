@@ -8,43 +8,34 @@ import (
 
 type Queue struct {
 	BaseModel
+	TestObject
+	TestEnv
 
-	Priority int
-	Serial   string
-	VmId     uint
+	// job
+	BuildType _const.BuildType
+	Priority  int
+	GroupId   uint
+	TaskId    uint
 
-	BuildType      _const.BuildType
-	OsPlatform     _const.OsPlatform
-	OsType         _const.OsType
-	OsLang         _const.OsLang
-	BrowserType    _const.BrowserType
-	BrowserVersion string
+	// env
+	Serial      string  // for appium test, specific a SN
+	Environment TestEnv // for appium, selenium test
+	VmId        uint
 
-	ScriptUrl   string
-	ScmAddress  string
-	ScmAccount  string
-	ScmPassword string
-
-	AppUrl          string
-	BuildCommands   string
-	ResultFiles     string
-	KeepResultFiles _domain.MyBool
-
+	// status
 	Progress _const.BuildProgress
 	Status   _const.BuildStatus
-
-	Retry int
-
-	TaskName string
-	UserName string
 
 	StartTime   time.Time
 	PendingTime time.Time
 	ResultTime  time.Time
 	TimeoutTime time.Time
 
-	TaskId  uint
-	GroupId uint
+	Retry int
+
+	// desc
+	TaskName string
+	UserName string
 }
 
 func NewQueue() Queue {
@@ -54,37 +45,52 @@ func NewQueue() Queue {
 	}
 	return queue
 }
-func NewQueueDetail(serial string, buildType _const.BuildType, groupId uint, taskId uint, taskPriority int,
-	osPlatform _const.OsPlatform, osType _const.OsType,
-	osLang _const.OsLang, browserType _const.BrowserType, browserVersion string,
+func NewQueueDetail(
+	buildType _const.BuildType, priority int, groupId uint, taskId uint,
+	serial string, environment TestEnv, vmId uint,
+	osPlatform _const.OsPlatform, osType _const.OsName, osLang _const.SysLang,
+	browserType _const.BrowserType, browserVersion string,
+
 	scriptUrl string, scmAddress string, scmAccount string, scmPassword string,
-	resultFiles string, keepResultFiles _domain.MyBool, taskName string, userName string,
-	appUrl string, buildCommands string) Queue {
+	resultFiles string, keepResultFiles _domain.MyBool,
+	appUrl string, buildCommands string,
+
+	taskName string, userName string) Queue {
+
 	queue := Queue{
+		Serial:      serial,
+		Environment: environment,
+		VmId:        vmId,
+
+		BuildType: buildType,
+		Priority:  priority,
+		GroupId:   groupId,
+		TaskId:    taskId,
+
+		TestEnv: TestEnv{
+			OsPlatform:  osPlatform,
+			OsName:      osType,
+			OsLang:      osLang,
+			BrowserType: browserType,
+			BrowserVer:  browserVersion,
+		},
+
+		TestObject: TestObject{
+			ScriptUrl:       scriptUrl,
+			ScmAddress:      scmAddress,
+			ScmAccount:      scmAccount,
+			ScmPassword:     scmPassword,
+			ResultFiles:     resultFiles,
+			KeepResultFiles: keepResultFiles,
+			AppUrl:          appUrl,
+			BuildCommands:   buildCommands,
+		},
+
+		TaskName: taskName,
+		UserName: userName,
+
 		Progress: _const.ProgressCreated,
 		Status:   _const.StatusCreated,
-
-		Serial:      serial,
-		BuildType:   buildType,
-		OsLang:      osLang,
-		OsPlatform:  osPlatform,
-		OsType:      osType,
-		BrowserType: browserType,
-
-		GroupId:         groupId,
-		TaskId:          taskId,
-		Priority:        taskPriority,
-		ScriptUrl:       scriptUrl,
-		ScmAddress:      scmAddress,
-		ScmAccount:      scmAccount,
-		ScmPassword:     scmPassword,
-		ResultFiles:     resultFiles,
-		KeepResultFiles: keepResultFiles,
-		TaskName:        taskName,
-		UserName:        userName,
-
-		AppUrl:        appUrl,
-		BuildCommands: buildCommands,
 	}
 	return queue
 }

@@ -20,7 +20,7 @@ func (r *ImageRepo) Get(id int) (image model.Image) {
 	return
 }
 
-func (r *ImageRepo) QueryByOs(platform _const.OsPlatform, osType _const.OsType, osLang _const.OsLang) (ids []int) {
+func (r *ImageRepo) QueryByOs(platform _const.OsPlatform, osType _const.OsName, osLang _const.SysLang) (ids []int) {
 	var db = r.DB.Model(model.Image{}).Where("NOT disabled AND NOT deleted")
 	if platform != "" {
 		db.Where("osPlatform = ?", platform)

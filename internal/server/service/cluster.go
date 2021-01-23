@@ -19,8 +19,8 @@ func NewHostService() *ClusterService {
 }
 
 func (s *ClusterService) GetValidForQueue(queue model.Queue) (hostId, backingImageId int) {
-	imageIds1 := s.ImageRepo.QueryByOs(queue.OsPlatform, queue.OsType, queue.OsLang)
-	imageIds2 := s.ImageRepo.QueryByBrowser(queue.BrowserType, queue.BrowserVersion)
+	imageIds1 := s.ImageRepo.QueryByOs(queue.OsPlatform, queue.OsName, queue.OsLang)
+	imageIds2 := s.ImageRepo.QueryByBrowser(queue.BrowserType, queue.BrowserVer)
 
 	images := make([]int, 0)
 	for id := range imageIds1 {

@@ -12,8 +12,8 @@ type Cluster struct {
 	Type string `json:"type"`
 
 	OsPlatform _const.OsPlatform `json:"osPlatform,omitempty"`
-	OsType     _const.OsType     `json:"osType,omitempty"`
-	OsLang     _const.OsLang     `json:"osLang,omitempty"`
+	OsType     _const.OsName     `json:"osType,omitempty"`
+	OsLang     _const.SysLang    `json:"osLang,omitempty"`
 
 	OsVersion string `json:"osVersion,omitempty"`
 	OsBuild   string `json:"osBuild,omitempty"`
