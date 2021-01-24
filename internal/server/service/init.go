@@ -26,7 +26,7 @@ func (s *InitService) Init() {
 		&model.Container{},
 		&model.Device{},
 		&model.Cluster{},
-		&model.Image{},
+		&model.DockerImage{},
 		&model.Iso{},
 		&model.Queue{},
 		&model.Task{},

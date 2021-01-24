@@ -37,7 +37,7 @@ func main() {
 	flagSet.StringVar(&agentConf.Inst.FarmServer, "s", "", "")
 	flagSet.StringVar(&agentConf.Inst.Ip, "i", "", "")
 	flagSet.IntVar(&agentConf.Inst.Port, "p", 10, "")
-	flagSet.StringVar(&platform, "t", string(_const.Android), "")
+	flagSet.StringVar(&platform, "t", string(_const.OsAndroid), "")
 
 	flagSet.BoolVar(&help, "h", false, "")
 
