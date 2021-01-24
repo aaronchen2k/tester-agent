@@ -26,6 +26,7 @@ require (
 	github.com/gomodule/redigo v2.0.0+incompatible
 	github.com/google/go-cmp v0.5.4 // indirect
 	github.com/gopherjs/gopherjs v0.0.0-20200217142428-fce0ec30dd00 // indirect
+	github.com/huandu/go-clone v1.1.4
 	github.com/iris-contrib/go.uuid v2.0.0+incompatible
 	github.com/iris-contrib/httpexpect/v2 v2.0.5
 	github.com/iris-contrib/middleware/cors v0.0.0-20201115103636-07e8bced147f

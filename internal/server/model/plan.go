@@ -3,12 +3,13 @@ package model
 import (
 	_const "github.com/aaronchen2k/tester/internal/pkg/const"
 	_domain "github.com/aaronchen2k/tester/internal/pkg/domain"
+	"github.com/aaronchen2k/tester/internal/server/model/base"
 	"time"
 )
 
 type Plan struct {
 	BaseModel
-	TestObject
+	base.TestObject
 
 	// job
 	BuildType _const.BuildType
@@ -16,8 +17,7 @@ type Plan struct {
 	GroupId   uint
 
 	// env
-	Serials      []string  // for appium test, , specific several SN
-	Environments []TestEnv // for selenium, appium test
+	Environments []base.TestEnv // for selenium, appium test
 
 	// test object
 	ScriptUrl   string

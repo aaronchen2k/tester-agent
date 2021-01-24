@@ -12,8 +12,8 @@ const locale = {
   'menu.home': '主页',
 
   'menu.task': '测试任务',
-  'menu.execution': '执行中',
-  'menu.history': '执行历史',
+  'menu.execution': '正在执行',
+  'menu.history': '历史执行',
   'menu.res': '测试资源',
   'menu.vm': '虚拟机',
   'menu.container': '容器',

@@ -2,22 +2,16 @@ package model
 
 import (
 	_const "github.com/aaronchen2k/tester/internal/pkg/const"
+	"github.com/aaronchen2k/tester/internal/server/model/base"
 	"time"
 )
 
 type Cluster struct {
 	BaseModel
+	base.TestEnv
 
 	Name string `json:"name"`
 	Type string `json:"type"`
-
-	OsPlatform _const.OsPlatform `json:"osPlatform,omitempty"`
-	OsType     _const.OsName     `json:"osType,omitempty"`
-	OsLang     _const.SysLang    `json:"osLang,omitempty"`
-
-	OsVersion string `json:"osVersion,omitempty"`
-	OsBuild   string `json:"osBuild,omitempty"`
-	OsBits    string `json:"osBits,omitempty"`
 
 	Ip      string `json:"ip"`
 	Port    int    `json:"port"`

@@ -66,7 +66,7 @@ func main() {
 
 func start(args []string) {
 	if err := flagSet.Parse(args[2:]); err == nil {
-		agentConf.Inst.Platform = _const.Platform(platform)
+		agentConf.Inst.Platform = _const.WorkPlatform(platform)
 
 		agentConf.Init()
 		cron.Init()

@@ -3,6 +3,8 @@ package repo
 import (
 	_domain "github.com/aaronchen2k/tester/internal/pkg/domain"
 	"github.com/aaronchen2k/tester/internal/server/model"
+	"github.com/aaronchen2k/tester/internal/server/model/base"
+	"github.com/huandu/go-clone"
 	"gorm.io/gorm"
 )
 
@@ -32,7 +34,18 @@ func (r *DeviceRepo) Register(device _domain.DeviceInst) (err error) {
 	}
 }
 
+func (r *DeviceRepo) Get(id uint) (device model.Device) {
+	r.DB.Where("id=?", id).First(&device)
+	return
+}
+
 func (r *DeviceRepo) GetBySerial(serial string) (device model.Device) {
 	r.DB.Where("serial=?", serial).First(&device)
+	return
+}
+
+func (r *DeviceRepo) GetByEnv(env base.TestEnv) (dev model.Device) {
+	condition := clone.Clone(env).(*model.Device)
+	r.DB.Where(&condition).First(&dev)
 	return
 }

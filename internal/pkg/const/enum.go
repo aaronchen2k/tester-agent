@@ -74,13 +74,12 @@ const (
 	ServiceBusy   ServiceStatus = "busy"
 )
 
-type Platform string
+type WorkPlatform string
 
 const (
-	Android Platform = "android"
-	Ios     Platform = "ios"
-	Host    Platform = "host"
-	Vm      Platform = "vm"
+	Host WorkPlatform = "host"
+	Vm   WorkPlatform = "vm"
+	Ios  WorkPlatform = "computer"
 )
 
 type BuildType string
@@ -97,6 +96,9 @@ const (
 	OsWindows OsPlatform = "windows"
 	OsLinux   OsPlatform = "linux"
 	OsMac     OsPlatform = "mac"
+
+	OsAndroid OsPlatform = "android"
+	OsIos     OsPlatform = "ios"
 )
 
 type OsName string

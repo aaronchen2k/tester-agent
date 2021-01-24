@@ -3,11 +3,13 @@ package model
 import (
 	_const "github.com/aaronchen2k/tester/internal/pkg/const"
 	_domain "github.com/aaronchen2k/tester/internal/pkg/domain"
+	"github.com/aaronchen2k/tester/internal/server/model/base"
 	"time"
 )
 
 type Vm struct {
 	BaseModel
+	base.TestEnv
 
 	Mac     string
 	Name    string

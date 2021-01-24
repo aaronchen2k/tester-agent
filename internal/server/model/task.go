@@ -2,14 +2,14 @@ package model
 
 import (
 	_const "github.com/aaronchen2k/tester/internal/pkg/const"
-	_domain "github.com/aaronchen2k/tester/internal/pkg/domain"
+	"github.com/aaronchen2k/tester/internal/server/model/base"
 	"time"
 )
 
 type Task struct {
 	BaseModel
-	TestObject
-	TestEnv
+	base.TestObject
+	base.TestEnv
 
 	// job
 	BuildType _const.BuildType
@@ -18,8 +18,7 @@ type Task struct {
 	PlanId    uint
 
 	// env
-	Serial      string  // for appium test, specific a SN
-	Environment TestEnv // for appium, selenium test
+	Environment base.TestEnv // for appium, selenium test
 
 	// status
 	Progress _const.BuildProgress
@@ -36,52 +35,25 @@ type Task struct {
 
 func NewTask(
 	buildType _const.BuildType, priority int, groupId uint, planId uint,
-	serial string, environment TestEnv,
+	taskName string, userName string,
+	testEnv base.TestEnv, testObj base.TestObject) Task {
 
-	osPlatform _const.OsPlatform, osType _const.OsName, osLang _const.SysLang,
-	browserType _const.BrowserType, browserVersion string,
-
-	scriptUrl string, scmAddress string, scmAccount string, scmPassword string,
-	resultFiles string, keepResultFiles _domain.MyBool,
-	appUrl string, buildCommands string,
-
-	taskName string, userName string) Task {
-
-	queue := Task{
-		Progress: _const.ProgressCreated,
-		Status:   _const.StatusCreated,
-
+	task := Task{
 		BuildType: buildType,
 		Priority:  priority,
 		GroupId:   groupId,
 		PlanId:    planId,
 
-		Serial:      serial,
-		Environment: environment,
-
-		TestEnv: TestEnv{
-			OsPlatform:  osPlatform,
-			OsName:      osType,
-			OsLang:      osLang,
-			BrowserType: browserType,
-			BrowserVer:  browserVersion,
-		},
-
-		TestObject: TestObject{
-			ScriptUrl:       scriptUrl,
-			ScmAddress:      scmAddress,
-			ScmAccount:      scmAccount,
-			ScmPassword:     scmPassword,
-			ResultFiles:     resultFiles,
-			KeepResultFiles: keepResultFiles,
-			AppUrl:          appUrl,
-			BuildCommands:   buildCommands,
-		},
-
 		TaskName: taskName,
 		UserName: userName,
+
+		TestEnv:    testEnv,
+		TestObject: testObj,
+
+		Progress: _const.ProgressCreated,
+		Status:   _const.StatusCreated,
 	}
-	return queue
+	return task
 }
 
 func (Task) TableName() string {

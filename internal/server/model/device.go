@@ -1,12 +1,13 @@
 package model
 
 import (
-	_const "github.com/aaronchen2k/tester/internal/pkg/const"
 	_domain "github.com/aaronchen2k/tester/internal/pkg/domain"
+	"github.com/aaronchen2k/tester/internal/server/model/base"
 )
 
 type Device struct {
 	BaseModel
+	base.TestEnv
 
 	// from node register
 	_domain.DeviceInst
@@ -22,10 +23,6 @@ type Device struct {
 	Memory          int
 	Storage         int
 	BatteryCapacity int
-
-	OsType    _const.Platform
-	OsLevel   string
-	OsVersion string
 }
 
 func NewDevice() Device {

@@ -2,7 +2,7 @@ package model
 
 import "github.com/aaronchen2k/tester/internal/server/model/base"
 
-type Iso struct {
+type VmTempl struct {
 	BaseModel
 	base.TestEnv
 
@@ -12,10 +12,13 @@ type Iso struct {
 
 	ResolutionHeight  int
 	ResolutionWidth   int
-	suggestDiskSize   int
-	suggestMemorySize int
+	SuggestDiskSize   int
+	SuggestMemorySize int
+
+	SysIsoId    uint
+	DriverIsoId uint
 }
 
-func (Iso) TableName() string {
-	return "biz_iso"
+func (VmTempl) TableName() string {
+	return "biz_docker_templ"
 }

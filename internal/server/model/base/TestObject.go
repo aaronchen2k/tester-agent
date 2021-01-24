@@ -1,4 +1,4 @@
-package model
+package base
 
 import (
 	_domain "github.com/aaronchen2k/tester/internal/pkg/domain"

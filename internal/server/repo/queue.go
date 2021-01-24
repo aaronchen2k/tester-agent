@@ -4,7 +4,6 @@ import (
 	_const "github.com/aaronchen2k/tester/internal/pkg/const"
 	"github.com/aaronchen2k/tester/internal/server/model"
 	"gorm.io/gorm"
-	"strings"
 	"time"
 )
 
@@ -43,11 +42,6 @@ func (r *QueueRepo) Save(queue *model.Queue) (err error) {
 	err = r.DB.Model(&queue).
 		Omit("StartTime", "PendingTime", "ResultTime", "TimeoutTime").
 		Create(&queue).Error
-	return
-}
-
-func (r *QueueRepo) DeleteInSameGroup(groupId uint, serials []string) (err error) {
-	r.DB.Where("group_id=? AND serial IN (?)", groupId, strings.Join(serials, ",")).Delete(&model.Queue{})
 	return
 }
 

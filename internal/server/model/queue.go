@@ -2,25 +2,20 @@ package model
 
 import (
 	_const "github.com/aaronchen2k/tester/internal/pkg/const"
-	_domain "github.com/aaronchen2k/tester/internal/pkg/domain"
+	"github.com/aaronchen2k/tester/internal/server/model/base"
 	"time"
 )
 
 type Queue struct {
 	BaseModel
-	TestObject
-	TestEnv
+	base.TestObject
+	base.TestEnv
 
 	// job
 	BuildType _const.BuildType
 	Priority  int
 	GroupId   uint
 	TaskId    uint
-
-	// env
-	Serial      string  // for appium test, specific a SN
-	Environment TestEnv // for appium, selenium test
-	VmId        uint
 
 	// status
 	Progress _const.BuildProgress
@@ -34,8 +29,8 @@ type Queue struct {
 	Retry int
 
 	// desc
-	TaskName string
-	UserName string
+	QueueName string
+	UserName  string
 }
 
 func NewQueue() Queue {
@@ -47,47 +42,20 @@ func NewQueue() Queue {
 }
 func NewQueueDetail(
 	buildType _const.BuildType, priority int, groupId uint, taskId uint,
-	serial string, environment TestEnv, vmId uint,
-	osPlatform _const.OsPlatform, osType _const.OsName, osLang _const.SysLang,
-	browserType _const.BrowserType, browserVersion string,
-
-	scriptUrl string, scmAddress string, scmAccount string, scmPassword string,
-	resultFiles string, keepResultFiles _domain.MyBool,
-	appUrl string, buildCommands string,
-
-	taskName string, userName string) Queue {
+	queueName string, userName string,
+	testEnv base.TestEnv, testObj base.TestObject) Queue {
 
 	queue := Queue{
-		Serial:      serial,
-		Environment: environment,
-		VmId:        vmId,
-
 		BuildType: buildType,
 		Priority:  priority,
 		GroupId:   groupId,
 		TaskId:    taskId,
 
-		TestEnv: TestEnv{
-			OsPlatform:  osPlatform,
-			OsName:      osType,
-			OsLang:      osLang,
-			BrowserType: browserType,
-			BrowserVer:  browserVersion,
-		},
+		QueueName: queueName,
+		UserName:  userName,
 
-		TestObject: TestObject{
-			ScriptUrl:       scriptUrl,
-			ScmAddress:      scmAddress,
-			ScmAccount:      scmAccount,
-			ScmPassword:     scmPassword,
-			ResultFiles:     resultFiles,
-			KeepResultFiles: keepResultFiles,
-			AppUrl:          appUrl,
-			BuildCommands:   buildCommands,
-		},
-
-		TaskName: taskName,
-		UserName: userName,
+		TestEnv:    testEnv,
+		TestObject: testObj,
 
 		Progress: _const.ProgressCreated,
 		Status:   _const.StatusCreated,
