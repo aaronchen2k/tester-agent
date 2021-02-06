@@ -1,69 +1,63 @@
 <template>
   <div>
-    <div class="main">
-      <div class="left" :style="{height: colHeight}">
-        <div>
-          <a href="#" @click="expand">
-            <span v-if="!expanded">展开全部</span>
-            <span v-if="expanded">收缩全部</span>
-          </a>
-        </div>
-        <div>
-          <a-tree
-            ref="machineTree"
-            class="draggable-tree"
-            :show-line="false"
-            :show-icon="true"
-            :expandedKeys.sync="openKeys"
-            :selectedKeys.sync="selectedKeys"
-            :tree-data="[treeData]"
-            :replaceFields="fieldMap"
-            @select="onSelect"
-            @rightClick="onRightClick"
-            :draggable="false"
-          >
-            <template slot="custom" slot-scope="{ type,isTemplate }">
-              <a-icon v-if="type=='cluster'" type="cluster" />
-              <a-icon v-else-if="type=='node'" type="cloud-server" />
-              <a-icon v-else-if="type=='vm' && !isTemplate" type="desktop" />
-              <a-icon v-else-if="type=='vm' && isTemplate" type="build" />
-            </template>
-          </a-tree>
-        </div>
-
-        <div v-if="rightClickNode" :style="rightMenuStyle" class="tree-context-menu">
-          <a-menu @click="menuClick" mode="inline" class="menu">
-            <a-menu-item key="addNeighbor" v-if="!isRoot">
-              <a-icon type="plus" />{{ $t('msg.design.create.brother') }}
-            </a-menu-item>
-            <a-menu-item key="addChild" v-if="type=='def'|| ((type=='ranges' || type=='instances') && isRoot)">
-              <a-icon type="plus" />{{ $t('msg.design.create.child') }}
-            </a-menu-item>
-            <a-menu-item key="remove" v-if="!isRoot">
-              <a-icon type="delete" />{{ $t('msg.design.remove.node') }}
-            </a-menu-item>
-          </a-menu>
-        </div>
-      </div>
-      <div class="right" :style="{height: colHeight}">
-
-      </div>
+    <div>
+      <a href="#" @click="expand">
+        <span v-if="!expanded">展开全部</span>
+        <span v-if="expanded">收缩全部</span>
+      </a>
+    </div>
+    <div>
+      <a-tree
+        ref="machineTree"
+        class="draggable-tree"
+        :show-line="false"
+        :show-icon="true"
+        :expandedKeys.sync="openKeys"
+        :selectedKeys.sync="selectedKeys"
+        :tree-data="[treeData]"
+        :replaceFields="fieldMap"
+        @select="onSelect"
+        @rightClick="onRightClick"
+        :draggable="false"
+      >
+        <template slot="custom" slot-scope="{ type,isTemplate }">
+          <a-icon v-if="type=='cluster'" type="cluster" />
+          <a-icon v-else-if="type=='node'" type="cloud-server" />
+          <a-icon v-else-if="type=='vm' && !isTemplate" type="desktop" />
+          <a-icon v-else-if="type=='vm' && isTemplate" type="build" />
+        </template>
+      </a-tree>
     </div>
 
+    <div v-if="rightClickNode" :style="rightMenuStyle" class="tree-context-menu">
+      <a-menu @click="menuClick" mode="inline" class="menu">
+        <a-menu-item key="addNeighbor" v-if="!isRoot">
+          <a-icon type="plus" />{{ $t('msg.design.create.brother') }}
+        </a-menu-item>
+        <a-menu-item key="addChild" v-if="type=='def'|| ((type=='ranges' || type=='instances') && isRoot)">
+          <a-icon type="plus" />{{ $t('msg.design.create.child') }}
+        </a-menu-item>
+        <a-menu-item key="remove" v-if="!isRoot">
+          <a-icon type="delete" />{{ $t('msg.design.remove.node') }}
+        </a-menu-item>
+      </a-menu>
+    </div>
   </div>
 </template>
 
 <script>
 
 import { listVm } from '@/api/manage'
+import Bus from '../../../../components/_util/bus'
 
 export default {
-  name: 'VmList',
+  name: 'VmTree',
   components: {
   },
   data () {
     return {
       models: [],
+      model: null,
       treeData: {},
       openKeys: [],
       selectedKeys: [],
@@ -81,9 +75,6 @@ export default {
     isRoot () {
       console.log('isRoot', this.selectNode)
       return !this.selectNode.parentID || this.selectNode.parentID === 0 || this.selectNode.id === 0
-    },
-    colHeight () {
-      return (document.documentElement.clientHeight - 140) + 'px'
     }
   },
   mounted () {
@@ -119,6 +110,8 @@ export default {
         //   this.time2 = Date.now() // trigger data refresh
         // })
       }
+
+      Bus.$emit('modelUpdate', this.model)
     },
     loadTreeCallback (data, selectedKey) {
       this.getOpenKeys(data)
@@ -140,7 +133,7 @@ export default {
       const node = this.nodeMap[e.node.eventKey]
       console.log('node', node)
       if ((this.type === 'def' && node.parentID === 0) || (this.type === 'config' && node.id === 0) ||
-          (node.fields && node.fields.length > 0)) {
+        (node.fields && node.fields.length > 0)) {
         this.rightVisible = false
         this.modelData = {}
       } else {
@@ -206,25 +199,10 @@ export default {
         }
       }
     }
-
   }
 }
 </script>
 
 <style lang="less" scoped>
-  .main {
-    display: flex;
-    padding: 10px;
-    background-color: #ffffff;
 
-    .left {
-      width: 260px;
-      border-right: 1px solid #DDDDDD;
-      overflow: auto;
-    }
-    .right {
-      flex: 1;
-      overflow: auto;
-    }
-  }
 </style>
