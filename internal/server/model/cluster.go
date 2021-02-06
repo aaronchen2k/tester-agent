@@ -10,21 +10,21 @@ type Cluster struct {
 	BaseModel
 	base.TestEnv
 
-	Name string `json:"name"`
-	Type string `json:"type"`
+	Name string `gorm:"name" json:"name"`
+	Type string `gorm:"type" json:"type"`
 
-	Ip      string `json:"ip"`
-	Port    int    `json:"port"`
-	WorkDir string `json:"workDir,omitempty"`
+	Ip      string `gorm:"ip" json:"ip"`
+	Port    int    `gorm:"port" json:"port"`
+	WorkDir string `gorm:"workDir" json:"workDir,omitempty"`
 
 	Username string `gorm:"username" json:"username"`
 	Password string `gorm:"password" json:"password"`
 
-	SshPort int               `json:"sshPort,omitempty"`
-	VncPort int               `json:"vncPort,omitempty"`
-	Status  _const.HostStatus `json:"status"`
+	SshPort int               `gorm:"sshPort" json:"sshPort,omitempty"`
+	VncPort int               `gorm:"vncPort" json:"vncPort,omitempty"`
+	Status  _const.HostStatus `gorm:"status" json:"status"`
 
-	LastRegisterDate time.Time `json:"lastRegisterDate"`
+	LastRegisterDate time.Time `gorm:"lastRegisterDate" json:"lastRegisterDate"`
 	TaskCount        int       `gorm:"-" json:"taskCount"`
 }
 

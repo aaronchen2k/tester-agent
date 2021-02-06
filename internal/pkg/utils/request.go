@@ -1,4 +1,4 @@
-package utils
+package _utils
 
 type Request struct {
 	PageSize int `json:"pageSize"`

@@ -6,19 +6,23 @@ type VmTempl struct {
 	BaseModel
 	base.TestEnv
 
-	Name string
-	Path string
-	Size int
+	Name string `gorm:"name" json:"name,omitempty"`
+	Path string `gorm:"path" json:"path,omitempty"`
+	Size int    `gorm:"size" json:"size,omitempty"`
 
-	ResolutionHeight  int
-	ResolutionWidth   int
-	SuggestDiskSize   int
-	SuggestMemorySize int
+	ResolutionHeight  int `gorm:"resolutionHeight" json:"resolutionHeight,omitempty"`
+	ResolutionWidth   int `gorm:"resolutionWidth" json:"resolutionWidth,omitempty"`
+	SuggestDiskSize   int `gorm:"suggestDiskSize" json:"suggestDiskSize,omitempty"`
+	SuggestMemorySize int `gorm:"suggestMemorySize" json:"suggestMemorySize,omitempty"`
 
-	SysIsoId    uint
-	DriverIsoId uint
+	SysIsoId    uint `gorm:"sysIsoId" json:"sysIsoId,omitempty"`
+	DriverIsoId uint `gorm:"driverIsoId" json:"driverIsoId,omitempty"`
+
+	Ident     string `gorm:"ident" json:"ident"`
+	NodeId    uint   `gorm:"nodeId" json:"nodeId"`
+	ClusterId uint   `gorm:"clusterId" json:"clusterId"`
 }
 
 func (VmTempl) TableName() string {
-	return "biz_docker_templ"
+	return "biz_vm_templ"
 }

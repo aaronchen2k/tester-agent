@@ -16,8 +16,8 @@ type Portainer struct {
 }
 
 type Endpoint struct {
-	Id        int32    `json:"Id,omitempty"`
-	Name      string   `json:"Name,omitempty"`
+	Id        uint     `json:"Id,omitempty"`
+	Name      string   `json:"Tag,omitempty"`
 	URL       string   `json:"URL,omitempty"`
 	PublicURL string   `json:"PublicURL,omitempty"`
 	GroupID   int32    `json:"GroupID,omitempty"`
@@ -63,7 +63,7 @@ type Container struct {
 		} `json:"Networks"`
 	} `json:"NetworkSettings"`
 	Mounts []struct {
-		Name        string `json:"Name"`
+		Name        string `json:"Tag"`
 		Source      string `json:"Source"`
 		Destination string `json:"Destination"`
 		Driver      string `json:"Driver"`

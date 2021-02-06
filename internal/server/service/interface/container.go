@@ -9,4 +9,5 @@ type ContainerInterface interface {
 	MachineInterface
 
 	ListContainer(clusterNode *domain.ResNode) ([]*model.Container, error)
+	CreateContainer(image model.ContainerImage, node model.Node, cluster model.Cluster) (model.Container, error)
 }

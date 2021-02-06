@@ -77,9 +77,12 @@ const (
 type WorkPlatform string
 
 const (
-	Host WorkPlatform = "host"
-	Vm   WorkPlatform = "vm"
-	Ios  WorkPlatform = "computer"
+	Host     WorkPlatform = "host"
+	Vm       WorkPlatform = "vm"
+	Computer WorkPlatform = "computer"
+
+	Android WorkPlatform = "android"
+	Ios     WorkPlatform = "ios"
 )
 
 type BuildType string

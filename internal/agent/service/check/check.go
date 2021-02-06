@@ -1,15 +1,15 @@
 package checkService
 
 import (
+	agentConf "github.com/aaronchen2k/tester/internal/agent/cfg"
 	appiumService "github.com/aaronchen2k/tester/internal/agent/service/appium"
 	deviceService "github.com/aaronchen2k/tester/internal/agent/service/device"
 	testService "github.com/aaronchen2k/tester/internal/agent/service/test"
 	vmService "github.com/aaronchen2k/tester/internal/agent/service/vm"
-	"github.com/aaronchen2k/tester/internal/agent/utils/common"
 )
 
 func Check() {
-	if agentUntils.IsDeviceAgent() { // device
+	if agentConf.IsDeviceAgent() { // device
 		devices := deviceService.RefreshDevices()
 		appiumService.CheckService(devices)
 
@@ -35,11 +35,11 @@ func Check() {
 			deviceService.Register(devices, false)
 		}
 
-	} else if agentUntils.IsHostAgent() { // host
+	} else if agentConf.IsHostAgent() { // host
 		// register host
 		vmService.RegisterHost()
 
-	} else if agentUntils.IsVmAgent() { // vm
+	} else if agentConf.IsVmAgent() { // vm
 		// is running，register busy
 		if testService.CheckTaskRunning() {
 			vmService.RegisterVm(true)

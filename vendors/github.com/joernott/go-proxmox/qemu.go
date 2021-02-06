@@ -2,6 +2,7 @@ package go_proxmox
 
 import (
 	"errors"
+	"github.com/aaronchen2k/tester/internal/server/domain"
 	"net/url"
 	"strconv"
 	"strings"
@@ -9,6 +10,8 @@ import (
 )
 
 type QemuVM struct {
+	domain.Vm
+
 	Mem       float64 `json:"mem"`
 	CPUs      float64 `json:"cpus"`
 	NetOut    float64 `json:"netout"`
@@ -274,11 +277,11 @@ func (qemu QemuVM) Resume() error {
 	return err
 }
 
-func (qemu QemuVM) Clone(newId float64, name string, targetName string) (Task, error) {
-	return qemu.CloneToPool(newId, name, targetName, "")
+func (qemu QemuVM) Clone(newId float64, name string, node string) (Task, error) {
+	return qemu.CloneToPool(newId, name, node, "")
 }
 
-func (qemu QemuVM) CloneToPool(newId float64, name string, targetName string, pool string) (Task, error) {
+func (qemu QemuVM) CloneToPool(newId float64, name string, node string, pool string) (Task, error) {
 	var target string
 	var err error
 
@@ -289,7 +292,7 @@ func (qemu QemuVM) CloneToPool(newId float64, name string, targetName string, po
 	form := url.Values{
 		"newid":  {newVMID},
 		"name":   {name},
-		"target": {targetName},
+		"target": {node},
 		"full":   {"1"},
 	}
 

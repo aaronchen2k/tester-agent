@@ -76,7 +76,7 @@ func (s *ExecService) CheckAndCallSeleniumTest(queue model.Queue) {
 		hostId, backingImageId := s.HostService.GetValidForQueue(queue)
 		if hostId != 0 {
 			// create kvm
-			result := s.VmService.CreateRemote(hostId, backingImageId, int(queue.ID))
+			result := s.VmService.CreateRemote(hostId, backingImageId, queue.ID)
 			if result.IsSuccess() { // success to create
 				newProgress = _const.ProgressInProgress
 			} else {

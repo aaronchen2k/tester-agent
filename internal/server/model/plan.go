@@ -2,7 +2,6 @@ package model
 
 import (
 	_const "github.com/aaronchen2k/tester/internal/pkg/const"
-	_domain "github.com/aaronchen2k/tester/internal/pkg/domain"
 	"github.com/aaronchen2k/tester/internal/server/model/base"
 	"time"
 )
@@ -12,35 +11,24 @@ type Plan struct {
 	base.TestObject
 
 	// job
-	BuildType _const.BuildType
-	Priority  int
-	GroupId   uint
+	BuildType _const.BuildType `gorm:"buildType" json:"buildType,omitempty"`
+	Priority  int              `gorm:"priority" json:"priority,omitempty"`
+	GroupId   uint             `gorm:"groupId" json:"groupId,omitempty"`
 
 	// env
-	Environments []base.TestEnv // for selenium, appium test
-
-	// test object
-	ScriptUrl   string
-	ScmAddress  string
-	ScmAccount  string
-	ScmPassword string
-
-	AppUrl          string
-	BuildCommands   string
-	ResultFiles     string
-	KeepResultFiles _domain.MyBool
+	Environments []base.TestEnv `gorm:"-"` // for selenium, appium test
 
 	// status
-	Progress _const.BuildProgress
-	Status   _const.BuildStatus
+	Progress _const.BuildProgress `gorm:"progress" json:"progress,omitempty"`
+	Status   _const.BuildStatus   `gorm:"status" json:"status,omitempty"`
 
-	StartTime   time.Time
-	PendingTime time.Time
-	ResultTime  time.Time
+	StartTime   time.Time `gorm:"startTime" json:"startTime,omitempty"`
+	PendingTime time.Time `gorm:"pendingTime" json:"pendingTime,omitempty"`
+	ResultTime  time.Time `gorm:"resultTime" json:"resultTime,omitempty"`
 
 	// desc
-	PlanName string
-	UserName string
+	PlanName string `gorm:"planName" json:"planName,omitempty"`
+	UserName string `gorm:"userName" json:"userName,omitempty"`
 }
 
 func NewPlan() Plan {

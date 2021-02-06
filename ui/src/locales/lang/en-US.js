@@ -11,10 +11,12 @@ const locale = {
   'message': '-',
   'menu.home': 'Home',
 
+  'menu.plan': 'Test Plan',
+  'menu.res': 'Test Environment',
+
   'menu.task': 'Test Task',
   'menu.execution': 'Test Execution',
   'menu.history': 'Test History',
-  'menu.res': 'Test Environment',
   'menu.vm': 'VM',
   'menu.container': 'Container',
 

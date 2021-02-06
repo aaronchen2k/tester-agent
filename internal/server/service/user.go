@@ -78,7 +78,7 @@ func (s *UserService) CheckLogin(ctx iris.Context, u *model.User, password strin
 
 // CreateUser create user
 func (s *UserService) CreateUser(u *model.User) error {
-	u.Password = utils.HashPassword(u.Password)
+	u.Password = _utils.HashPassword(u.Password)
 	if err := s.UserRepo.DB.Create(u).Error; err != nil {
 		return err
 	}
@@ -91,7 +91,7 @@ func (s *UserService) CreateUser(u *model.User) error {
 // UpdateUserById update user by id
 func (s *UserService) UpdateUserById(id uint, nu *model.User) error {
 	if len(nu.Password) > 0 {
-		nu.Password = utils.HashPassword(nu.Password)
+		nu.Password = _utils.HashPassword(nu.Password)
 	}
 	if err := s.UserRepo.Update(&model.User{}, nu, id); err != nil {
 		return err

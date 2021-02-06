@@ -3,7 +3,7 @@ package vmService
 import (
 	"fmt"
 	"github.com/aaronchen2k/tester/internal/agent/cfg"
-	constanct "github.com/aaronchen2k/tester/internal/agent/libs/const"
+	agentConst "github.com/aaronchen2k/tester/internal/agent/utils/const"
 	_domain "github.com/aaronchen2k/tester/internal/pkg/domain"
 	_fileUtils "github.com/aaronchen2k/tester/internal/pkg/libs/file"
 	_logUtils "github.com/aaronchen2k/tester/internal/pkg/libs/log"
@@ -14,52 +14,8 @@ import (
 	"strings"
 )
 
-func Create(vm *_domain.Vm) (err error) {
-
-	// create def file
-	defContent, macAddress := genDefFromTempl(vm.Name, vm.MemorySize*1000, vm.CdromSys, vm.CdromDriver)
-	if defContent == "" {
-		return
-	}
-
-	vm.MacAddress = macAddress
-	defPath := fmt.Sprintf("%s%s%s.xml", agentConf.Inst.WorkDir, constanct.FolderDef, vm.Name)
-	_fileUtils.WriteFile(defPath, defContent)
-
-	// create image file
-	var cmd string
-	rawPath := fmt.Sprintf("%s%s.qcow2", constanct.FolderImage, vm.Name)
-	if vm.BackingImagePath == "" {
-		cmd = fmt.Sprintf("qemu-img create -f qcow2 %s %dG", rawPath, vm.DiskSize/1000)
-	} else {
-		cmd = fmt.Sprintf("qemu-img create -f qcow2 -o cluster_size=2M,backing_file=%s %s %dG",
-			vm.BackingImagePath, rawPath, vm.DiskSize/1000)
-	}
-	_, err = _shellUtils.ExeShellInDir(cmd, agentConf.Inst.WorkDir)
-	if err != nil {
-		_logUtils.Errorf("fail to generate vm, cmd %s, err %s.", cmd, err.Error())
-		return
-	}
-
-	cmd = fmt.Sprintf("virsh define %s.xml", constanct.FolderDef+vm.Name)
-	_, err = _shellUtils.ExeShellInDir(cmd, agentConf.Inst.WorkDir)
-	if err != nil {
-		_logUtils.Errorf("fail to define vm, cmd %s, err %s.", cmd, err.Error())
-		return
-	}
-
-	cmd = fmt.Sprintf("virsh start %s", defPath)
-	_, err = _shellUtils.ExeShellInDir(cmd, agentConf.Inst.WorkDir)
-	if err != nil {
-		_logUtils.Errorf("fail to start vm, cmd %s, err %s.", cmd, err.Error())
-		return
-	}
-
-	return
-}
-
 func Define(vmUniqueName string) (err error) {
-	defPath := constanct.FolderDef + vmUniqueName
+	defPath := agentConst.FolderDef + vmUniqueName
 	cmd := fmt.Sprintf("virsh define %s.xml", defPath)
 	_, err = _shellUtils.ExeShellInDir(cmd, agentConf.Inst.WorkDir)
 	if err != nil {
@@ -104,20 +60,20 @@ func GetVncPort(vmName string) (port int, err error) {
 }
 
 func genDefFromTempl(vmName string, memory int, vmCdrom string, vmCdrom2 string) (templContent, macAddress string) {
-	vmTemplate := fmt.Sprintf("%s%s/common.xml", agentConf.Inst.WorkDir, constanct.FolderTempl)
+	vmTemplate := fmt.Sprintf("%s%s/common.xml", agentConf.Inst.WorkDir, agentConst.FolderTempl)
 
-	templContent = _fileUtils.ReadFile(agentConf.Inst.WorkDir + constanct.FolderTempl + vmTemplate)
+	templContent = _fileUtils.ReadFile(agentConf.Inst.WorkDir + agentConst.FolderTempl + vmTemplate)
 
 	templContent = strings.Replace(templContent, "${name}", vmName, -1)
 	templContent = strings.Replace(templContent, "${memory}", strconv.Itoa(memory), -1)
 
-	rawPath := fmt.Sprintf("%s%s%s.qcow2", agentConf.Inst.WorkDir, constanct.FolderImage, vmName)
+	rawPath := fmt.Sprintf("%s%s%s.qcow2", agentConf.Inst.WorkDir, agentConst.FolderImage, vmName)
 	templContent = strings.Replace(templContent, "${rawPath}", rawPath, -1)
 
-	cdromPath := fmt.Sprintf("%s%s%s", agentConf.Inst.WorkDir, constanct.FolderIso, vmCdrom)
+	cdromPath := fmt.Sprintf("%s%s%s", agentConf.Inst.WorkDir, agentConst.FolderIso, vmCdrom)
 	templContent = strings.Replace(templContent, "${cdrom}", cdromPath, -1)
 
-	cdromPath2 := fmt.Sprintf("%s%s%s", agentConf.Inst.WorkDir, constanct.FolderIso, vmCdrom2)
+	cdromPath2 := fmt.Sprintf("%s%s%s", agentConf.Inst.WorkDir, agentConst.FolderIso, vmCdrom2)
 	templContent = strings.Replace(templContent, "${cdrom2}", cdromPath2, -1)
 
 	macAddress = genMacAddress()
@@ -195,7 +151,7 @@ func Undefine(vmUniqueName string) (err error) {
 }
 
 func RemoveDefFile(vmUniqueName string) (err error) {
-	defPath := fmt.Sprintf("%s/%s.xml", constanct.FolderDef, vmUniqueName)
+	defPath := fmt.Sprintf("%s/%s.xml", agentConst.FolderDef, vmUniqueName)
 	cmd := fmt.Sprintf("rm -rf %s", defPath)
 	_, err = _shellUtils.ExeShellInDir(cmd, agentConf.Inst.WorkDir)
 	if err != nil {

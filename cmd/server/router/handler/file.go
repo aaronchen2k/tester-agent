@@ -11,14 +11,14 @@ import (
 	"time"
 )
 
-type FileController struct {
+type FileCtrl struct {
 	Ctx iris.Context
 }
 
-func NewFileController() *FileController {
-	return &FileController{}
+func NewFileCtrl() *FileCtrl {
+	return &FileCtrl{}
 }
-func (g *FileController) PostUpload() {
+func (g *FileCtrl) PostUpload() {
 	dir := _const.UploadDir + _dateUtils.DateStr(time.Now())
 	_fileUtils.MkDirIfNeeded(dir)
 

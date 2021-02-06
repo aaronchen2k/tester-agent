@@ -11,10 +11,12 @@ const locale = {
   'message': '-',
   'menu.home': '主页',
 
+  'menu.plan': '测试计划',
+  'menu.res': '测试资源',
+
   'menu.task': '测试任务',
   'menu.execution': '正在执行',
   'menu.history': '历史执行',
-  'menu.res': '测试资源',
   'menu.vm': '虚拟机',
   'menu.container': '容器',
 

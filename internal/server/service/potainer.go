@@ -1,10 +1,11 @@
-package serviceImpl
+package service
 
 import (
 	_const "github.com/aaronchen2k/tester/internal/pkg/const"
 	_logUtils "github.com/aaronchen2k/tester/internal/pkg/libs/log"
 	"github.com/aaronchen2k/tester/internal/server/domain"
 	"github.com/aaronchen2k/tester/internal/server/model"
+	serverUtils "github.com/aaronchen2k/tester/internal/server/utils/common"
 	go_portainer "github.com/aaronchen2k/tester/vendors/github.com/leidruid/go-portainer"
 	"strconv"
 	"strings"
@@ -19,6 +20,49 @@ func NewPortainerService() *PortainerService {
 
 func (s *PortainerService) ListContainer(clusterNode *domain.ResNode) (containers []*model.Container, err error) {
 	s.GetNodeTree(clusterNode)
+
+	return
+}
+
+func (s *PortainerService) CreateContainer(image model.ContainerImage, node model.Node, cluster model.Cluster) (
+	container model.Container, err error) {
+	config := go_portainer.Config{
+		Host:     cluster.Ip,
+		Port:     cluster.Port,
+		User:     cluster.Username,
+		Password: cluster.Password,
+		Schema:   "http",
+		URL:      "/api",
+	}
+	portainer := go_portainer.NewPortainer(&config)
+	err = portainer.Auth()
+	if err != nil {
+		_logUtils.Print("fail to connect portainer, error: " + err.Error())
+		return
+	}
+
+	endpoint, _ := strconv.Atoi(node.Tag)
+	vmHostName := serverUtils.GenVmHostName(image.OsPlatform, image.OsName, image.OsLang)
+
+	body := map[string]interface{}{}
+	body["Hostname"] = vmHostName
+	body["Image"] = image.Name
+
+	dockerId, err := portainer.CreateContainer(uint(endpoint), body)
+	if err != nil {
+		_logUtils.Printf("fail to create container, error: %d-%s", dockerId, err.Error())
+		return
+	}
+
+	_, err = portainer.StartContainer(uint(endpoint), dockerId)
+	if err != nil {
+		_logUtils.Printf("fail to start container, error: %d-%s", dockerId, err.Error())
+		return
+	}
+
+	container.Ident = dockerId
+	container.NodeId = node.ID
+	container.ClusterId = cluster.ID
 
 	return
 }

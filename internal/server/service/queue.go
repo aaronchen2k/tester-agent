@@ -11,8 +11,10 @@ import (
 type QueueService struct {
 	TaskService *TaskService `inject:""`
 
-	QueueRepo  *repo.QueueRepo  `inject:""`
-	DeviceRepo *repo.DeviceRepo `inject:""`
+	QueueRepo       *repo.QueueRepo          `inject:""`
+	DeviceRepo      *repo.DeviceRepo         `inject:""`
+	VmTemplRepo     *repo.VmTemplRepo        `inject:""`
+	DockerImageRepo *repo.ContainerImageRepo `inject:""`
 }
 
 func NewQueueService() *QueueService {
@@ -28,6 +30,8 @@ func (s *QueueService) GenerateFromTask(task model.Task) {
 		s.GenerateAppiumQueue(task)
 	} else if task.BuildType == _const.SeleniumTest {
 		s.GenerateSeleniumQueue(task)
+	} else if task.BuildType == _const.UnitTest {
+		s.GenerateUnitTestQueue(task)
 	}
 
 	return
@@ -41,7 +45,7 @@ func (s *QueueService) GenerateAppiumQueue(task model.Task) {
 	if serial == "" {
 		device = s.DeviceRepo.GetBySerial(serial)
 	} else {
-		device = s.getDeviceFromEnv(env)
+		device = s.getDeviceByEnv(env)
 	}
 
 	if device.ID == 0 { // not found
@@ -53,7 +57,7 @@ func (s *QueueService) GenerateAppiumQueue(task model.Task) {
 
 	if device.ID != 0 {
 		queue := model.NewQueueDetail(
-			task.BuildType, task.Priority, task.GroupId, task.ID,
+			_const.AppiumTest, task.Priority, task.GroupId, task.ID,
 			task.TaskName, task.UserName,
 			env, task.TestObject)
 
@@ -66,11 +70,31 @@ func (s *QueueService) GenerateAppiumQueue(task model.Task) {
 func (s *QueueService) GenerateSeleniumQueue(task model.Task) {
 	env := task.TestEnv
 
-	vmTempl := s.getVmTemplFromEnv(env)
+	vmTempl := s.getVmTemplByEnv(env)
+	if vmTempl.ID == 0 {
+		return
+	}
+
 	env.VmTemplId = vmTempl.ID
 
 	queue := model.NewQueueDetail(
-		task.BuildType, task.Priority, task.GroupId, task.ID,
+		_const.SeleniumTest, task.Priority, task.GroupId, task.ID,
+		task.TaskName, task.UserName,
+		env, task.TestObject)
+
+	s.QueueRepo.Save(&queue)
+
+	return
+}
+
+func (s *QueueService) GenerateUnitTestQueue(task model.Task) {
+	env := task.TestEnv
+
+	vmTempl := s.getVmTemplByEnv(env)
+	env.VmTemplId = vmTempl.ID
+
+	queue := model.NewQueueDetail(
+		_const.UnitTest, task.Priority, task.GroupId, task.ID,
 		task.TaskName, task.UserName,
 		env, task.TestObject)
 
@@ -86,7 +110,7 @@ func (s *QueueService) SetQueueResult(queueId uint, progress _const.BuildProgres
 	s.TaskService.CheckCompleted(queue.TaskId)
 }
 
-func (s *QueueService) getDeviceFromEnv(env base.TestEnv) (dev model.Device) {
+func (s *QueueService) getDeviceByEnv(env base.TestEnv) (dev model.Device) {
 	if env.DeviceId != 0 {
 		dev := s.DeviceRepo.Get(env.DeviceId)
 		if dev.ID > 0 {
@@ -106,7 +130,21 @@ func (s *QueueService) getDeviceFromEnv(env base.TestEnv) (dev model.Device) {
 	return
 }
 
-func (s *QueueService) getVmTemplFromEnv(env base.TestEnv) (dev model.VmTempl) {
+func (s *QueueService) getVmTemplByEnv(env base.TestEnv) (templ model.VmTempl) {
+	if env.VmTemplId != 0 {
+		templ := s.VmTemplRepo.Get(env.VmTemplId)
+		if templ.ID > 0 {
+			return templ
+		}
+	}
+
+	templ = s.VmTemplRepo.GetByEnv(env)
+
+	return
+}
+
+func (s *QueueService) getDockerImageByEnv(env base.TestEnv) (image model.ContainerImage) {
+	image = s.DockerImageRepo.GetByEnv(env)
 
 	return
 }

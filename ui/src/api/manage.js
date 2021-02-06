@@ -4,6 +4,8 @@ const prefix = '/v1/admin'
 
 const api = {
   profile: `${prefix}/profile`,
+  machines: `${prefix}/machines`,
+  plans: `${prefix}/plans`,
   vms: `${prefix}/vms`,
   containers: `${prefix}/containers`,
 
@@ -15,7 +17,7 @@ const api = {
   orgTree: `${prefix}/org/tree`
 }
 
-export default api
+export const WsApi = 'ws://127.0.0.1:8085/api/v1/ws'
 
 export function getProfile (parameter) {
   return request({
@@ -24,16 +26,24 @@ export function getProfile (parameter) {
     data: parameter
   })
 }
+
+export function listPlan () {
+  return request({
+    url: api.plans,
+    method: 'get',
+    params: {}
+  })
+}
 export function listVm () {
   return request({
-    url: api.vms,
+    url: api.machines + '/listVm',
     method: 'get',
     params: {}
   })
 }
 export function listContainer (parameter) {
   return request({
-    url: api.containers,
+    url: api.machines + '/listContainers',
     method: 'get',
     params: parameter
   })

@@ -9,4 +9,5 @@ type VmInterface interface {
 	MachineInterface
 
 	ListVm(clusterNode *domain.ResNode) ([]*model.Vm, error)
+	CreateVm(templ model.VmTempl, node model.Node, cluster model.Cluster) (model.Vm, error)
 }

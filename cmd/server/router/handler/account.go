@@ -14,7 +14,7 @@ import (
 	"github.com/kataras/iris/v12"
 )
 
-type AccountController struct {
+type AccountCtrl struct {
 	UserService *service.UserService `inject:""`
 
 	UserRepo  *repo.UserRepo  `inject:""`
@@ -23,8 +23,8 @@ type AccountController struct {
 	PermRepo  *repo.PermRepo  `inject:""`
 }
 
-func NewAccountController() *AccountController {
-	return &AccountController{}
+func NewAccountCtrl() *AccountCtrl {
+	return &AccountCtrl{}
 }
 
 /**
@@ -41,12 +41,12 @@ func NewAccountController() *AccountController {
 * @apiSuccess {String} data 返回数据
 * @apiPermission null
  */
-func (c *AccountController) UserLogin(ctx iris.Context) {
+func (c *AccountCtrl) UserLogin(ctx iris.Context) {
 	ctx.StatusCode(iris.StatusOK)
 	aul := new(validate.LoginRequest)
 
 	if err := ctx.ReadJSON(aul); err != nil {
-		_, _ = ctx.JSON(utils.ApiRes(400, err.Error(), nil))
+		_, _ = ctx.JSON(_utils.ApiRes(400, err.Error(), nil))
 		return
 	}
 
@@ -55,7 +55,7 @@ func (c *AccountController) UserLogin(ctx iris.Context) {
 		errs := err.(validator.ValidationErrors)
 		for _, e := range errs.Translate(validate.ValidateTrans) {
 			if len(e) > 0 {
-				_, _ = ctx.JSON(utils.ApiRes(400, e, nil))
+				_, _ = ctx.JSON(_utils.ApiRes(400, e, nil))
 				return
 			}
 		}
@@ -74,7 +74,7 @@ func (c *AccountController) UserLogin(ctx iris.Context) {
 	}
 	user, err := c.UserRepo.GetUser(search)
 	if err != nil {
-		_, _ = ctx.JSON(utils.ApiRes(400, err.Error(), nil))
+		_, _ = ctx.JSON(_utils.ApiRes(400, err.Error(), nil))
 		return
 	}
 
@@ -88,7 +88,7 @@ func (c *AccountController) UserLogin(ctx iris.Context) {
 
 	c.UserService.UpdateRefreshToken(user.ID, refreshToken)
 
-	_, _ = ctx.JSON(utils.ApiRes(code, msg, response))
+	_, _ = ctx.JSON(_utils.ApiRes(code, msg, response))
 }
 
 /**
@@ -103,7 +103,7 @@ func (c *AccountController) UserLogin(ctx iris.Context) {
 * @apiSuccess {String} data 返回数据
 * @apiPermission null
  */
-func (c *AccountController) UserLogout(ctx iris.Context) {
+func (c *AccountCtrl) UserLogout(ctx iris.Context) {
 	ctx.StatusCode(iris.StatusOK)
 	value := ctx.Values().Get("jwt").(*jwt.Token)
 
@@ -117,19 +117,19 @@ func (c *AccountController) UserLogout(ctx iris.Context) {
 
 		credentials, err = c.TokenRepo.GetRedisSession(conn, value.Raw)
 		if err != nil {
-			_, _ = ctx.JSON(utils.ApiRes(400, err.Error(), nil))
+			_, _ = ctx.JSON(_utils.ApiRes(400, err.Error(), nil))
 			return
 		}
 		if credentials != nil {
 			if err := c.TokenRepo.DelUserTokenCache(conn, *credentials, value.Raw); err != nil {
-				_, _ = ctx.JSON(utils.ApiRes(400, err.Error(), nil))
+				_, _ = ctx.JSON(_utils.ApiRes(400, err.Error(), nil))
 				return
 			}
 		}
 	} else {
 		credentials = sessionUtils.GetCredentials(ctx)
 		if credentials == nil {
-			_, _ = ctx.JSON(utils.ApiRes(400, err.Error(), nil))
+			_, _ = ctx.JSON(_utils.ApiRes(400, err.Error(), nil))
 			return
 		} else {
 			sessionUtils.RemoveCredentials(ctx)
@@ -137,7 +137,7 @@ func (c *AccountController) UserLogout(ctx iris.Context) {
 	}
 
 	ctx.Application().Logger().Infof("%d 退出系统", credentials.UserId)
-	_, _ = ctx.JSON(utils.ApiRes(200, "退出", nil))
+	_, _ = ctx.JSON(_utils.ApiRes(200, "退出", nil))
 }
 
 /**
@@ -152,7 +152,7 @@ func (c *AccountController) UserLogout(ctx iris.Context) {
 * @apiSuccess {String} data 返回数据
 * @apiPermission null
  */
-func (c *AccountController) UserExpire(ctx iris.Context) {
+func (c *AccountCtrl) UserExpire(ctx iris.Context) {
 
 	ctx.StatusCode(iris.StatusOK)
 	value := ctx.Values().Get("jwt").(*jwt.Token)
@@ -160,15 +160,15 @@ func (c *AccountController) UserExpire(ctx iris.Context) {
 	defer conn.Close()
 	sess, err := c.TokenRepo.GetRedisSession(conn, value.Raw)
 	if err != nil {
-		_, _ = ctx.JSON(utils.ApiRes(400, err.Error(), nil))
+		_, _ = ctx.JSON(_utils.ApiRes(400, err.Error(), nil))
 		return
 	}
 	if sess != nil {
 		if err := c.TokenRepo.UpdateUserTokenCacheExpire(conn, *sess, value.Raw); err != nil {
-			_, _ = ctx.JSON(utils.ApiRes(400, err.Error(), nil))
+			_, _ = ctx.JSON(_utils.ApiRes(400, err.Error(), nil))
 			return
 		}
 	}
 
-	_, _ = ctx.JSON(utils.ApiRes(200, "", nil))
+	_, _ = ctx.JSON(_utils.ApiRes(200, "", nil))
 }

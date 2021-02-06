@@ -14,28 +14,28 @@ export const asyncRouterMap = [
     name: 'index',
     component: BasicLayout,
     meta: { title: 'menu.home' },
-    redirect: '/task',
+    redirect: '/exec',
     children: [
 
       // home
       {
-        path: '/task',
-        name: 'task',
-        redirect: '/task/execution/list',
+        path: '/exec',
+        name: 'exec',
+        redirect: '/exec/plan/list',
         component: RouteView,
-        meta: { title: 'menu.task', keepAlive: true, icon: bxAnaalyse, permission: [ 'task' ] },
+        meta: { title: 'menu.task', keepAlive: true, icon: bxAnaalyse, permission: [ 'exec' ] },
         hideChildrenInMenu: false,
         children: [
           {
-            path: '/task/execution/list',
-            name: 'execution-list',
-            component: () => import('@/views/task/execution/List'),
-            meta: { title: 'menu.execution', keepAlive: true, permission: [ 'task' ] }
+            path: '/exec/plan/list',
+            name: 'plan-list',
+            component: () => import('@/views/exec/plan/List'),
+            meta: { title: 'menu.plan', keepAlive: true, permission: [ 'exec' ] }
           },
           {
-            path: '/task/history/list',
+            path: '/exec/history/list',
             name: 'history-list',
-            component: () => import('@/views/task/history/List'),
+            component: () => import('@/views/exec/history/List'),
             meta: { title: 'menu.history', permission: [ 'task' ] }
           }
         ]

@@ -17,7 +17,7 @@ type TaskRepo struct {
 }
 
 func (r *TaskRepo) Save(task *model.Task) (err error) {
-	err = r.DB.Model(&task).Omit("StartTime", "PendingTime", "ResultTime").Create(&task).Error
+	err = r.DB.Model(&task).Omit("").Create(&task).Error
 	return
 }
 

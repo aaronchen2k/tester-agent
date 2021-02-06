@@ -9,23 +9,23 @@ import (
 )
 
 type ClusterService struct {
-	HostRepo  *repo.ClusterRepo `inject:""`
-	ImageRepo *repo.ImageRepo   `inject:""`
-	VmRepo    *repo.VmRepo      `inject:""`
+	HostRepo        *repo.ClusterRepo        `inject:""`
+	DockerImageRepo *repo.ContainerImageRepo `inject:""`
+	VmRepo          *repo.VmRepo             `inject:""`
 }
 
 func NewHostService() *ClusterService {
 	return &ClusterService{}
 }
 
-func (s *ClusterService) GetValidForQueue(queue model.Queue) (hostId, backingImageId int) {
-	imageIds1 := s.ImageRepo.QueryByOs(queue.OsPlatform, queue.OsName, queue.OsLang)
-	imageIds2 := s.ImageRepo.QueryByBrowser(queue.BrowserType, queue.BrowserVer)
+func (s *ClusterService) GetValidForQueue(queue model.Queue) (hostId, backingImageId uint) {
+	imageIds1 := s.DockerImageRepo.QueryByOs(queue.OsPlatform, queue.OsName, queue.OsLang)
+	imageIds2 := s.DockerImageRepo.QueryByBrowser(queue.BrowserType, queue.BrowserVer)
 
-	images := make([]int, 0)
+	images := make([]uint, 0)
 	for id := range imageIds1 {
 		if _numbUtils.FindIntInArr(id, imageIds2) {
-			images = append(images, id)
+			images = append(images, uint(id))
 		}
 	}
 
@@ -43,11 +43,11 @@ func (s *ClusterService) GetValidForQueue(queue model.Queue) (hostId, backingIma
 	return
 }
 
-func (s *ClusterService) getIdleHost() (ids []int) {
+func (s *ClusterService) getIdleHost() (ids []uint) {
 	// keys: hostId, vmCount
 	hostToVmCountList := s.HostRepo.QueryIdle(_const.MaxVmOnHost)
 
-	hostIds := make([]int, 0)
+	hostIds := make([]uint, 0)
 	for _, mp := range hostToVmCountList {
 		hostId := mp["hostId"]
 		hostIds = append(hostIds, hostId)

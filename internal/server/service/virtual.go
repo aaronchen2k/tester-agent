@@ -4,34 +4,34 @@ import (
 	"github.com/aaronchen2k/tester/internal/pkg/const"
 	serverConf "github.com/aaronchen2k/tester/internal/server/cfg"
 	"github.com/aaronchen2k/tester/internal/server/domain"
-	serviceImpl "github.com/aaronchen2k/tester/internal/server/service/impl"
+	"github.com/aaronchen2k/tester/internal/server/model"
 	serviceInterface "github.com/aaronchen2k/tester/internal/server/service/interface"
 	serverConst "github.com/aaronchen2k/tester/internal/server/utils/const"
 	"strconv"
 )
 
-type MachineService struct {
+type VirtualService struct {
 	ClusterService *ClusterService `inject:""`
 
 	VmService        serviceInterface.VmInterface
 	ContainerService serviceInterface.ContainerInterface
 }
 
-func NewMachineService() *MachineService {
-	inst := &MachineService{}
+func NewVirtualService() *VirtualService {
+	inst := &VirtualService{}
 
 	if serverConf.Config.Adapter.VmPlatform == serverConst.Pve {
-		inst.VmService = serviceImpl.NewPveService()
+		inst.VmService = NewPveService()
 	}
 
 	if serverConf.Config.Adapter.ContainerPlatform == serverConst.Portainer {
-		inst.ContainerService = serviceImpl.NewPortainerService()
+		inst.ContainerService = NewPortainerService()
 	}
 
 	return inst
 }
 
-func (s *MachineService) ListVm() (rootNode *domain.ResNode) {
+func (s *VirtualService) ListVm() (rootNode *domain.ResNode) {
 	rootNode = &domain.ResNode{Name: "虚拟机", Type: _const.ResRoot, Id: "0"}
 	hosts := s.ClusterService.ListByType("pve")
 
@@ -52,7 +52,7 @@ func (s *MachineService) ListVm() (rootNode *domain.ResNode) {
 	return
 }
 
-func (s *MachineService) ListContainers() (rootNode *domain.ResNode) {
+func (s *VirtualService) ListContainers() (rootNode *domain.ResNode) {
 	rootNode = &domain.ResNode{Name: "容器", Type: _const.ResRoot, Id: "0"}
 	hosts := s.ClusterService.ListByType("portainer")
 
@@ -67,6 +67,22 @@ func (s *MachineService) ListContainers() (rootNode *domain.ResNode) {
 
 		s.ContainerService.GetNodeTree(hostNode)
 	}
+
+	return
+}
+
+func (s *VirtualService) CreateVm(templ model.VmTempl, node model.Node, cluster model.Cluster) (
+	vm model.Vm, err error) {
+
+	vm, err = s.VmService.CreateVm(templ, node, cluster)
+
+	return
+}
+
+func (s *VirtualService) CreateContainer(image model.ContainerImage, node model.Node, cluster model.Cluster) (
+	container model.Container, err error) {
+
+	container, err = s.ContainerService.CreateContainer(image, node, cluster)
 
 	return
 }

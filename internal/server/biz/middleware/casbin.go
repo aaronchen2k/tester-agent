@@ -30,13 +30,13 @@ func (m *CasbinService) Serve(ctx iris.Context) {
 
 	if credentials == nil {
 		ctx.StopExecution()
-		_, _ = ctx.JSON(utils.ApiRes(401, "", nil))
+		_, _ = ctx.JSON(_utils.ApiRes(401, "", nil))
 		ctx.StopExecution()
 		return
 	} else {
 		check, err := m.Check(ctx.Request(), credentials.UserId)
 		if !check {
-			_, _ = ctx.JSON(utils.ApiRes(403, err.Error(), nil))
+			_, _ = ctx.JSON(_utils.ApiRes(403, err.Error(), nil))
 			ctx.StopExecution()
 			return
 		} else {

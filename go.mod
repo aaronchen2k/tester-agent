@@ -7,13 +7,16 @@ require (
 	github.com/azumads/faker v0.0.0-20150921074035-6cae71ddb107
 	github.com/bxcodec/faker/v3 v3.5.0
 	github.com/casbin/casbin/v2 v2.19.2
-	github.com/coreos/etcd v3.3.13+incompatible
+	github.com/coreos/etcd v3.3.13+incompatible // indirect
 	github.com/denisenkom/go-mssqldb v0.9.0 // indirect
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/easysoft/zmanager v0.0.0-20210113092058-fb8dd8b2608e
 	github.com/emirpasic/gods v1.12.0
+	github.com/facebookgo/ensure v0.0.0-20200202191622-63f1cf65ac4c // indirect
 	github.com/facebookgo/inject v0.0.0-20180706035515-f23751cae28b
+	github.com/facebookgo/stack v0.0.0-20160209184415-751773369052 // indirect
 	github.com/facebookgo/structtag v0.0.0-20150214074306-217e25fb9691 // indirect
+	github.com/facebookgo/subset v0.0.0-20200203212716-c811ad88dec4 // indirect
 	github.com/fatih/color v1.10.0
 	github.com/flosch/pongo2/v4 v4.0.1 // indirect
 	github.com/go-errors/errors v1.0.1
@@ -22,11 +25,13 @@ require (
 	github.com/go-playground/universal-translator v0.17.0
 	github.com/go-playground/validator/v10 v10.4.1
 	github.com/gofrs/uuid v3.3.0+incompatible // indirect
+	github.com/goinggo/mapstructure v0.0.0-20140717182941-194205d9b4a9 // indirect
 	github.com/golang/protobuf v1.4.3 // indirect
 	github.com/gomodule/redigo v2.0.0+incompatible
 	github.com/google/go-cmp v0.5.4 // indirect
 	github.com/gopherjs/gopherjs v0.0.0-20200217142428-fce0ec30dd00 // indirect
-	github.com/huandu/go-clone v1.1.4
+	github.com/gorilla/websocket v1.4.2
+	github.com/huandu/go-clone v1.1.4 // indirect
 	github.com/iris-contrib/go.uuid v2.0.0+incompatible
 	github.com/iris-contrib/httpexpect/v2 v2.0.5
 	github.com/iris-contrib/middleware/cors v0.0.0-20201115103636-07e8bced147f
@@ -38,14 +43,17 @@ require (
 	github.com/jinzhu/gorm v1.9.12
 	github.com/k0kubun/colorstring v0.0.0-20150214042306-9440f1994b88 // indirect
 	github.com/kardianos/service v1.2.0
+	github.com/kataras/iris v0.0.2
 	github.com/kataras/iris/v12 v12.2.0-alpha2
-	github.com/lestrrat/go-file-rotatelogs v0.0.0-20180223000712-d3151e2a480f
+	github.com/kataras/neffos v0.0.18
+	github.com/lestrrat/go-file-rotatelogs v0.0.0-20180223000712-d3151e2a480f // indirect
 	github.com/lib/pq v1.8.0 // indirect
 	github.com/manveru/gobdd v0.0.0-20131210092515-f1a17fdd710b // indirect
 	github.com/mattn/go-sqlite3 v2.0.3+incompatible // indirect
 	github.com/mholt/archiver/v3 v3.5.0
 	github.com/mitchellh/mapstructure v1.1.2
 	github.com/mna/redisc v1.1.7
+	github.com/nats-io/nats-server/v2 v2.1.9 // indirect
 	github.com/nxadm/tail v1.4.5 // indirect
 	github.com/pkg/errors v0.9.1
 	github.com/rifflock/lfshook v0.0.0-20180920164130-b9218ef580f5

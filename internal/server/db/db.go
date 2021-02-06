@@ -109,10 +109,10 @@ func DBFile() string {
 		return DBFileDev()
 	}
 
-	path := filepath.Join(utils.GetExeDir(), strings.ToLower(serverConf.Config.DB.Name+".db"))
+	path := filepath.Join(_utils.GetExeDir(), strings.ToLower(serverConf.Config.DB.Name+".db"))
 	return path
 }
 
 func DBFileDev() string {
-	return filepath.Join(utils.CWD(), strings.ToLower(utils.EXEName())+".dev.db")
+	return filepath.Join(_utils.CWD(), strings.ToLower(_utils.EXEName())+".dev.db")
 }

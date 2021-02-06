@@ -32,12 +32,12 @@ func main() {
 	flagSet = flag.NewFlagSet("tester", flag.ContinueOnError)
 
 	flagSet.StringVar(&agentConf.Inst.KvmDir, "k", "kvm", "")
-	flagSet.StringVar(&agentConf.Inst.WorkDir, "w", "farm", "")
+	flagSet.StringVar(&agentConf.Inst.WorkDir, "w", "work", "")
 
 	flagSet.StringVar(&agentConf.Inst.FarmServer, "s", "", "")
 	flagSet.StringVar(&agentConf.Inst.Ip, "i", "", "")
-	flagSet.IntVar(&agentConf.Inst.Port, "p", 10, "")
-	flagSet.StringVar(&platform, "t", string(_const.OsAndroid), "")
+	flagSet.IntVar(&agentConf.Inst.Port, "p", 0, "")
+	flagSet.StringVar(&platform, "t", "", "")
 
 	flagSet.BoolVar(&help, "h", false, "")
 

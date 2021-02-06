@@ -39,28 +39,28 @@ func (r *ClusterRepo) QueryByType(tp string) (clusters []model.Cluster, err erro
 	return
 }
 
-func (r *ClusterRepo) Get(id int) (cluster model.Cluster) {
+func (r *ClusterRepo) Get(id uint) (cluster model.Cluster) {
 	r.DB.Where("id=?", id).First(&cluster)
 	return
 }
 
-func (r *ClusterRepo) QueryByImages(images []int, ids []int) (clusterId, backingImageId int) {
+func (r *ClusterRepo) QueryByImages(images []uint, ids []uint) (clusterId, backingImageId uint) {
 	sql := `SELECT r.clusterId, r.backingImageId imageId 
 			FROM BizClusterCapability_relation r 
 		    INNER JOIN BizCluster cluster on r.clusterId = cluster.id 
 
 	        WHERE cluster.status = 'active' 
 			AND r.backingImageId IN (` +
-		strings.Join(_commonUtils.IntToStrArr(images), ",") +
+		strings.Join(_commonUtils.UintToStrArr(images), ",") +
 		`) AND cluster.id IN ("` +
-		strings.Join(_commonUtils.IntToStrArr(ids), ",") +
+		strings.Join(_commonUtils.UintToStrArr(ids), ",") +
 		`) LIMIT 1`
 
 	r.DB.Raw(sql).Scan(&ids)
 	return
 }
 
-func (r *ClusterRepo) QueryIdle(cluster int) (ret []map[string]int) {
+func (r *ClusterRepo) QueryIdle(cluster int) (ret []map[string]uint) {
 	sql := `SELECT temp.clusterId, temp.vmCount 
 			FROM (
 				SELECT DISTINCT cluster.id clusterId, IFNULL(sub.num, 0) vmCount

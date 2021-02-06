@@ -83,7 +83,7 @@ func (m *TokenService) Serve(ctx iris.Context) {
 	credentials, _ = m.GetCredentials(value, ctx)
 	if credentials == nil {
 		ctx.StopExecution()
-		_, _ = ctx.JSON(utils.ApiRes(401, "", nil))
+		_, _ = ctx.JSON(_utils.ApiRes(401, "", nil))
 		ctx.StopExecution()
 		return
 	}
@@ -100,7 +100,7 @@ func (m *TokenService) GetCredentials(value *jwt.Token, ctx iris.Context) (
 		credentials, err = m.TokenRepo.GetRedisSession(conn, value.Raw)
 		if err != nil || credentials == nil {
 			m.TokenRepo.UserTokenExpired(value.Raw)
-			_, _ = ctx.JSON(utils.ApiRes(401, "", nil))
+			_, _ = ctx.JSON(_utils.ApiRes(401, "", nil))
 			ctx.StopExecution()
 			return
 		}

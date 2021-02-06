@@ -1,6 +1,7 @@
 package _commonUtils
 
 import (
+	"fmt"
 	"github.com/emirpasic/gods/maps"
 	"os"
 	"os/user"
@@ -57,6 +58,13 @@ func UpdateUrl(url string) string {
 func IntToStrArr(intArr []int) (strArr []string) {
 	for _, i := range intArr {
 		strArr = append(strArr, strconv.Itoa(i))
+	}
+
+	return
+}
+func UintToStrArr(intArr []uint) (strArr []string) {
+	for _, i := range intArr {
+		strArr = append(strArr, fmt.Sprintf("%d", i))
 	}
 
 	return

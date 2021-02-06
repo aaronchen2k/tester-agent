@@ -2,9 +2,9 @@ package seleniumService
 
 import (
 	"fmt"
-	constanct "github.com/aaronchen2k/tester/internal/agent/libs/const"
 	commonService "github.com/aaronchen2k/tester/internal/agent/service/common"
 	execService "github.com/aaronchen2k/tester/internal/agent/service/exec"
+	agentConst "github.com/aaronchen2k/tester/internal/agent/utils/const"
 	_domain "github.com/aaronchen2k/tester/internal/pkg/domain"
 	"strings"
 )
@@ -38,8 +38,8 @@ func parseBuildCommand(build *_domain.BuildTo) {
 	//				  -DdriverType=${driverType}
 	//		 		  -DdriverPath=${driverPath}
 
-	command := strings.ReplaceAll(build.BuildCommands, constanct.BuildParamSeleniumDriverType, build.SeleniumDriverVersion)
-	command = strings.ReplaceAll(command, constanct.BuildParamSeleniumDriverPath, build.SeleniumDriverPath)
+	command := strings.ReplaceAll(build.BuildCommands, agentConst.BuildParamSeleniumDriverType, build.SeleniumDriverVersion)
+	command = strings.ReplaceAll(command, agentConst.BuildParamSeleniumDriverPath, build.SeleniumDriverPath)
 
 	build.BuildCommands = command
 }

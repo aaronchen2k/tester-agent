@@ -1,33 +1,72 @@
 package handler
 
 import (
-	"fmt"
-	_domain "github.com/aaronchen2k/tester/internal/pkg/domain"
-	_logUtils "github.com/aaronchen2k/tester/internal/pkg/libs/log"
+	"github.com/aaronchen2k/tester/internal/pkg/utils"
 	"github.com/aaronchen2k/tester/internal/server/model"
 	"github.com/aaronchen2k/tester/internal/server/service"
+	serverConst "github.com/aaronchen2k/tester/internal/server/utils/const"
 	"github.com/kataras/iris/v12"
+	"strconv"
 )
 
-type PlanController struct {
-	Ctx         iris.Context
+type PlanCtrl struct {
+	BaseCtrl
+
 	PlanService *service.PlanService `inject:""`
 	TaskService *service.TaskService `inject:""`
 }
 
-func NewPlanController() *PlanController {
-	return &PlanController{}
+func NewPlanCtrl() *PlanCtrl {
+	return &PlanCtrl{}
 }
-func (g *PlanController) PostCreate() (result _domain.RpcResult) {
-	var plan model.Plan
-	if err := g.Ctx.ReadJSON(&plan); err != nil {
-		_logUtils.Error(err.Error())
-		result.Fail("wrong request data")
+
+func (c *PlanCtrl) List(ctx iris.Context) {
+	keywords := ctx.FormValue("keywords")
+	pageNoStr := ctx.FormValue("pageNo")
+	pageSizeStr := ctx.FormValue("pageSize")
+
+	pageNo, _ := strconv.Atoi(pageNoStr)
+	pageSize, _ := strconv.Atoi(pageSizeStr)
+	if pageSize == 0 {
+		pageSize = serverConst.PageSize
+	}
+
+	plans, total := c.PlanService.List(keywords, pageNo, pageSize)
+
+	_, _ = ctx.JSON(_utils.ApiResPage(200, "请求成功",
+		plans, pageNo, pageSize, total))
+}
+
+func (c *PlanCtrl) Get(ctx iris.Context) {
+
+}
+
+func (c *PlanCtrl) Create(ctx iris.Context) {
+	ctx.StatusCode(iris.StatusOK)
+	plan := new(model.Plan)
+	if err := ctx.ReadJSON(plan); err != nil {
+		_, _ = ctx.JSON(_utils.ApiRes(400, err.Error(), nil))
 		return
 	}
 
-	po := g.PlanService.Save(plan)
-	count := g.TaskService.GenerateFromPlan(po)
-	result.Success(fmt.Sprintf("create %d tasks for plan %d.", count, po.ID))
-	return result
+	if c.Validate(*plan, ctx) {
+		return
+	}
+
+	err := c.PlanService.Save(plan)
+	if err != nil {
+		_, _ = ctx.JSON(_utils.ApiRes(400, "操作失败", nil))
+		return
+	}
+
+	_, _ = ctx.JSON(_utils.ApiRes(200, "操作成功", plan))
+	return
+}
+
+func (c *PlanCtrl) Update(ctx iris.Context) {
+
+}
+
+func (c *PlanCtrl) Delete(ctx iris.Context) {
+
 }

@@ -20,17 +20,18 @@ func Init() {
 	}
 
 	usr, _ := user.Current()
-	log.Warn("run as user " + usr.Username)
+	log.Info("run as user " + usr.Username)
 
 	_vari.WorkDir = addPathSepIfNeeded(path.Join(usr.HomeDir, "tester-manager"))
 	logDir := addPathSepIfNeeded(path.Join(_vari.WorkDir, "log"))
 	MkDirIfNeeded(logDir)
-	log.Warn("log dir is " + logDir)
+	log.Info("log dir is " + logDir)
 
 	logger = logrus.New()
 	logger.Out = ioutil.Discard
 
 	pathMap := lfshook.PathMap{
+		logrus.InfoLevel:  logDir + "log.txt",
 		logrus.WarnLevel:  logDir + "log.txt",
 		logrus.ErrorLevel: logDir + "error.txt",
 	}

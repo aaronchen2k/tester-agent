@@ -11,22 +11,22 @@ import (
 )
 
 func RegisterHost() {
-	host := _domain.Host{Ip: agentConf.Inst.Ip, Port: agentConf.Inst.Port, Status: _const.HostActive}
-	host.Vms = getVms()
-	updateVms(host.Vms)
-
-	url := _httpUtils.GenUrl(agentConf.Inst.FarmServer, "host/register")
-	resp, ok := _httpUtils.Post(url, host)
-
-	msg := ""
-	str := "%s to register host, response is %#v"
-	if ok {
-		msg = "success"
-		_logUtils.Infof(str, msg, resp)
-	} else {
-		msg = "fail"
-		_logUtils.Errorf(str, msg, resp)
-	}
+	//host := _domain.Host{Ip: agentConf.Inst.Ip, Port: agentConf.Inst.Port, Status: _const.HostActive}
+	//host.Vms = getVms()
+	//updateVms(host.Vms)
+	//
+	//url := _httpUtils.GenUrl(agentConf.Inst.FarmServer, "host/register")
+	//resp, ok := _httpUtils.Post(url, host)
+	//
+	//msg := ""
+	//str := "%s to register host, response is %#v"
+	//if ok {
+	//	msg = "success"
+	//	_logUtils.Infof(str, msg, resp)
+	//} else {
+	//	msg = "fail"
+	//	_logUtils.Errorf(str, msg, resp)
+	//}
 }
 
 func RegisterVm(isBusy bool) {

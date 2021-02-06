@@ -1,18 +1,18 @@
 package deviceService
 
 import (
+	agentConf "github.com/aaronchen2k/tester/internal/agent/cfg"
 	androidService "github.com/aaronchen2k/tester/internal/agent/service/device/android"
 	iosService "github.com/aaronchen2k/tester/internal/agent/service/device/ios"
-	"github.com/aaronchen2k/tester/internal/agent/utils/common"
 	_const "github.com/aaronchen2k/tester/internal/pkg/const"
 	_domain "github.com/aaronchen2k/tester/internal/pkg/domain"
 )
 
 func RefreshDevices() []_domain.DeviceInst {
-	if agentUntils.IsAndroidAgent() {
+	if agentConf.IsAndroidAgent() {
 		androidService.Devices = androidService.GetDeviceInsts()
 		return androidService.Devices
-	} else if agentUntils.IsIosAgent() {
+	} else if agentConf.IsIosAgent() {
 		iosService.Devices = iosService.GetDeviceInsts()
 		return iosService.Devices
 	}
@@ -22,9 +22,9 @@ func RefreshDevices() []_domain.DeviceInst {
 
 func GetDevice(serial string) (_domain.DeviceInst, bool) {
 	var devices []_domain.DeviceInst
-	if agentUntils.IsAndroidAgent() {
+	if agentConf.IsAndroidAgent() {
 		devices = androidService.Devices
-	} else if agentUntils.IsIosAgent() {
+	} else if agentConf.IsIosAgent() {
 		devices = iosService.Devices
 	}
 

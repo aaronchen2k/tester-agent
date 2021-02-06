@@ -48,15 +48,13 @@ func (s *RpcService) CreateVm(req _domain.PveReq) (result _domain.RpcResult) {
 	result.Success(fmt.Sprintf("success to create vm via rpc %#v.", req))
 	return
 }
-
-func (s *RpcService) RestartVm(req _domain.PveReq) (result _domain.RpcResult) {
+func (s *RpcService) DestroyVm(req _domain.PveReq) (result _domain.RpcResult) {
 	obj := interface{}(req)
-	result = s.Request(req.NodeIp, req.NodePort, "vm", "Restart", &obj)
+	s.Request(req.NodeIp, req.NodePort, "vm", "destroy", &obj)
 
-	result.Success(fmt.Sprintf("success to start vm via rpc %#v.", req))
+	result.Success(fmt.Sprintf("success to stop vm via rpc %#v.", req))
 	return
 }
-
 func (s *RpcService) StartVm(req _domain.PveReq) (result _domain.RpcResult) {
 	obj := interface{}(req)
 	s.Request(req.NodeIp, req.NodePort, "vm", "Start", &obj)
@@ -64,7 +62,6 @@ func (s *RpcService) StartVm(req _domain.PveReq) (result _domain.RpcResult) {
 	result.Success(fmt.Sprintf("success to start vm via rpc %#v.", req))
 	return
 }
-
 func (s *RpcService) StopVm(req _domain.PveReq) (result _domain.RpcResult) {
 	obj := interface{}(req)
 	s.Request(req.NodeIp, req.NodePort, "vm", "Stop", &obj)

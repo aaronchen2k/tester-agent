@@ -5,14 +5,13 @@ import (
 )
 
 type TestObject struct {
-	ScriptUrl   string
-	ScmAddress  string
-	ScmAccount  string
-	ScmPassword string
+	ScriptUrl   string `gorm:"scriptUrl" json:"scriptUrl,omitempty"`
+	ScmAddress  string `gorm:"scmAddress" json:"scmAddress,omitempty"`
+	ScmAccount  string `gorm:"scmAccount" json:"scmAccount,omitempty"`
+	ScmPassword string `gorm:"scmPassword" json:"scmPassword,omitempty"`
 
-	AppUrl          string
-	BuildCommands   string
-	ResultFiles     string
-	KeepResultFiles _domain.MyBool
-	UserName        string
+	AppUrl          string         `gorm:"appUrl" json:"appUrl,omitempty"`
+	BuildCommands   string         `gorm:"buildCommands" json:"buildCommands,omitempty"`
+	ResultFiles     string         `gorm:"resultFiles" json:"resultFiles,omitempty"`
+	KeepResultFiles _domain.MyBool `gorm:"keepResultFiles" json:"keepResultFiles,omitempty"`
 }

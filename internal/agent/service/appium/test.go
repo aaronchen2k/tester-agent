@@ -2,11 +2,11 @@ package appiumService
 
 import (
 	"fmt"
-	constanct "github.com/aaronchen2k/tester/internal/agent/libs/const"
 	commonService "github.com/aaronchen2k/tester/internal/agent/service/common"
 	deviceService "github.com/aaronchen2k/tester/internal/agent/service/device"
 	androidService "github.com/aaronchen2k/tester/internal/agent/service/device/android"
 	execService "github.com/aaronchen2k/tester/internal/agent/service/exec"
+	agentConst "github.com/aaronchen2k/tester/internal/agent/utils/const"
 	_domain "github.com/aaronchen2k/tester/internal/pkg/domain"
 	"strconv"
 	"strings"
@@ -56,10 +56,10 @@ func parseBuildCommand(build *_domain.BuildTo) {
 	appPackage := app.MainPackage
 	appActivity := app.MainActivity
 
-	command := strings.ReplaceAll(build.BuildCommands, constanct.BuildParamAppPath, build.AppPath)
-	command = strings.ReplaceAll(command, constanct.BuildParamAppPackage, appPackage)
-	command = strings.ReplaceAll(command, constanct.BuildParamAppActivity, appActivity)
-	command = strings.ReplaceAll(command, constanct.BuildParamAppiumPort, strconv.Itoa(build.AppiumPort))
+	command := strings.ReplaceAll(build.BuildCommands, agentConst.BuildParamAppPath, build.AppPath)
+	command = strings.ReplaceAll(command, agentConst.BuildParamAppPackage, appPackage)
+	command = strings.ReplaceAll(command, agentConst.BuildParamAppActivity, appActivity)
+	command = strings.ReplaceAll(command, agentConst.BuildParamAppiumPort, strconv.Itoa(build.AppiumPort))
 
 	build.BuildCommands = command
 }

@@ -14,15 +14,15 @@ import (
 	"time"
 )
 
-type AppiumController struct {
+type AppiumCtrl struct {
 	Ctx     iris.Context
 	Service *service.AppiumService `inject:""`
 }
 
-func NewAppiumController() *AppiumController {
-	return &AppiumController{}
+func NewAppiumCtrl() *AppiumCtrl {
+	return &AppiumCtrl{}
 }
-func (g *AppiumController) PostUpload() (result _domain.RpcResult) {
+func (g *AppiumCtrl) PostUpload() (result _domain.RpcResult) {
 	dir := _const.UploadDir + _dateUtils.DateStr(time.Now())
 	dir = _fileUtils.UpdateDir(dir)
 	_fileUtils.MkDirIfNeeded(dir)

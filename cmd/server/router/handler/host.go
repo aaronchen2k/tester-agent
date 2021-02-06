@@ -7,16 +7,16 @@ import (
 	"strconv"
 )
 
-type HostController struct {
+type HostCtrl struct {
 	Ctx         iris.Context
 	HostService *service.ClusterService `inject:""`
 }
 
-func NewHostController() *HostController {
-	return &HostController{}
+func NewHostCtrl() *HostCtrl {
+	return &HostCtrl{}
 }
 
-func (c *HostController) List(ctx iris.Context) {
+func (c *HostCtrl) List(ctx iris.Context) {
 	keywords := ctx.FormValue("keywords")
 	pageNoStr := ctx.FormValue("pageNo")
 	pageSizeStr := ctx.FormValue("pageSize")
@@ -26,11 +26,11 @@ func (c *HostController) List(ctx iris.Context) {
 
 	hosts, total := c.HostService.ListAll(keywords, pageNo, pageSize)
 
-	_, _ = ctx.JSON(utils.ApiResPage(200, "请求成功",
+	_, _ = ctx.JSON(_utils.ApiResPage(200, "请求成功",
 		hosts, pageNo, pageSize, total))
 }
 
-func (c *HostController) Get(ctx iris.Context) {
+func (c *HostCtrl) Get(ctx iris.Context) {
 
-	_, _ = ctx.JSON(utils.ApiRes(200, "请求成功", nil))
+	_, _ = ctx.JSON(_utils.ApiRes(200, "请求成功", nil))
 }

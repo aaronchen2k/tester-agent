@@ -9,20 +9,20 @@ import (
 type Build struct {
 	BaseModel
 
-	QueueId uint
-	Queue   `sql:"-", gorm:"foreignkey:QueueId"`
+	QueueId uint `gorm:"serial" json:"serial,omitempty"`
+	Queue   `sql:"-", gorm:"foreignkey:QueueId" json:"-"`
 
 	// env
-	NodeIp     string
-	NodePort   int
-	AppiumPort int
+	NodeIp     string `gorm:"nodeIp" json:"nodeIp,omitempty"`
+	NodePort   int    `gorm:"nodePort" json:"nodePort,omitempty"`
+	AppiumPort int    `gorm:"appiumPort" json:"appiumPort,omitempty"`
 
 	// status
-	StartTime    time.Time
-	CompleteTime time.Time
+	StartTime    time.Time `gorm:"startTime" json:"startTime,omitempty"`
+	CompleteTime time.Time `gorm:"completeTime" json:"completeTime,omitempty"`
 
-	Progress _const.BuildProgress
-	Status   _const.BuildStatus
+	Progress _const.BuildProgress `gorm:"progress" json:"progress,omitempty"`
+	Status   _const.BuildStatus   `gorm:"status" json:"status,omitempty"`
 }
 
 func NewBuild() Build {

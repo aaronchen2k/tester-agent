@@ -10,27 +10,29 @@ type Queue struct {
 	BaseModel
 	base.TestObject
 	base.TestEnv
+	VmId uint `gorm:"vmId" json:"vmId,omitempty"`
 
 	// job
-	BuildType _const.BuildType
-	Priority  int
-	GroupId   uint
-	TaskId    uint
+	BuildType _const.BuildType `gorm:"buildType" json:"buildType,omitempty"`
+	Priority  int              `gorm:"priority" json:"priority,omitempty"`
+	GroupId   uint             `gorm:"groupId" json:"groupId,omitempty"`
+	PlanId    uint             `gorm:"planId" json:"planId,omitempty"`
+	TaskId    uint             `gorm:"taskId" json:"taskId,omitempty"`
 
 	// status
-	Progress _const.BuildProgress
-	Status   _const.BuildStatus
+	Progress _const.BuildProgress `gorm:"progress" json:"progress,omitempty"`
+	Status   _const.BuildStatus   `gorm:"status" json:"status,omitempty"`
 
-	StartTime   time.Time
-	PendingTime time.Time
-	ResultTime  time.Time
-	TimeoutTime time.Time
+	StartTime   time.Time `gorm:"startTime" json:"startTime,omitempty"`
+	PendingTime time.Time `gorm:"pendingTime" json:"pendingTime,omitempty"`
+	ResultTime  time.Time `gorm:"resultTime" json:"resultTime,omitempty"`
+	TimeoutTime time.Time `gorm:"timeoutTime" json:"timeoutTime,omitempty"`
 
-	Retry int
+	Retry int `gorm:"retry"`
 
 	// desc
-	QueueName string
-	UserName  string
+	QueueName string `gorm:"queueName"`
+	UserName  string `gorm:"userName"`
 }
 
 func NewQueue() Queue {

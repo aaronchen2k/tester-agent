@@ -7,6 +7,8 @@ import (
 )
 
 type TaskService struct {
+	QueueService *QueueService `inject:""`
+
 	TaskRepo   *repo.TaskRepo   `inject:""`
 	QueueRepo  *repo.QueueRepo  `inject:""`
 	DeviceRepo *repo.DeviceRepo `inject:""`
@@ -52,7 +54,7 @@ func (s *TaskService) CheckCompleted(taskId uint) {
 	}
 }
 
-func (s *TaskService) GenerateFromPlan(plan model.Plan) (count int) {
+func (s *TaskService) GenerateFromPlan(plan *model.Plan) (count int) {
 	if plan.GroupId == 0 {
 		plan.GroupId = plan.ID
 	}
@@ -62,10 +64,12 @@ func (s *TaskService) GenerateFromPlan(plan model.Plan) (count int) {
 			plan.BuildType, plan.Priority, plan.GroupId, plan.ID,
 			plan.PlanName, plan.UserName,
 			env, plan.TestObject)
-
 		s.TaskRepo.Save(&task)
-		count++
+
+		s.QueueService.GenerateFromTask(task)
 	}
+
+	count = len(plan.Environments)
 
 	return
 }

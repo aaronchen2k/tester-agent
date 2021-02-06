@@ -70,7 +70,7 @@ func Init(version string, printVersion, printRouter *bool) {
 		}
 	}
 
-	if utils.IsPortInUse(serverConf.Config.Port) {
+	if _utils.IsPortInUse(serverConf.Config.Port) {
 		panic(fmt.Sprintf("端口 %d 已被使用", serverConf.Config.Port))
 	}
 
@@ -95,8 +95,7 @@ func injectObj(router *router.Router) {
 		&inject.Object{Value: repo.NewCommonRepo()},
 		&inject.Object{Value: repo.NewDeviceRepo()},
 		&inject.Object{Value: repo.NewExecRepo()},
-		&inject.Object{Value: repo.NewClusterRepo()},
-		&inject.Object{Value: repo.NewImageRepo()},
+
 		&inject.Object{Value: repo.NewIsoRepo()},
 		&inject.Object{Value: repo.NewPermRepo()},
 		&inject.Object{Value: repo.NewQueueRepo()},
@@ -104,7 +103,13 @@ func injectObj(router *router.Router) {
 		&inject.Object{Value: repo.NewTaskRepo()},
 		&inject.Object{Value: repo.NewTokenRepo()},
 		&inject.Object{Value: repo.NewUserRepo()},
+
+		&inject.Object{Value: repo.NewClusterRepo()},
+		&inject.Object{Value: repo.NewNodeRepo()},
+		&inject.Object{Value: repo.NewVmTemplRepo()},
 		&inject.Object{Value: repo.NewVmRepo()},
+		&inject.Object{Value: repo.NewContainerImageRepo()},
+		&inject.Object{Value: repo.NewContainerRepo()},
 
 		// middleware
 		&inject.Object{Value: middlewareUtils.NewEnforcer()},
@@ -119,33 +124,43 @@ func injectObj(router *router.Router) {
 		&inject.Object{Value: service.NewDeviceService()},
 		&inject.Object{Value: service.NewExecService()},
 		&inject.Object{Value: service.NewHostService()},
-		&inject.Object{Value: service.NewImageService()},
+
 		&inject.Object{Value: service.NewIsoService()},
 		&inject.Object{Value: service.NewPermService()},
 		&inject.Object{Value: service.NewQueueService()},
 		&inject.Object{Value: service.NewRoleService()},
-		&inject.Object{Value: service.NewRpcService()},
 		&inject.Object{Value: service.NewSeeder()},
 		&inject.Object{Value: service.NewSeleniumService()},
 		&inject.Object{Value: service.NewTaskService()},
 		&inject.Object{Value: service.NewUserService()},
+
+		&inject.Object{Value: service.NewVirtualService()},
+		&inject.Object{Value: service.NewDockerImageService()},
+		&inject.Object{Value: service.NewContainerService()},
+		&inject.Object{Value: service.NewVmTemplService()},
 		&inject.Object{Value: service.NewVmService()},
-		&inject.Object{Value: service.NewMachineService()},
+
+		&inject.Object{Value: service.NewRpcService()},
 
 		// controller
-		&inject.Object{Value: handler.NewAccountController()},
-		&inject.Object{Value: handler.NewAppiumController()},
-		&inject.Object{Value: handler.NewDeviceController()},
-		&inject.Object{Value: handler.NewFileController()},
-		&inject.Object{Value: handler.NewMachineController()},
-		&inject.Object{Value: handler.NewHostController()},
-		&inject.Object{Value: handler.NewImageController()},
-		&inject.Object{Value: handler.NewInitController()},
-		&inject.Object{Value: handler.NewPermController()},
-		&inject.Object{Value: handler.NewRoleController()},
-		&inject.Object{Value: handler.NewTaskController()},
-		&inject.Object{Value: handler.NewUserController()},
-		&inject.Object{Value: handler.NewVmController()},
+		//&inject.Object{Value: handler.NewWsCtrl()},
+		&inject.Object{Value: handler.NewAccountCtrl()},
+		&inject.Object{Value: handler.NewAppiumCtrl()},
+		&inject.Object{Value: handler.NewDeviceCtrl()},
+		&inject.Object{Value: handler.NewFileCtrl()},
+
+		&inject.Object{Value: handler.NewHostCtrl()},
+		&inject.Object{Value: handler.NewInitCtrl()},
+		&inject.Object{Value: handler.NewPermCtrl()},
+		&inject.Object{Value: handler.NewRoleCtrl()},
+		&inject.Object{Value: handler.NewTaskCtrl()},
+		&inject.Object{Value: handler.NewUserCtrl()},
+
+		&inject.Object{Value: handler.NewMachineCtrl()},
+		&inject.Object{Value: handler.NewContainerImageCtrl()},
+		&inject.Object{Value: handler.NewContainerCtrl()},
+		&inject.Object{Value: handler.NewVmTemplCtrl()},
+		&inject.Object{Value: handler.NewVmCtrl()},
 
 		// router
 		&inject.Object{Value: router},

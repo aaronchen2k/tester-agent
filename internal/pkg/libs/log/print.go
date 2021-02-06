@@ -4,14 +4,17 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/fatih/color"
+	"log"
 	"strings"
 )
 
 func Info(str string) {
 	logger.Infoln(str)
+	log.Println(str)
 }
 func Infof(str string, args ...interface{}) {
 	logger.Infof(str, args)
+	log.Printf(str+"\n", args)
 }
 
 func Warn(str string) {

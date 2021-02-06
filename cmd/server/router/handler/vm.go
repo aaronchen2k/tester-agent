@@ -4,30 +4,43 @@ import (
 	"fmt"
 	_domain "github.com/aaronchen2k/tester/internal/pkg/domain"
 	_logUtils "github.com/aaronchen2k/tester/internal/pkg/libs/log"
+	"github.com/aaronchen2k/tester/internal/pkg/utils"
+	"github.com/aaronchen2k/tester/internal/server/domain"
 	"github.com/aaronchen2k/tester/internal/server/service"
 	"github.com/kataras/iris/v12"
 )
 
-type VmController struct {
-	Ctx          iris.Context
-	VmService    *service.VmService      `inject:""`
-	ImageService *service.ImageService   `inject:""`
-	HostService  *service.ClusterService `inject:""`
+type VmCtrl struct {
+	Ctx       iris.Context
+	VmService *service.VmService `inject:""`
 }
 
-func NewVmController() *VmController {
-	return &VmController{}
+func NewVmCtrl() *VmCtrl {
+	return &VmCtrl{}
 }
 
-func (g *VmController) PostRegister() (result _domain.RpcResult) {
+func (c *VmCtrl) Create(ctx iris.Context) {
+	req := domain.VmReq{}
+	err := ctx.ReadJSON(&req)
+	if err != nil {
+		_, _ = ctx.JSON(_utils.ApiRes(400, err.Error(), nil))
+		return
+	}
+
+	c.VmService.Create(req.TemplId)
+
+	return
+}
+
+func (c *VmCtrl) Register() (result _domain.RpcResult) {
 	var vm _domain.Vm
-	if err := g.Ctx.ReadJSON(&vm); err != nil {
+	if err := c.Ctx.ReadJSON(&vm); err != nil {
 		_logUtils.Error(err.Error())
 		result.Fail("wrong request data")
 		return
 	}
 
-	po := g.VmService.Register(vm)
+	po := c.VmService.Register(vm)
 
 	result.Success(fmt.Sprintf("succes to register host %d.", po))
 	return result

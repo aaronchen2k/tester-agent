@@ -3,13 +3,13 @@ package vmService
 import (
 	"fmt"
 	"github.com/aaronchen2k/tester/internal/agent/cfg"
-	constanct "github.com/aaronchen2k/tester/internal/agent/libs/const"
+	agentConst "github.com/aaronchen2k/tester/internal/agent/utils/const"
 	_logUtils "github.com/aaronchen2k/tester/internal/pkg/libs/log"
 	_shellUtils "github.com/aaronchen2k/tester/internal/pkg/libs/shell"
 )
 
 func RemoveDefImage(vmUniqueName string) (err error) {
-	rawPath := fmt.Sprintf("%s%s.qcow2", constanct.FolderImage, vmUniqueName)
+	rawPath := fmt.Sprintf("%s%s.qcow2", agentConst.FolderImage, vmUniqueName)
 
 	cmd := "rm -rf " + rawPath
 	_, err = _shellUtils.ExeShellInDir(cmd, agentConf.Inst.WorkDir)

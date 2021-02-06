@@ -22,14 +22,20 @@ func (s *InitService) Init() {
 		&model.Role{},
 		&model.Permission{},
 
-		&model.Build{},
-		&model.Container{},
 		&model.Device{},
 		&model.Cluster{},
-		&model.DockerImage{},
+
 		&model.Iso{},
 		&model.Queue{},
+
+		&model.Plan{},
 		&model.Task{},
+		&model.Queue{},
+		&model.Build{},
+
+		&model.ContainerImage{},
+		&model.Container{},
+		&model.VmTempl{},
 		&model.Vm{},
 	)
 	if err != nil {

@@ -6,26 +6,26 @@ import (
 	"github.com/kataras/iris/v12"
 )
 
-type MachineController struct {
+type MachineCtrl struct {
 	Ctx            iris.Context
-	MachineService *service.MachineService `inject:""`
+	MachineService *service.VirtualService `inject:""`
 }
 
-func NewMachineController() *MachineController {
-	return &MachineController{}
+func NewMachineCtrl() *MachineCtrl {
+	return &MachineCtrl{}
 }
 
-func (c *MachineController) ListVm(ctx iris.Context) {
+func (c *MachineCtrl) ListVm(ctx iris.Context) {
 	rootNode := c.MachineService.ListVm()
-	_, _ = ctx.JSON(utils.ApiRes(200, "请求成功", rootNode))
+	_, _ = ctx.JSON(_utils.ApiRes(200, "请求成功", rootNode))
 }
 
-func (c *MachineController) ListContainers(ctx iris.Context) {
+func (c *MachineCtrl) ListContainers(ctx iris.Context) {
 	rootNode := c.MachineService.ListContainers()
-	_, _ = ctx.JSON(utils.ApiRes(200, "请求成功", rootNode))
+	_, _ = ctx.JSON(_utils.ApiRes(200, "请求成功", rootNode))
 }
 
-func (c *MachineController) Get(ctx iris.Context) {
+func (c *MachineCtrl) Get(ctx iris.Context) {
 
-	_, _ = ctx.JSON(utils.ApiRes(200, "请求成功", nil))
+	_, _ = ctx.JSON(_utils.ApiRes(200, "请求成功", nil))
 }

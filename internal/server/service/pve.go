@@ -1,4 +1,4 @@
-package serviceImpl
+package service
 
 import (
 	"fmt"
@@ -6,6 +6,7 @@ import (
 	_logUtils "github.com/aaronchen2k/tester/internal/pkg/libs/log"
 	"github.com/aaronchen2k/tester/internal/server/domain"
 	"github.com/aaronchen2k/tester/internal/server/model"
+	serverUtils "github.com/aaronchen2k/tester/internal/server/utils/common"
 	go_proxmox "github.com/aaronchen2k/tester/vendors/github.com/joernott/go-proxmox"
 	"strconv"
 )
@@ -19,6 +20,45 @@ func NewPveService() *PveService {
 
 func (s *PveService) ListVm(clusterNode *domain.ResNode) (vms []*model.Vm, err error) {
 	s.GetNodeTree(clusterNode)
+
+	return
+}
+
+func (s *PveService) CreateVm(templ model.VmTempl, node model.Node, cluster model.Cluster) (vm model.Vm, err error) {
+	address := fmt.Sprintf("%s:%d", cluster.Ip, cluster.Port)
+	pve, err := go_proxmox.NewProxMox(address, cluster.Username, cluster.Password)
+	if err != nil {
+		_logUtils.Info("fail to connect proxmox, error: " + err.Error())
+		return
+	}
+
+	newVmIdStr, _ := pve.NextVMId()
+	templVm, err := pve.FindVM(templ.Ident)
+	if err != nil {
+		_logUtils.Info("fail to find vm, error: " + err.Error())
+		return
+	}
+
+	newVmId, _ := strconv.ParseFloat(newVmIdStr, 64)
+	vmHostName := serverUtils.GenVmHostName(templ.OsPlatform, templ.OsName, templ.OsLang)
+	task, err := templVm.Clone(newVmId, vmHostName, node.Tag)
+	if err != nil {
+		_logUtils.Info("fail to clone vm, error: " + err.Error())
+		return
+	}
+
+	newVm, err := pve.FindVM(newVmIdStr)
+	err = newVm.Start()
+	if err != nil {
+		_logUtils.Info("fail to start vm, error: " + err.Error())
+		return
+	}
+
+	_logUtils.Info("success to clone vm, task: " + task.ID)
+
+	vm.Ident = newVmIdStr
+	vm.NodeId = node.ID
+	vm.ClusterId = cluster.ID
 
 	return
 }

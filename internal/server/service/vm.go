@@ -1,58 +1,65 @@
 package service
 
 import (
-	"crypto/rand"
 	"fmt"
 	_const "github.com/aaronchen2k/tester/internal/pkg/const"
 	_domain "github.com/aaronchen2k/tester/internal/pkg/domain"
+	_logUtils "github.com/aaronchen2k/tester/internal/pkg/libs/log"
 	_stringUtils "github.com/aaronchen2k/tester/internal/pkg/libs/string"
 	"github.com/aaronchen2k/tester/internal/server/model"
 	"github.com/aaronchen2k/tester/internal/server/repo"
+	"math/rand"
 	"strings"
 )
 
 type VmService struct {
-	RpcService *RpcService `inject:""`
+	RpcService     *RpcService     `inject:""`
+	MachineService *VirtualService `inject:""`
 
 	VmRepo      *repo.VmRepo      `inject:""`
+	VmTemplRepo *repo.VmTemplRepo `inject:""`
 	ClusterRepo *repo.ClusterRepo `inject:""`
-	ImageRepo   *repo.ImageRepo   `inject:""`
-	IsoRepo     *repo.IsoRepo     `inject:""`
-	QueueRepo   *repo.QueueRepo   `inject:""`
+	NodeRepo    *repo.NodeRepo    `inject:""`
+
+	IsoRepo   *repo.IsoRepo   `inject:""`
+	QueueRepo *repo.QueueRepo `inject:""`
 }
 
 func NewVmService() *VmService {
 	return &VmService{}
 }
 
-func (s *VmService) Register(vm _domain.Vm) (result _domain.RpcResult) {
-	err := s.VmRepo.Register(vm)
-	if err != nil {
-		result.Fail(fmt.Sprintf("fail to register host %s ", vm.MacAddress))
-	}
-	return
+func (s *VmService) Create(vmTemplId uint) {
+	templ := s.VmTemplRepo.Get(vmTemplId)
+	node := s.NodeRepo.Get(templ.NodeId)
+	cluster := s.ClusterRepo.Get(templ.ClusterId)
+
+	vm, err := s.MachineService.CreateVm(templ, node, cluster)
+
+	// TODO: save to db?
+	_logUtils.Info(fmt.Sprintf("%#v, %s", vm, err.Error()))
 }
 
-func (s *VmService) CreateRemote(hostId, backingImageId, queueId int) (result _domain.RpcResult) {
+func (s *VmService) CreateRemote(hostId, templImageId, queueId uint) (result _domain.RpcResult) {
 	host := s.ClusterRepo.Get(hostId)
-	backingImage := s.ImageRepo.Get(backingImageId)
-	sysIso := s.IsoRepo.Get(backingImage.SysIsoId)
+	vmTempl := s.VmTemplRepo.Get(templImageId)
+	sysIso := s.IsoRepo.Get(vmTempl.SysIsoId)
 	sysIsoPath := sysIso.Path
 
 	driverIsoPath := ""
-	if backingImage.OsPlatform == _const.OsWindows {
-		driverIso := s.IsoRepo.Get(backingImage.DriverIsoId)
+	if vmTempl.OsPlatform == _const.OsWindows {
+		driverIso := s.IsoRepo.Get(vmTempl.DriverIsoId)
 		driverIsoPath = driverIso.Path
 	}
 
 	mac := s.genValidMacAddress() // get a unique mac address
-	vmName := s.genVmName(backingImage.Name)
+	vmName := s.genVmName(vmTempl.Name)
 
 	vmPo := model.Vm{Mac: mac, Name: vmName, HostName: host.Name,
-		DiskSize: backingImage.SuggestDiskSize, MemorySize: backingImage.SuggestMemorySize,
-		CdromSys: sysIsoPath, CdromDriver: driverIsoPath, BackingImagePath: backingImage.Path,
-		HostId: uint(hostId), BackingImageId: uint(backingImageId),
-		CdromSysId: backingImage.SysIsoId, CdromDriverId: backingImage.DriverIsoId}
+		DiskSize: vmTempl.SuggestDiskSize, MemorySize: vmTempl.SuggestMemorySize,
+		CdromSys: sysIsoPath, CdromDriver: driverIsoPath, BackingImagePath: vmTempl.Path,
+		HostId: uint(hostId), TemplImageId: uint(templImageId),
+		CdromSysId: vmTempl.SysIsoId, CdromDriverId: vmTempl.DriverIsoId}
 
 	s.VmRepo.Save(vmPo) // save vm to db
 
@@ -70,6 +77,14 @@ func (s *VmService) CreateRemote(hostId, backingImageId, queueId int) (result _d
 		s.QueueRepo.Pending(uint(queueId))
 	}
 
+	return
+}
+
+func (s *VmService) Register(vm _domain.Vm) (result _domain.RpcResult) {
+	err := s.VmRepo.Register(vm)
+	if err != nil {
+		result.Fail(fmt.Sprintf("fail to register host %s ", vm.MacAddress))
+	}
 	return
 }
 

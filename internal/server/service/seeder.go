@@ -52,7 +52,7 @@ func (s *SeederService) init() {
 	Fake.Rand = rand.New(rand.NewSource(42))
 	rand.Seed(time.Now().UnixNano())
 
-	exeDir := utils.GetExeDir()
+	exeDir := _utils.GetExeDir()
 	pth := filepath.Join(exeDir, "perms.yml")
 	if !_fileUtils.FileExist(pth) { // debug mode
 		pth = filepath.Join(exeDir, "cmd", "server", "perms.yml")

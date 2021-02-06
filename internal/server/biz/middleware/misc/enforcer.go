@@ -16,7 +16,7 @@ func NewEnforcer() *casbin.Enforcer {
 		logrus.Println(fmt.Sprintf("NewAdapter 错误: %v", err))
 	}
 
-	exeDir := utils.GetExeDir()
+	exeDir := _utils.GetExeDir()
 	pth := filepath.Join(exeDir, "rbac_model.conf")
 	if !_fileUtils.FileExist(pth) { // debug mode
 		pth = filepath.Join(exeDir, "cmd", "server", "rbac_model.conf")

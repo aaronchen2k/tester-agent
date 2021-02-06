@@ -3,21 +3,33 @@ package service
 import (
 	"fmt"
 	_domain "github.com/aaronchen2k/tester/internal/pkg/domain"
+	_logUtils "github.com/aaronchen2k/tester/internal/pkg/libs/log"
 	"github.com/aaronchen2k/tester/internal/server/repo"
 )
 
 type ContainerService struct {
-	RpcService *RpcService `inject:""`
+	RpcService     *RpcService     `inject:""`
+	MachineService *VirtualService `inject:""`
 
-	ContainerRepo *repo.ContainerRepo `inject:""`
-	ClusterRepo   *repo.ClusterRepo   `inject:""`
-	ImageRepo     *repo.ImageRepo     `inject:""`
-	IsoRepo       *repo.IsoRepo       `inject:""`
-	QueueRepo     *repo.QueueRepo     `inject:""`
+	ContainerRepo      *repo.ContainerRepo      `inject:""`
+	ContainerImageRepo *repo.ContainerImageRepo `inject:""`
+	ClusterRepo        *repo.ClusterRepo        `inject:""`
+	NodeRepo           *repo.NodeRepo           `inject:""`
 }
 
 func NewContainerService() *ContainerService {
 	return &ContainerService{}
+}
+
+func (s *ContainerService) Create(containerImageId uint) (dockerId string, err error) {
+	imagePo := s.ContainerImageRepo.Get(containerImageId)
+	node := s.NodeRepo.Get(imagePo.NodeId)
+	cluster := s.ClusterRepo.Get(imagePo.ClusterId)
+
+	vm, err := s.MachineService.CreateContainer(imagePo, node, cluster)
+	// TODO: save to db?
+	_logUtils.Info(fmt.Sprintf("%#v, %s", vm, err.Error()))
+	return
 }
 
 func (s *ContainerService) Register(container _domain.Container) (result _domain.RpcResult) {

@@ -63,7 +63,7 @@ func (p *Portainer) ListEndpoints() ([]Endpoint, error) {
 	return endpoints, err
 }
 
-func (p *Portainer) ListImages(e int32) (images []Image, err error) {
+func (p *Portainer) ListImages(e uint) (images []Image, err error) {
 	url := fmt.Sprintf("/endpoints/%d/docker/images/json", e)
 	urlargs := make(map[string]string)
 	urlargs["all"] = "1"
@@ -82,7 +82,7 @@ func (p *Portainer) ListImages(e int32) (images []Image, err error) {
 	return
 }
 
-func (p *Portainer) ListContainers(e int32) ([]Container, error) {
+func (p *Portainer) ListContainers(e uint) ([]Container, error) {
 	url := fmt.Sprintf("/endpoints/%d/docker/containers/json", e)
 	urlargs := make(map[string]string)
 	urlargs["all"] = "1"
@@ -102,28 +102,41 @@ func (p *Portainer) ListContainers(e int32) ([]Container, error) {
 }
 
 //noinspection GoNilness
-func (p *Portainer) StopContainer(e int32, id string) (int, error) {
-	url := fmt.Sprintf("/endpoints/%d/docker/containers/%s/stop", e, id)
-	res, err := p.makeRequest("POST", url, nil, nil)
+func (p *Portainer) CreateContainer(e uint, body map[string]interface{}) (id string, err error) {
+	url := fmt.Sprintf("/endpoints/%d/docker/containers/create", e)
+
+	requestByte, _ := json.Marshal(body)
+	bodyReader := bytes.NewReader(requestByte)
+
+	res, err := p.makeRequest("POST", url, bodyReader, nil)
+	defer res.Body.Close()
 	if err != nil {
 		log.Printf("http.Do(%v) error: %v\n", res.Request.URL, err)
-		return 0, err
+		return
 	}
-	_ = res.Body.Close()
+
+	bodyStr, _ := ioutil.ReadAll(res.Body)
+	var result map[string]interface{}
+	json.Unmarshal(bodyStr, &result)
+
 	switch res.StatusCode {
 	case http.StatusNoContent:
-		return res.StatusCode, nil
+		return
 	case http.StatusInternalServerError:
-		return res.StatusCode, errors.New(fmt.Sprintf("InternalServerError: (%s)", url))
+		err = errors.New(fmt.Sprintf("InternalServerError: (%s)", url))
 	case http.StatusNotFound:
-		return res.StatusCode, errors.New(fmt.Sprintf("Not found: (%s)", url))
+		err = errors.New(fmt.Sprintf("Not found: (%s)", url))
+	case http.StatusNotModified:
+		err = errors.New(fmt.Sprintf("Already started: (%s)", url))
 	default:
-		return res.StatusCode, errors.New(fmt.Sprintf("UnhandledError %d: (%s)", res.StatusCode, url))
+		err = errors.New(fmt.Sprintf("UnhandledError %d: (%s)", res.StatusCode, url))
 	}
+
+	return
 }
 
 //noinspection GoNilness
-func (p *Portainer) StartContainer(e int32, id string) (int, error) {
+func (p *Portainer) StartContainer(e uint, id string) (int, error) {
 	url := fmt.Sprintf("/endpoints/%d/docker/containers/%s/start", e, id)
 	res, err := p.makeRequest("POST", url, nil, nil)
 	if err != nil {
@@ -140,6 +153,27 @@ func (p *Portainer) StartContainer(e int32, id string) (int, error) {
 		return res.StatusCode, errors.New(fmt.Sprintf("Not found: (%s)", url))
 	case http.StatusNotModified:
 		return res.StatusCode, errors.New(fmt.Sprintf("Already started: (%s)", url))
+	default:
+		return res.StatusCode, errors.New(fmt.Sprintf("UnhandledError %d: (%s)", res.StatusCode, url))
+	}
+}
+
+//noinspection GoNilness
+func (p *Portainer) StopContainer(e uint, id string) (int, error) {
+	url := fmt.Sprintf("/endpoints/%d/docker/containers/%s/stop", e, id)
+	res, err := p.makeRequest("POST", url, nil, nil)
+	if err != nil {
+		log.Printf("http.Do(%v) error: %v\n", res.Request.URL, err)
+		return 0, err
+	}
+	_ = res.Body.Close()
+	switch res.StatusCode {
+	case http.StatusNoContent:
+		return res.StatusCode, nil
+	case http.StatusInternalServerError:
+		return res.StatusCode, errors.New(fmt.Sprintf("InternalServerError: (%s)", url))
+	case http.StatusNotFound:
+		return res.StatusCode, errors.New(fmt.Sprintf("Not found: (%s)", url))
 	default:
 		return res.StatusCode, errors.New(fmt.Sprintf("UnhandledError %d: (%s)", res.StatusCode, url))
 	}

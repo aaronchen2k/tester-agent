@@ -48,7 +48,7 @@ func GetZipSingleDir(path string) string {
 		if f.IsDir() {
 			zfh, ok := f.Header.(zip.FileHeader)
 			if ok {
-				//logUtils.PrintTo("file: " + zfh.Name)
+				//logUtils.PrintTo("file: " + zfh.Tag)
 
 				if folder == "" && zfh.Name != "__MACOSX" {
 					folder = zfh.Name

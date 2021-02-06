@@ -6,18 +6,18 @@ import (
 	"github.com/kataras/iris/v12"
 )
 
-type InitController struct {
+type InitCtrl struct {
 	SeederService *service.SeederService `inject:""`
 }
 
-func NewInitController() *InitController {
-	return &InitController{}
+func NewInitCtrl() *InitCtrl {
+	return &InitCtrl{}
 }
 
-func (c *InitController) InitData(ctx iris.Context) {
+func (c *InitCtrl) InitData(ctx iris.Context) {
 	ctx.StatusCode(iris.StatusOK)
 
 	c.SeederService.Run()
 
-	_, _ = ctx.JSON(utils.ApiRes(200, "请求成功", nil))
+	_, _ = ctx.JSON(_utils.ApiRes(200, "请求成功", nil))
 }

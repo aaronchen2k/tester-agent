@@ -10,7 +10,7 @@ import (
 	"github.com/kataras/iris/v12"
 )
 
-type RoleController struct {
+type RoleCtrl struct {
 	RoleService *service.RoleService `inject:""`
 
 	UserRepo *repo.UserRepo `inject:""`
@@ -18,8 +18,8 @@ type RoleController struct {
 	PermRepo *repo.PermRepo `inject:""`
 }
 
-func NewRoleController() *RoleController {
-	return &RoleController{}
+func NewRoleCtrl() *RoleCtrl {
+	return &RoleCtrl{}
 }
 
 /**
@@ -34,19 +34,19 @@ func NewRoleController() *RoleController {
 * @apiSuccess {String} data 返回数据
 * @apiPermission
  */
-func (c *RoleController) GetRole(ctx iris.Context) {
+func (c *RoleCtrl) GetRole(ctx iris.Context) {
 	ctx.StatusCode(iris.StatusOK)
 	//id, _ := ctx.Params().GetUint("id")
 
 	role, err := c.RoleRepo.GetRole(nil)
 	if err != nil {
-		_, _ = ctx.JSON(utils.ApiRes(400, err.Error(), nil))
+		_, _ = ctx.JSON(_utils.ApiRes(400, err.Error(), nil))
 		return
 	}
 
 	rr := c.RoleService.RoleTransform(role)
 	rr.Perms = c.PermRepo.PermsTransform(c.RoleService.RolePermissions(role))
-	_, _ = ctx.JSON(utils.ApiRes(200, "操作成功", rr))
+	_, _ = ctx.JSON(_utils.ApiRes(200, "操作成功", rr))
 }
 
 /**
@@ -65,13 +65,13 @@ func (c *RoleController) GetRole(ctx iris.Context) {
 * @apiSuccess {String} data 返回数据
 * @apiPermission null
  */
-func (c *RoleController) CreateRole(ctx iris.Context) {
+func (c *RoleCtrl) CreateRole(ctx iris.Context) {
 
 	ctx.StatusCode(iris.StatusOK)
 	role := new(model.Role)
 
 	if err := ctx.ReadJSON(role); err != nil {
-		_, _ = ctx.JSON(utils.ApiRes(400, err.Error(), nil))
+		_, _ = ctx.JSON(_utils.ApiRes(400, err.Error(), nil))
 		return
 	}
 
@@ -80,7 +80,7 @@ func (c *RoleController) CreateRole(ctx iris.Context) {
 		errs := err.(validator.ValidationErrors)
 		for _, e := range errs.Translate(validate.ValidateTrans) {
 			if len(e) > 0 {
-				_, _ = ctx.JSON(utils.ApiRes(400, e, nil))
+				_, _ = ctx.JSON(_utils.ApiRes(400, e, nil))
 				return
 			}
 		}
@@ -88,14 +88,14 @@ func (c *RoleController) CreateRole(ctx iris.Context) {
 
 	err = c.RoleService.CreateRole(role)
 	if err != nil {
-		_, _ = ctx.JSON(utils.ApiRes(400, err.Error(), nil))
+		_, _ = ctx.JSON(_utils.ApiRes(400, err.Error(), nil))
 		return
 	}
 	if role.ID == 0 {
-		_, _ = ctx.JSON(utils.ApiRes(400, "操作失败", nil))
+		_, _ = ctx.JSON(_utils.ApiRes(400, "操作失败", nil))
 		return
 	}
-	_, _ = ctx.JSON(utils.ApiRes(200, "操作成功", c.RoleService.RoleTransform(role)))
+	_, _ = ctx.JSON(_utils.ApiRes(200, "操作成功", c.RoleService.RoleTransform(role)))
 
 }
 
@@ -115,12 +115,12 @@ func (c *RoleController) CreateRole(ctx iris.Context) {
 * @apiSuccess {String} data 返回数据
 * @apiPermission null
  */
-func (c *RoleController) UpdateRole(ctx iris.Context) {
+func (c *RoleCtrl) UpdateRole(ctx iris.Context) {
 
 	ctx.StatusCode(iris.StatusOK)
 	role := new(model.Role)
 	if err := ctx.ReadJSON(role); err != nil {
-		_, _ = ctx.JSON(utils.ApiRes(400, err.Error(), nil))
+		_, _ = ctx.JSON(_utils.ApiRes(400, err.Error(), nil))
 		return
 	}
 
@@ -129,7 +129,7 @@ func (c *RoleController) UpdateRole(ctx iris.Context) {
 		errs := err.(validator.ValidationErrors)
 		for _, e := range errs.Translate(validate.ValidateTrans) {
 			if len(e) > 0 {
-				_, _ = ctx.JSON(utils.ApiRes(400, e, nil))
+				_, _ = ctx.JSON(_utils.ApiRes(400, e, nil))
 				return
 			}
 		}
@@ -138,10 +138,10 @@ func (c *RoleController) UpdateRole(ctx iris.Context) {
 	id, _ := ctx.Params().GetUint("id")
 	err = c.RoleService.UpdateRole(id, role)
 	if err != nil {
-		_, _ = ctx.JSON(utils.ApiRes(400, err.Error(), nil))
+		_, _ = ctx.JSON(_utils.ApiRes(400, err.Error(), nil))
 		return
 	}
-	_, _ = ctx.JSON(utils.ApiRes(200, "操作成功", c.RoleService.RoleTransform(role)))
+	_, _ = ctx.JSON(_utils.ApiRes(200, "操作成功", c.RoleService.RoleTransform(role)))
 
 }
 
@@ -157,17 +157,17 @@ func (c *RoleController) UpdateRole(ctx iris.Context) {
 * @apiSuccess {String} data 返回数据
 * @apiPermission null
  */
-func (c *RoleController) DeleteRole(ctx iris.Context) {
+func (c *RoleCtrl) DeleteRole(ctx iris.Context) {
 	ctx.StatusCode(iris.StatusOK)
 	id, _ := ctx.Params().GetUint("id")
 
 	err := c.RoleRepo.DeleteRoleById(id)
 	if err != nil {
-		_, _ = ctx.JSON(utils.ApiRes(400, err.Error(), nil))
+		_, _ = ctx.JSON(_utils.ApiRes(400, err.Error(), nil))
 		return
 	}
 
-	_, _ = ctx.JSON(utils.ApiRes(200, "删除成功", nil))
+	_, _ = ctx.JSON(_utils.ApiRes(200, "删除成功", nil))
 }
 
 /**
@@ -182,14 +182,14 @@ func (c *RoleController) DeleteRole(ctx iris.Context) {
 * @apiSuccess {String} data 返回数据
 * @apiPermission null
  */
-func (c *RoleController) GetAllRoles(ctx iris.Context) {
+func (c *RoleCtrl) GetAllRoles(ctx iris.Context) {
 	ctx.StatusCode(iris.StatusOK)
 	roles, count, err := c.RoleRepo.GetAllRoles(nil)
 	if err != nil {
-		_, _ = ctx.JSON(utils.ApiRes(400, err.Error(), nil))
+		_, _ = ctx.JSON(_utils.ApiRes(400, err.Error(), nil))
 		return
 	}
 
 	transform := c.RoleService.RolesTransform(roles)
-	_, _ = ctx.JSON(utils.ApiRes(200, "操作成功", map[string]interface{}{"items": transform, "total": count, "limit": "s.Limit"}))
+	_, _ = ctx.JSON(_utils.ApiRes(200, "操作成功", map[string]interface{}{"items": transform, "total": count, "limit": "s.Limit"}))
 }

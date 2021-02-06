@@ -55,10 +55,9 @@ request.interceptors.request.use(config => {
   console.log('===Request===', config)
 
   const jwtToken = storage.get(ACCESS_TOKEN)
-  console.log('add token in request header', jwtToken)
-
   if (jwtToken) {
     config.headers['Authorization'] = 'Bearer ' + jwtToken
+    console.log('add token in request header', jwtToken)
   }
 
   return config

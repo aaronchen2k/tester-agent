@@ -70,7 +70,7 @@ func InitConfig(pth string) {
 	if pth != "" {
 		configPath = pth
 	} else {
-		exeDir := utils.GetExeDir()
+		exeDir := _utils.GetExeDir()
 		configPath = filepath.Join(exeDir, "server.yml")
 		if !_fileUtils.FileExist(configPath) { // debug mode
 			configPath = filepath.Join(exeDir, "cmd", "server", "server.yml")

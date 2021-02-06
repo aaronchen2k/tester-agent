@@ -7,6 +7,7 @@ import (
 
 type Vm struct {
 	Id                int
+	VmId              string
 	Name              string
 	DiskSize          int
 	MemorySize        int

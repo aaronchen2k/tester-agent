@@ -7,15 +7,15 @@ import (
 	"github.com/kataras/iris/v12"
 )
 
-type DeviceController struct {
+type DeviceCtrl struct {
 	Ctx     iris.Context
 	Service *service.DeviceService `inject:""`
 }
 
-func NewDeviceController() *DeviceController {
-	return &DeviceController{}
+func NewDeviceCtrl() *DeviceCtrl {
+	return &DeviceCtrl{}
 }
-func (g *DeviceController) PostRegister() (result _domain.RpcResult) {
+func (g *DeviceCtrl) PostRegister() (result _domain.RpcResult) {
 	var devices []_domain.DeviceInst
 	if err := g.Ctx.ReadJSON(&devices); err != nil {
 		_logUtils.Error(err.Error())

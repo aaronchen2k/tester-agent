@@ -9,31 +9,31 @@ import (
 type Container struct {
 	BaseModel
 
-	Mac     string
-	Name    string
-	Ip      string
-	Port    int
-	SshPort int
-	VncPort int
-	Status  _const.VmStatus
-	Msg     string
-	WorkDir string
+	Mac     string          `gorm:"mac" json:"mac,omitempty"`
+	Name    string          `gorm:"name" json:"name,omitempty"`
+	Ip      string          `gorm:"ip" json:"ip,omitempty"`
+	Port    int             `gorm:"port" json:"port,omitempty"`
+	SshPort int             `gorm:"sshPort" json:"sshPort,omitempty"`
+	VncPort int             `gorm:"vncPort" json:"vncPort,omitempty"`
+	Status  _const.VmStatus `gorm:"status" json:"status,omitempty"`
+	Msg     string          `gorm:"msg" json:"msg,omitempty"`
+	WorkDir string          `gorm:"workDir" json:"workDir,omitempty"`
 
-	HostId  uint
-	ImageId uint
+	HostId  uint `gorm:"hostId" json:"hostId,omitempty"`
+	ImageId uint `gorm:"imageId" json:"imageId,omitempty"`
 
-	HostName   string
-	DefPath    string
-	ImagePath  string
-	DiskSize   int
-	MemorySize int
+	HostName   string `gorm:"hostName" json:"hostName,omitempty"`
+	DefPath    string `gorm:"defPath" json:"defPath,omitempty"`
+	ImagePath  string `gorm:"imagePath" json:"imagePath,omitempty"`
+	DiskSize   int    `gorm:"diskSize" json:"diskSize,omitempty"`
+	MemorySize int    `gorm:"memorySize" json:"memorySize,omitempty"`
 
-	DestroyAt        time.Time
-	LastRegisterDate time.Time
-}
+	DestroyAt        time.Time `gorm:"destroyAt" json:"destroyAt,omitempty"`
+	LastRegisterDate time.Time `gorm:"lastRegisterDate" json:"lastRegisterDate,omitempty"`
 
-func (Container) TableName() string {
-	return "biz_vm"
+	Ident     string `gorm:"ident" json:"ident"`
+	NodeId    uint   `gorm:"nodeId" json:"nodeId"`
+	ClusterId uint   `gorm:"clusterId" json:"clusterId"`
 }
 
 func (Container) GenContainerTo(containerPo Container) (to _domain.Container) {
@@ -49,4 +49,8 @@ func (Container) GenPveReq(vmPo Container) (req _domain.PveReq) {
 		VmDiskSize: vmPo.DiskSize, VmMemorySize: vmPo.MemorySize, VmBackingImage: vmPo.ImagePath}
 
 	return
+}
+
+func (Container) TableName() string {
+	return "biz_container"
 }
