@@ -7,12 +7,12 @@ import (
 	"github.com/aaronchen2k/tester/cmd/server/server"
 	_logUtils "github.com/aaronchen2k/tester/internal/pkg/libs/log"
 	"github.com/aaronchen2k/tester/internal/server/cfg"
+	serverConst "github.com/aaronchen2k/tester/internal/server/utils/const"
 	"os"
 )
 
 var (
 	version      = "master"
-	configPath   = flag.String("c", "", "配置路径")
 	printVersion = flag.Bool("v", false, "打印版本号")
 	printRouter  = flag.Bool("r", false, "打印路由列表")
 )
@@ -37,7 +37,7 @@ func main() {
 	}
 	flag.Parse()
 
-	_logUtils.Init()
-	serverConf.InitConfig(*configPath)
+	_logUtils.Init(serverConst.AppName)
+	serverConf.Init()
 	server.Init(version, printVersion, printRouter)
 }

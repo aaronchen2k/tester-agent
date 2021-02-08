@@ -23,21 +23,16 @@ func Init() {
 	Inst.Server = _httpUtils.UpdateUrl(Inst.Server)
 }
 
+func IsVmAgent() bool {
+	return Inst.Platform == _const.Vm
+}
 func IsDeviceAgent() bool {
 	return IsIosAgent() || IsAndroidAgent()
 }
-
 func IsAndroidAgent() bool {
 	return Inst.Platform == _const.Android
 }
 
 func IsIosAgent() bool {
 	return Inst.Platform == _const.Ios
-}
-
-func IsHostAgent() bool {
-	return Inst.Platform == _const.Host
-}
-func IsVmAgent() bool {
-	return Inst.Platform == _const.Vm
 }

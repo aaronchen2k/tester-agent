@@ -26,7 +26,7 @@ var (
 //单元测试基境
 func TestMain(m *testing.M) {
 	flag.Parse()
-	serverConf.InitConfig("")
+	serverConf.Init("")
 	s := server2.NewServer(nil) // 初始化app
 	s.NewApp(nil, nil, nil, nil)
 	app = s.App

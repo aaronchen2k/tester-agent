@@ -65,16 +65,11 @@ type DBConfig struct {
 	Password string `yaml:"password" env:"DBPassword" default:"P2ssw0rd"`
 }
 
-func InitConfig(pth string) {
-	configPath := ""
-	if pth != "" {
-		configPath = pth
-	} else {
-		exeDir := _utils.GetExeDir()
-		configPath = filepath.Join(exeDir, "server.yml")
-		if !_fileUtils.FileExist(configPath) { // debug mode
-			configPath = filepath.Join(exeDir, "cmd", "server", "server.yml")
-		}
+func Init() {
+	exeDir := _utils.GetExeDir()
+	configPath := filepath.Join(exeDir, "server.yml")
+	if !_fileUtils.FileExist(configPath) { // debug mode
+		configPath = filepath.Join(exeDir, "cmd", "server", "server.yml")
 	}
 
 	fmt.Println(fmt.Sprintf("配置YML文件路径：%v", configPath))

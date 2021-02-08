@@ -3,9 +3,10 @@ package main
 import (
 	"flag"
 	"github.com/aaronchen2k/tester/cmd/agent/router"
-	"github.com/aaronchen2k/tester/internal/agent/cfg"
+	agentConf "github.com/aaronchen2k/tester/internal/agent/conf"
 	"github.com/aaronchen2k/tester/internal/agent/cron"
 	agentUntils "github.com/aaronchen2k/tester/internal/agent/utils/common"
+	agentConst "github.com/aaronchen2k/tester/internal/agent/utils/const"
 	_const "github.com/aaronchen2k/tester/internal/pkg/const"
 	_logUtils "github.com/aaronchen2k/tester/internal/pkg/libs/log"
 	"github.com/fatih/color"
@@ -30,9 +31,6 @@ func main() {
 	}()
 
 	flagSet = flag.NewFlagSet("tester", flag.ContinueOnError)
-
-	flagSet.StringVar(&agentConf.Inst.KvmDir, "k", "kvm", "")
-	flagSet.StringVar(&agentConf.Inst.WorkDir, "w", "work", "")
 
 	flagSet.StringVar(&agentConf.Inst.Server, "s", "", "")
 	flagSet.StringVar(&agentConf.Inst.Ip, "i", "", "")
@@ -68,17 +66,16 @@ func start(args []string) {
 	if err := flagSet.Parse(args[2:]); err == nil {
 		agentConf.Inst.Platform = _const.WorkPlatform(platform)
 
-		_logUtils.Init()
-		agentConf.Init()
 		cron.Init()
-
 		router.App()
 	}
 }
 
 func init() {
-	cleanup()
+	_logUtils.Init(agentConst.AppName)
+	agentConf.Init()
 
+	cleanup()
 }
 
 func cleanup() {

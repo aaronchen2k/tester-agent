@@ -4,6 +4,7 @@ import (
 	"flag"
 	"github.com/aaronchen2k/tester/cmd/manager/program"
 	managerConf "github.com/aaronchen2k/tester/cmd/manager/utils/conf"
+	managerConst "github.com/aaronchen2k/tester/cmd/manager/utils/const"
 	agentConst "github.com/aaronchen2k/tester/internal/agent/utils/const"
 	_const "github.com/aaronchen2k/tester/internal/pkg/const"
 	_i118Utils "github.com/aaronchen2k/tester/internal/pkg/libs/i118"
@@ -93,8 +94,10 @@ func main() {
 }
 
 func init() {
-	_logUtils.Init()
+	_logUtils.Init(managerConst.AppName)
 	managerConf.Init()
+
+	cleanup()
 }
 
 func cleanup() {

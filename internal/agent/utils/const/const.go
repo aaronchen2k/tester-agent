@@ -6,7 +6,7 @@ import (
 )
 
 var (
-	AppType    = "agent"
+	AppName    = "agent"
 	ConfigVer  = 1
 	ConfigFile = fmt.Sprintf("conf%stester.yaml", string(os.PathSeparator))
 

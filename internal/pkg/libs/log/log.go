@@ -14,7 +14,7 @@ import (
 
 var logger *logrus.Logger
 
-func Init() {
+func Init(app string) {
 	if logger != nil {
 		return
 	}
@@ -22,7 +22,7 @@ func Init() {
 	usr, _ := user.Current()
 	log.Info("run as user " + usr.Username)
 
-	_vari.WorkDir = addPathSepIfNeeded(path.Join(usr.HomeDir, "tester-manager"))
+	_vari.WorkDir = addPathSepIfNeeded(path.Join(usr.HomeDir, "tester"))
 	logDir := addPathSepIfNeeded(path.Join(_vari.WorkDir, "log"))
 	MkDirIfNeeded(logDir)
 	log.Info("log dir is " + logDir)
@@ -31,9 +31,9 @@ func Init() {
 	logger.Out = ioutil.Discard
 
 	pathMap := lfshook.PathMap{
-		logrus.InfoLevel:  logDir + "log.txt",
-		logrus.WarnLevel:  logDir + "log.txt",
-		logrus.ErrorLevel: logDir + "error.txt",
+		logrus.InfoLevel:  logDir + app + "-log.txt",
+		logrus.WarnLevel:  logDir + app + "-log.txt",
+		logrus.ErrorLevel: logDir + app + "-error.txt",
 	}
 
 	logger.Hooks.Add(lfshook.NewHook(
