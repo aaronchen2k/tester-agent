@@ -3,7 +3,7 @@ package appiumService
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/aaronchen2k/tester/internal/agent/cfg"
+	agentConf "github.com/aaronchen2k/tester/internal/agent/conf"
 	deviceService "github.com/aaronchen2k/tester/internal/agent/service/device"
 	_const "github.com/aaronchen2k/tester/internal/pkg/const"
 	_domain "github.com/aaronchen2k/tester/internal/pkg/domain"

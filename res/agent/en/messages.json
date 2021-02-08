@@ -28,6 +28,14 @@
     {
       "id": "start_to_run",
       "translation": "Start to run scheduled job."
+    },
+    {
+      "id": "success_to_register",
+      "translation": "Success to register vm to server %s."
+    },
+    {
+      "id": "fail_to_register",
+      "translation": "Fail to register vm to server %s, response is %#v."
     }
   ]
 }

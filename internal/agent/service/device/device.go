@@ -1,7 +1,7 @@
 package deviceService
 
 import (
-	agentConf "github.com/aaronchen2k/tester/internal/agent/cfg"
+	agentConf "github.com/aaronchen2k/tester/internal/agent/conf"
 	androidService "github.com/aaronchen2k/tester/internal/agent/service/device/android"
 	iosService "github.com/aaronchen2k/tester/internal/agent/service/device/ios"
 	_const "github.com/aaronchen2k/tester/internal/pkg/const"

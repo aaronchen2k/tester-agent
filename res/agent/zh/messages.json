@@ -29,6 +29,14 @@
     {
       "id": "start_to_run",
       "translation": "执行定时任务。"
+    },
+    {
+      "id": "success_to_register",
+      "translation": "成功注册虚拟机到服务器%s."
+    },
+    {
+      "id": "fail_to_register",
+      "translation": "失败注册虚拟机到服务器%s，响应为%#v."
     }
   ]
 }

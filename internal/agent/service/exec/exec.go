@@ -3,7 +3,7 @@ package execService
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/aaronchen2k/tester/internal/agent/cfg"
+	agentConf "github.com/aaronchen2k/tester/internal/agent/conf"
 	_domain "github.com/aaronchen2k/tester/internal/pkg/domain"
 	_fileUtils "github.com/aaronchen2k/tester/internal/pkg/libs/file"
 	_httpUtils "github.com/aaronchen2k/tester/internal/pkg/libs/http"

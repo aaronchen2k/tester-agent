@@ -35,7 +35,8 @@ func main() {
 	flagSet.StringVar(&agentConf.Inst.Server, "s", "", "")
 	flagSet.StringVar(&agentConf.Inst.Ip, "i", "", "")
 	flagSet.IntVar(&agentConf.Inst.Port, "p", 10, "")
-	flagSet.StringVar(&platform, "t", string(_const.OsAndroid), "")
+	flagSet.StringVar(&agentConf.Inst.Language, "l", "zh", "")
+	flagSet.StringVar(&platform, "t", string(_const.Vm), "")
 
 	flagSet.BoolVar(&help, "h", false, "")
 
@@ -45,25 +46,21 @@ func main() {
 
 	switch os.Args[1] {
 	case "start":
-		start(os.Args)
+		start()
 
 	case "help", "-h":
 		agentUntils.PrintUsage()
 
 	default:
-		if len(os.Args) > 1 {
-			args := []string{os.Args[0], "start"}
-			args = append(args, os.Args[1:]...)
-
-			start(args)
-		} else {
-			agentUntils.PrintUsage()
-		}
+		start()
 	}
 }
 
-func start(args []string) {
-	if err := flagSet.Parse(args[2:]); err == nil {
+func start() {
+	_logUtils.Init(agentConst.AppName)
+	agentConf.Init()
+
+	if err := flagSet.Parse(os.Args[1:]); err == nil {
 		agentConf.Inst.Platform = _const.WorkPlatform(platform)
 
 		cron.Init()
@@ -72,9 +69,6 @@ func start(args []string) {
 }
 
 func init() {
-	_logUtils.Init(agentConst.AppName)
-	agentConf.Init()
-
 	cleanup()
 }
 

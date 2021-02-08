@@ -1,7 +1,7 @@
 package deviceCommon
 
 import (
-	"github.com/aaronchen2k/tester/internal/agent/cfg"
+	agentConf "github.com/aaronchen2k/tester/internal/agent/conf"
 	_domain "github.com/aaronchen2k/tester/internal/pkg/domain"
 	"github.com/jinzhu/copier"
 )

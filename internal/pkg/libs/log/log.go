@@ -20,12 +20,12 @@ func Init(app string) {
 	}
 
 	usr, _ := user.Current()
-	log.Info("run as user " + usr.Username)
+	log.Info("Run as user " + usr.Username)
 
 	_vari.WorkDir = addPathSepIfNeeded(path.Join(usr.HomeDir, "tester"))
 	logDir := addPathSepIfNeeded(path.Join(_vari.WorkDir, "log"))
 	MkDirIfNeeded(logDir)
-	log.Info("log dir is " + logDir)
+	log.Info("Log dir is " + logDir)
 
 	logger = logrus.New()
 	logger.Out = ioutil.Discard

@@ -2,10 +2,12 @@ package agentConf
 
 import (
 	"github.com/aaronchen2k/tester/internal/agent/agentModel"
+	agentConst "github.com/aaronchen2k/tester/internal/agent/utils/const"
 	_const "github.com/aaronchen2k/tester/internal/pkg/const"
 	_commonUtils "github.com/aaronchen2k/tester/internal/pkg/libs/common"
 	_fileUtils "github.com/aaronchen2k/tester/internal/pkg/libs/file"
 	_httpUtils "github.com/aaronchen2k/tester/internal/pkg/libs/http"
+	_i118Utils "github.com/aaronchen2k/tester/internal/pkg/libs/i118"
 )
 
 var (
@@ -13,6 +15,8 @@ var (
 )
 
 func Init() {
+	_i118Utils.InitI118(Inst.Language, agentConst.AppName)
+
 	ip, _, hostName := _commonUtils.GetIp()
 	Inst.HostName = hostName
 	Inst.Ip = ip.String()

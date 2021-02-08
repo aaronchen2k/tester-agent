@@ -1,7 +1,7 @@
 package checkService
 
 import (
-	agentConf "github.com/aaronchen2k/tester/internal/agent/cfg"
+	agentConf "github.com/aaronchen2k/tester/internal/agent/conf"
 	appiumService "github.com/aaronchen2k/tester/internal/agent/service/appium"
 	deviceService "github.com/aaronchen2k/tester/internal/agent/service/device"
 	testService "github.com/aaronchen2k/tester/internal/agent/service/test"

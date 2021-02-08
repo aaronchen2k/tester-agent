@@ -107,31 +107,6 @@ func Post(url string, params interface{}) (interface{}, bool) {
 	code := result.Code
 	return result, code == _const.ResultSuccess.Int()
 }
-func Post2(url string, params interface{}) (interface{}, bool) {
-	if _vari.Verbose {
-		_logUtils.Info(url)
-	}
-
-	paramStr, err := json.Marshal(params)
-	if err != nil {
-		_logUtils.Error(err.Error())
-		return nil, false
-	}
-
-	resp, err := http.Post(url, "application/json", strings.NewReader(string(paramStr)))
-	bodyStr, _ := ioutil.ReadAll(resp.Body)
-	if _vari.Verbose {
-		_logUtils.PrintUnicode(bodyStr)
-	}
-
-	var result _domain.RpcResult
-	json.Unmarshal(bodyStr, &result)
-
-	defer resp.Body.Close()
-
-	code := result.Code
-	return result, code == _const.ResultSuccess.Int()
-}
 
 func GenUrl(server string, path string) string {
 	server = UpdateUrl(server)
