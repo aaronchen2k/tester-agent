@@ -6,14 +6,14 @@ type Iso struct {
 	BaseModel
 	base.TestEnv
 
-	Name string `gorm:"name" json:"name,omitempty"`
-	Path string `gorm:"path" json:"path,omitempty"`
-	Size int    `gorm:"size"`
+	Name string `json:"name,omitempty"`
+	Path string `json:"path,omitempty"`
+	Size int    `json:"size,omitempty"`
 
-	ResolutionHeight  int `gorm:"resolutionHeight" json:"resolutionHeight,omitempty"`
-	ResolutionWidth   int `gorm:"resolutionWidth" json:"resolutionWidth,omitempty"`
-	SuggestDiskSize   int `gorm:"suggestDiskSize" json:"suggestDiskSize,omitempty"`
-	SuggestMemorySize int `gorm:"suggestMemorySize" json:"suggestMemorySize,omitempty"`
+	ResolutionHeight  int `json:"resolutionHeight,omitempty"`
+	ResolutionWidth   int `json:"resolutionWidth,omitempty"`
+	SuggestDiskSize   int `json:"suggestDiskSize,omitempty"`
+	SuggestMemorySize int `json:"suggestMemorySize,omitempty"`
 }
 
 func (Iso) TableName() string {

@@ -9,31 +9,31 @@ import (
 type Container struct {
 	BaseModel
 
-	Mac     string          `gorm:"mac" json:"mac,omitempty"`
-	Name    string          `gorm:"name" json:"name,omitempty"`
-	Ip      string          `gorm:"ip" json:"ip,omitempty"`
-	Port    int             `gorm:"port" json:"port,omitempty"`
-	SshPort int             `gorm:"sshPort" json:"sshPort,omitempty"`
-	VncPort int             `gorm:"vncPort" json:"vncPort,omitempty"`
-	Status  _const.VmStatus `gorm:"status" json:"status,omitempty"`
-	Msg     string          `gorm:"msg" json:"msg,omitempty"`
-	WorkDir string          `gorm:"workDir" json:"workDir,omitempty"`
+	Mac     string          `json:"mac,omitempty"`
+	Name    string          `json:"name,omitempty"`
+	Ip      string          `json:"ip,omitempty"`
+	Port    int             `json:"port,omitempty"`
+	SshPort int             `json:"sshPort,omitempty"`
+	VncPort int             `json:"vncPort,omitempty"`
+	Status  _const.VmStatus `json:"status,omitempty"`
+	Msg     string          `json:"msg,omitempty"`
+	WorkDir string          `json:"workDir,omitempty"`
 
-	HostId  uint `gorm:"hostId" json:"hostId,omitempty"`
-	ImageId uint `gorm:"imageId" json:"imageId,omitempty"`
+	HostId  uint `json:"hostId,omitempty"`
+	ImageId uint `json:"imageId,omitempty"`
 
-	HostName   string `gorm:"hostName" json:"hostName,omitempty"`
-	DefPath    string `gorm:"defPath" json:"defPath,omitempty"`
-	ImagePath  string `gorm:"imagePath" json:"imagePath,omitempty"`
-	DiskSize   int    `gorm:"diskSize" json:"diskSize,omitempty"`
-	MemorySize int    `gorm:"memorySize" json:"memorySize,omitempty"`
+	HostName   string `json:"hostName,omitempty"`
+	DefPath    string `json:"defPath,omitempty"`
+	ImagePath  string `json:"imagePath,omitempty"`
+	DiskSize   int    `json:"diskSize,omitempty"`
+	MemorySize int    `json:"memorySize,omitempty"`
 
-	DestroyAt        time.Time `gorm:"destroyAt" json:"destroyAt,omitempty"`
-	LastRegisterDate time.Time `gorm:"lastRegisterDate" json:"lastRegisterDate,omitempty"`
+	DestroyAt        time.Time `json:"destroyAt,omitempty"`
+	LastRegisterDate time.Time `json:"lastRegisterDate,omitempty"`
 
-	Ident     string `gorm:"ident" json:"ident"`
-	NodeId    uint   `gorm:"nodeId" json:"nodeId"`
-	ClusterId uint   `gorm:"clusterId" json:"clusterId"`
+	Ident     string `json:"ident"`
+	NodeId    uint   `json:"nodeId"`
+	ClusterId uint   `json:"clusterId"`
 }
 
 func (Container) GenContainerTo(containerPo Container) (to _domain.Container) {

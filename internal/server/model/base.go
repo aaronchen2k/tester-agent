@@ -5,8 +5,8 @@ import (
 )
 
 type BaseModel struct {
-	ID        uint       `gorm:"primary_key" json:"id"`
-	CreatedAt time.Time  `gorm:"createdAt" json:"createdAt"`
-	UpdatedAt time.Time  `gorm:"updatedAt" json:"updatedAt"`
-	DeletedAt *time.Time `gorm:"deletedAt" sql:"index" json:"deletedAt"`
+	ID        uint       `gorm:"primaryKey" json:"id"`
+	CreatedAt time.Time  `json:"createdAt"`
+	UpdatedAt time.Time  `json:"updatedAt"`
+	DeletedAt *time.Time `sql:"index" json:"deletedAt"`
 }

@@ -6,21 +6,21 @@ type ContainerImage struct {
 	BaseModel
 	base.TestEnv
 
-	Name string `gorm:"name" json:"name,omitempty"`
-	Path string `gorm:"path" json:"path,omitempty"`
-	Size int    `gorm:"size" json:"size,omitempty"`
+	Name string `json:"name,omitempty"`
+	Path string `json:"path,omitempty"`
+	Size int    `json:"size,omitempty"`
 
-	ResolutionHeight  int `gorm:"resolutionHeight" json:"resolutionHeight,omitempty"`
-	ResolutionWidth   int `gorm:"resolutionWidth" json:"resolutionWidth,omitempty"`
-	SuggestDiskSize   int `gorm:"suggestDiskSize" json:"suggestDiskSize,omitempty"`
-	SuggestMemorySize int `gorm:"suggestMemorySize" json:"suggestMemorySize,omitempty"`
+	ResolutionHeight  int `json:"resolutionHeight,omitempty"`
+	ResolutionWidth   int `json:"resolutionWidth,omitempty"`
+	SuggestDiskSize   int `json:"suggestDiskSize,omitempty"`
+	SuggestMemorySize int `json:"suggestMemorySize,omitempty"`
 
-	SysIsoId    uint `gorm:"sysIsoId" json:"sysIsoId,omitempty"`
-	DriverIsoId uint `gorm:"driverIsoId" json:"driverIsoId,omitempty"`
+	SysIsoId    uint `json:"sysIsoId,omitempty"`
+	DriverIsoId uint `json:"driverIsoId,omitempty"`
 
-	Ident   string `gorm:"ident" json:"ident"`
-	Node    string `gorm:"node" json:"node"`
-	Cluster string `gorm:"cluster" json:"cluster"`
+	Ident   string `json:"ident"`
+	Node    string `json:"node"`
+	Cluster string `json:"cluster"`
 }
 
 func (ContainerImage) TableName() string {

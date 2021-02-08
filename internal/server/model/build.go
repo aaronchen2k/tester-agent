@@ -3,26 +3,32 @@ package model
 import (
 	_const "github.com/aaronchen2k/tester/internal/pkg/const"
 	_domain "github.com/aaronchen2k/tester/internal/pkg/domain"
+	"github.com/aaronchen2k/tester/internal/server/model/base"
 	"time"
 )
 
 type Build struct {
 	BaseModel
+	base.TestObject
+	base.TestEnv
 
-	QueueId uint `gorm:"serial" json:"serial,omitempty"`
-	Queue   `sql:"-", gorm:"foreignkey:QueueId" json:"-"`
+	QueueId uint `json:"queueId,omitempty"`
+
+	// job
+	BuildType _const.BuildType `json:"buildType,omitempty"`
+	Priority  int              `json:"priority,omitempty"`
 
 	// env
-	NodeIp     string `gorm:"nodeIp" json:"nodeIp,omitempty"`
-	NodePort   int    `gorm:"nodePort" json:"nodePort,omitempty"`
-	AppiumPort int    `gorm:"appiumPort" json:"appiumPort,omitempty"`
+	NodeIp     string `json:"nodeIp,omitempty"`
+	NodePort   int    `json:"nodePort,omitempty"`
+	AppiumPort int    `json:"appiumPort,omitempty"`
 
 	// status
-	StartTime    time.Time `gorm:"startTime" json:"startTime,omitempty"`
-	CompleteTime time.Time `gorm:"completeTime" json:"completeTime,omitempty"`
+	StartTime    time.Time `json:"startTime,omitempty"`
+	CompleteTime time.Time `json:"completeTime,omitempty"`
 
-	Progress _const.BuildProgress `gorm:"progress" json:"progress,omitempty"`
-	Status   _const.BuildStatus   `gorm:"status" json:"status,omitempty"`
+	Progress _const.BuildProgress `json:"progress,omitempty"`
+	Status   _const.BuildStatus   `json:"status,omitempty"`
 }
 
 func NewBuild() Build {

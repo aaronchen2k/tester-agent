@@ -4,25 +4,25 @@ import _const "github.com/aaronchen2k/tester/internal/pkg/const"
 
 type EnvBase struct {
 	BaseModel
-	Code string `gorm:"code" json:"code"`
+	Code string `json:"code"`
 }
 
 type OsPlatform struct {
 	EnvBase
-	Name _const.OsPlatform `gorm:"name" json:"name"`
+	Name _const.OsPlatform `json:"name"`
 }
 type OsType struct {
 	EnvBase
-	Name       _const.OsType `gorm:"name" json:"name"`
-	OsPlatform string        `gorm:"osPlatform" json:"osPlatform"`
+	Name       _const.OsType `json:"name"`
+	OsPlatform string        `json:"osPlatform"`
 }
 type OsLang struct {
 	EnvBase
-	Name string `gorm:"name" json:"name"`
+	Name string `json:"name"`
 }
 type BrowserType struct {
 	EnvBase
-	Name _const.BrowserType `gorm:"name" json:"name"`
+	Name _const.BrowserType `json:"name"`
 }
 
 func (OsPlatform) TableName() string {

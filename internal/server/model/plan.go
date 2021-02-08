@@ -11,24 +11,24 @@ type Plan struct {
 	base.TestObject
 
 	// job
-	BuildType _const.BuildType `gorm:"buildType" json:"buildType,omitempty"`
-	Priority  int              `gorm:"priority" json:"priority,omitempty"`
-	GroupId   uint             `gorm:"groupId" json:"groupId,omitempty"`
+	BuildType _const.BuildType `json:"buildType,omitempty"`
+	Priority  int              `json:"priority,omitempty"`
+	GroupId   uint             `json:"groupId,omitempty"`
 
 	// env
-	Environments []base.TestEnv `gorm:"-"` // for selenium, appium test
+	Environments []base.TestEnv `gorm:"-"`
 
 	// status
-	Progress _const.BuildProgress `gorm:"progress" json:"progress,omitempty"`
-	Status   _const.BuildStatus   `gorm:"status" json:"status,omitempty"`
+	Progress _const.BuildProgress `json:"progress,omitempty"`
+	Status   _const.BuildStatus   `json:"status,omitempty"`
 
-	StartTime   time.Time `gorm:"startTime" json:"startTime,omitempty"`
-	PendingTime time.Time `gorm:"pendingTime" json:"pendingTime,omitempty"`
-	ResultTime  time.Time `gorm:"resultTime" json:"resultTime,omitempty"`
+	StartTime   time.Time `json:"startTime,omitempty"`
+	PendingTime time.Time `json:"pendingTime,omitempty"`
+	ResultTime  time.Time `json:"resultTime,omitempty"`
 
 	// desc
-	PlanName string `gorm:"planName" json:"planName,omitempty"`
-	UserName string `gorm:"userName" json:"userName,omitempty"`
+	PlanName string `json:"planName,omitempty"`
+	UserName string `json:"userName,omitempty"`
 }
 
 func NewPlan() Plan {

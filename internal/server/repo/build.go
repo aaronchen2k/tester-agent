@@ -19,7 +19,6 @@ func NewBuildRepo() *BuildRepo {
 
 func (r *BuildRepo) GetBuild(id uint) (build model.Build) {
 	r.DB.Where("ID=?", id).First(&build)
-	r.DB.Model(&build).Preload("Queue").Find(&build.Queue)
 
 	return
 }

@@ -8,21 +8,21 @@ import (
 type Node struct {
 	BaseModel
 
-	Ident string `gorm:"ident" json:"ident"`
-	Type  string `gorm:"type" json:"type"`
+	Ident string `json:"ident"`
+	Type  string `json:"type"`
 
-	Ip      string `gorm:"ip" json:"ip"`
-	Port    int    `gorm:"port" json:"port"`
-	WorkDir string `gorm:"workDir" json:"workDir,omitempty"`
+	Ip      string `json:"ip"`
+	Port    int    `son:"port"`
+	WorkDir string `json:"workDir,omitempty"`
 
-	Username string `gorm:"username" json:"username"`
-	Password string `gorm:"password" json:"password"`
+	Username string `json:"username"`
+	Password string `json:"password"`
 
-	SshPort int               `gorm:"sshPort" json:"sshPort,omitempty"`
-	VncPort int               `gorm:"vncPort" json:"vncPort,omitempty"`
-	Status  _const.HostStatus `gorm:"status" json:"status"`
+	SshPort int               `json:"sshPort,omitempty"`
+	VncPort int               `json:"vncPort,omitempty"`
+	Status  _const.HostStatus `json:"status"`
 
-	LastRegisterDate time.Time `gorm:"lastRegisterDate" json:"lastRegisterDate"`
+	LastRegisterDate time.Time `json:"lastRegisterDate"`
 	TaskCount        int       `gorm:"-" json:"taskCount"`
 }
 

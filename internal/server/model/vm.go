@@ -11,39 +11,39 @@ type Vm struct {
 	BaseModel
 	base.TestEnv
 
-	Mac     string          `gorm:"mac" json:"mac,omitempty"`
-	Name    string          `gorm:"name" json:"name,omitempty"`
-	Ip      string          `gorm:"ip" json:"ip,omitempty"`
-	Port    int             `gorm:"port" json:"port,omitempty"`
-	SshPort int             `gorm:"sshPort" json:"sshPort,omitempty"`
-	VncPort int             `gorm:"vncPort" json:"vncPort,omitempty"`
-	Status  _const.VmStatus `gorm:"status" json:"status,omitempty"`
-	Msg     string          `gorm:"msg" json:"msg,omitempty"`
-	WorkDir string          `gorm:"workDir" json:"workDir,omitempty"`
+	Mac     string          `json:"mac,omitempty"`
+	Name    string          `json:"name,omitempty"`
+	Ip      string          `json:"ip,omitempty"`
+	Port    int             `json:"port,omitempty"`
+	SshPort int             `json:"sshPort,omitempty"`
+	VncPort int             `json:"vncPort,omitempty"`
+	Status  _const.VmStatus `json:"status,omitempty"`
+	Msg     string          `json:"msg,omitempty"`
+	WorkDir string          `json:"workDir,omitempty"`
 
-	HostId        uint `gorm:"hostId" json:"hostId,omitempty"`
-	TemplImageId  uint `gorm:"templImageId" json:"templImageId,omitempty"`
-	CdromSysId    uint `gorm:"cdromSysId" json:"cdromSysId,omitempty"`
-	CdromDriverId uint `gorm:"cdromDriverId" json:"cdromDriverId,omitempty"`
+	HostId        uint `json:"hostId,omitempty"`
+	TemplImageId  uint `json:"templImageId,omitempty"`
+	CdromSysId    uint `json:"cdromSysId,omitempty"`
+	CdromDriverId uint `json:"cdromDriverId,omitempty"`
 
-	HostName         string `gorm:"hostName" json:"hostName,omitempty"`
-	DefPath          string `gorm:"defPath" json:"defPath,omitempty"`
-	ImagePath        string `gorm:"imagePath" json:"imagePath,omitempty"`
-	BackingImagePath string `gorm:"backingImagePath" json:"backingImagePath,omitempty"`
-	DiskSize         int    `gorm:"diskSize" json:"diskSize,omitempty"`
-	MemorySize       int    `gorm:"memorySize" json:"memorySize,omitempty"`
-	CdromSys         string `gorm:"cdromSys" json:"cdromSys,omitempty"`
-	CdromDriver      string `gorm:"cdromDriver" json:"cdromDriver,omitempty"`
+	HostName         string `json:"hostName,omitempty"`
+	DefPath          string `json:"defPath,omitempty"`
+	ImagePath        string `json:"imagePath,omitempty"`
+	BackingImagePath string `json:"backingImagePath,omitempty"`
+	DiskSize         int    `json:"diskSize,omitempty"`
+	MemorySize       int    `json:"memorySize,omitempty"`
+	CdromSys         string `json:"cdromSys,omitempty"`
+	CdromDriver      string `json:"cdromDriver,omitempty"`
 
-	ResolutionHeight int `gorm:"resolutionHeight" json:"resolutionHeight,omitempty"`
-	ResolutionWidth  int `gorm:"resolutionWidth" json:"resolutionWidth,omitempty"`
+	ResolutionHeight int `json:"resolutionHeight,omitempty"`
+	ResolutionWidth  int `json:"resolutionWidth,omitempty"`
 
-	DestroyAt        time.Time `gorm:"destroyAt" json:"destroyAt,omitempty"`
-	LastRegisterDate time.Time `gorm:"lastRegisterDate" json:"lastRegisterDate,omitempty"`
+	DestroyAt        time.Time `json:"destroyAt,omitempty"`
+	LastRegisterDate time.Time `gorm:"json:"lastRegisterDate,omitempty"`
 
-	Ident     string `gorm:"ident" json:"ident"`
-	NodeId    uint   `gorm:"nodeId" json:"nodeId"`
-	ClusterId uint   `gorm:"clusterId" json:"clusterId"`
+	Ident     string `json:"ident"`
+	NodeId    uint   `json:"nodeId"`
+	ClusterId uint   `json:"clusterId"`
 }
 
 func GenVmTo(vmPo Vm) (to _domain.Vm) {

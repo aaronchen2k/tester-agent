@@ -13,26 +13,26 @@ type Queue struct {
 	VmId uint `gorm:"vmId" json:"vmId,omitempty"`
 
 	// job
-	BuildType _const.BuildType `gorm:"buildType" json:"buildType,omitempty"`
-	Priority  int              `gorm:"priority" json:"priority,omitempty"`
-	GroupId   uint             `gorm:"groupId" json:"groupId,omitempty"`
-	PlanId    uint             `gorm:"planId" json:"planId,omitempty"`
-	TaskId    uint             `gorm:"taskId" json:"taskId,omitempty"`
+	BuildType _const.BuildType `json:"buildType,omitempty"`
+	Priority  int              `json:"priority,omitempty"`
+	GroupId   uint             `json:"groupId,omitempty"`
+	PlanId    uint             `json:"planId,omitempty"`
+	TaskId    uint             `json:"taskId,omitempty"`
 
 	// status
-	Progress _const.BuildProgress `gorm:"progress" json:"progress,omitempty"`
-	Status   _const.BuildStatus   `gorm:"status" json:"status,omitempty"`
+	Progress _const.BuildProgress `json:"progress,omitempty"`
+	Status   _const.BuildStatus   `json:"status,omitempty"`
 
-	StartTime   time.Time `gorm:"startTime" json:"startTime,omitempty"`
-	PendingTime time.Time `gorm:"pendingTime" json:"pendingTime,omitempty"`
-	ResultTime  time.Time `gorm:"resultTime" json:"resultTime,omitempty"`
-	TimeoutTime time.Time `gorm:"timeoutTime" json:"timeoutTime,omitempty"`
+	StartTime   time.Time `json:"startTime,omitempty"`
+	PendingTime time.Time `json:"pendingTime,omitempty"`
+	ResultTime  time.Time `json:"resultTime,omitempty"`
+	TimeoutTime time.Time `json:"timeoutTime,omitempty"`
 
-	Retry int `gorm:"retry"`
+	Retry int `json:"retry,omitempty"`
 
 	// desc
-	QueueName string `gorm:"queueName"`
-	UserName  string `gorm:"userName"`
+	QueueName string `json:"queueName,omitempty"`
+	UserName  string `json:"userName,omitempty"`
 }
 
 func NewQueue() Queue {
