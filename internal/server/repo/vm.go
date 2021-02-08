@@ -31,6 +31,7 @@ func (r *VmRepo) GetById(id uint) (vm model.Vm) {
 	r.DB.Where("ID=?", id).First(&vm)
 	return
 }
+
 func (r *VmRepo) GetByMac(mac string) (vm model.Vm) {
 	r.DB.Where("mac=?", mac).First(&vm)
 	return

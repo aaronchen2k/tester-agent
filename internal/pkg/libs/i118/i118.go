@@ -2,30 +2,25 @@ package _i118Utils
 
 import (
 	"encoding/json"
-	_const "github.com/aaronchen2k/tester/internal/pkg/const"
 	_commonUtils "github.com/aaronchen2k/tester/internal/pkg/libs/common"
-	managerRes "github.com/aaronchen2k/tester/res/manager"
+	agentRes "github.com/aaronchen2k/tester/res/agent"
 	"golang.org/x/text/language"
 	"golang.org/x/text/message"
 	"io/ioutil"
+	"path"
 )
 
 var I118Prt *message.Printer
 
-func InitI118(lang string) {
+func InitI118(lang string, app string) {
 	//var once sync.Once
 	//once.Do(func() {
+
+	langRes := path.Join("res", app, lang, "messages.json")
+
 	isRelease := _commonUtils.IsRelease()
-
-	var langRes string
-	if lang == _const.LanguageEN {
-		langRes = _const.EnRes
-	} else {
-		langRes = _const.ZhRes
-	}
-
 	if isRelease {
-		data, _ := managerRes.Asset(langRes)
+		data, _ := agentRes.Asset(langRes)
 		InitResFromAsset(data)
 	} else {
 		InitRes(langRes)

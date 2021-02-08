@@ -37,7 +37,7 @@ func UploadResult(build _domain.BuildTo, result _domain.RpcResult) {
 
 	result.Payload = build
 
-	uploadResultUrl := _httpUtils.GenUrl(agentConf.Inst.FarmServer, "build/upload")
+	uploadResultUrl := _httpUtils.GenUrl(agentConf.Inst.Server, "build/upload")
 	files := []string{zipFile}
 	extraParams := map[string]string{}
 	json, _ := json.Marshal(result)

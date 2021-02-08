@@ -22,13 +22,36 @@ perms:
     description: ""
     act: "POST"
 
-  - name: "/api/v1/admin/vms"
+  - name: "/api/v1/admin/env"
+    displayname: "环境配置"
+    description: ""
+    act: "GET"
+
+  - name: "/api/v1/admin/machines/listVm"
     displayname: "虚拟机列表"
     description: ""
     act: "GET"
 
-  - name: "/api/v1/admin/containers"
+  - name: "/api/v1/admin/machines/listContainer"
     displayname: "容器列表"
+    description: ""
+    act: "GET"
+
+  - name: "/api/v1/admin/vms"
+    displayname: "虚拟机"
+    description: ""
+    act: "GET"
+  - name: "/api/v1/admin/vmTempls"
+    displayname: "虚拟机模板加载"
+    description: ""
+    act: "POST"
+  - name: "/api/v1/admin/vmTempls"
+    displayname: "虚拟机模板更新"
+    description: ""
+    act: "PUT"
+
+  - name: "/api/v1/admin/containers"
+    displayname: "容器"
     description: ""
     act: "GET"
 

@@ -18,9 +18,9 @@ type VmTempl struct {
 	SysIsoId    uint `gorm:"sysIsoId" json:"sysIsoId,omitempty"`
 	DriverIsoId uint `gorm:"driverIsoId" json:"driverIsoId,omitempty"`
 
-	Ident     string `gorm:"ident" json:"ident"`
-	NodeId    uint   `gorm:"nodeId" json:"nodeId"`
-	ClusterId uint   `gorm:"clusterId" json:"clusterId"`
+	Ident   string `gorm:"ident" json:"ident"`
+	Node    string `gorm:"node" json:"node"`
+	Cluster string `gorm:"cluster" json:"cluster"`
 }
 
 func (VmTempl) TableName() string {

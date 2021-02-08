@@ -34,10 +34,10 @@ func main() {
 	flagSet.StringVar(&agentConf.Inst.KvmDir, "k", "kvm", "")
 	flagSet.StringVar(&agentConf.Inst.WorkDir, "w", "work", "")
 
-	flagSet.StringVar(&agentConf.Inst.FarmServer, "s", "", "")
+	flagSet.StringVar(&agentConf.Inst.Server, "s", "", "")
 	flagSet.StringVar(&agentConf.Inst.Ip, "i", "", "")
-	flagSet.IntVar(&agentConf.Inst.Port, "p", 0, "")
-	flagSet.StringVar(&platform, "t", "", "")
+	flagSet.IntVar(&agentConf.Inst.Port, "p", 10, "")
+	flagSet.StringVar(&platform, "t", string(_const.OsAndroid), "")
 
 	flagSet.BoolVar(&help, "h", false, "")
 
@@ -68,6 +68,7 @@ func start(args []string) {
 	if err := flagSet.Parse(args[2:]); err == nil {
 		agentConf.Inst.Platform = _const.WorkPlatform(platform)
 
+		_logUtils.Init()
 		agentConf.Init()
 		cron.Init()
 
@@ -77,7 +78,7 @@ func start(args []string) {
 
 func init() {
 	cleanup()
-	_logUtils.Init()
+
 }
 
 func cleanup() {

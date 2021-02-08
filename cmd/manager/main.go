@@ -1,36 +1,52 @@
 package main
 
 import (
-	"github.com/aaronchen2k/tester/internal/manager/program"
-	configUtils "github.com/easysoft/zmanager/pkg/config"
-	commonUtils "github.com/easysoft/zmanager/pkg/utils/common"
-	constant "github.com/easysoft/zmanager/pkg/utils/const"
-	i118Utils "github.com/easysoft/zmanager/pkg/utils/i118"
-	"log"
-	"os"
-
+	"flag"
+	"github.com/aaronchen2k/tester/cmd/manager/program"
+	managerConf "github.com/aaronchen2k/tester/cmd/manager/utils/conf"
+	agentConst "github.com/aaronchen2k/tester/internal/agent/utils/const"
+	_const "github.com/aaronchen2k/tester/internal/pkg/const"
+	_i118Utils "github.com/aaronchen2k/tester/internal/pkg/libs/i118"
+	_logUtils "github.com/aaronchen2k/tester/internal/pkg/libs/log"
+	_stringUtils "github.com/aaronchen2k/tester/internal/pkg/libs/string"
 	"github.com/kardianos/service"
+	"os"
+	"os/signal"
+	"syscall"
+)
+
+var (
+	help    bool
+	flagSet *flag.FlagSet
+
+	action string
 )
 
 func main() {
-	configUtils.Init()
+	channel := make(chan os.Signal)
+	signal.Notify(channel, os.Interrupt, syscall.SIGTERM)
+	go func() {
+		<-channel
+		cleanup()
+		os.Exit(0)
+	}()
 
-	action := ""
-	if len(os.Args) > 1 {
-		action = os.Args[1]
-	}
+	flagSet = flag.NewFlagSet("tester", flag.ContinueOnError)
 
-	if action != "" && commonUtils.StrInArr(action, constant.Actions) {
-		log.Println(i118Utils.I118Prt.Sprintf("valid_actions", service.ControlAction))
+	flagSet.StringVar(&action, "a", "", "")
+
+	if action != "" && !_stringUtils.StrInArr(action, agentConst.ControlActions) {
+		_logUtils.Warn(_i118Utils.I118Prt.Sprintf("invalid_actions", action, service.ControlAction))
+		return
 	}
 
 	options := make(service.KeyValue)
 	options["Restart"] = "on-success"
 	options["SuccessExitStatus"] = "1 2 8 SIGKILL"
 	config := &service.Config{
-		Name:        constant.AppName,
-		DisplayName: constant.AppName,
-		Description: constant.AppName + " service.",
+		Name:        _const.AppName,
+		DisplayName: _const.AppName,
+		Description: _const.AppName + " service.",
 		Dependencies: []string{
 			"Requires=network.target",
 			"After=network-online.target syslog.target"},
@@ -38,36 +54,48 @@ func main() {
 	}
 
 	prg := &program.Program{}
-	s, err := service.New(prg, config)
+	srv, err := service.New(prg, config)
 	if err != nil {
-		log.Fatal(err)
+		_logUtils.Error(err.Error())
+		os.Exit(1)
 	}
 	errs := make(chan error, 5)
-	program.Logger, err = s.Logger(errs)
+	program.Logger, err = srv.Logger(errs)
 	if err != nil {
-		log.Fatal(err)
+		_logUtils.Error(err.Error())
+		os.Exit(1)
 	}
 
 	go func() {
 		for {
 			err := <-errs
 			if err != nil {
-				log.Print(err)
+				_logUtils.Info(err.Error())
 			}
 		}
 	}()
 
 	if action != "" {
-		err := service.Control(s, action)
+		err := service.Control(srv, action)
 		if err != nil {
-			log.Println(i118Utils.I118Prt.Sprintf("valid_actions", service.ControlAction))
-			log.Fatal(err)
+			_logUtils.Info(_i118Utils.I118Prt.Sprintf("invalid_actions", action, service.ControlAction))
+
+			_logUtils.Error(err.Error())
+			os.Exit(1)
 		}
 		return
 	}
 
-	err = s.Run()
+	err = srv.Run()
 	if err != nil {
 		program.Logger.Error(err)
 	}
+}
+
+func init() {
+	_logUtils.Init()
+	managerConf.Init()
+}
+
+func cleanup() {
 }

@@ -14,7 +14,7 @@ func NewNodeRepo() *NodeRepo {
 	return &NodeRepo{}
 }
 
-func (r *NodeRepo) Get(id uint) (node model.Node) {
-	r.DB.Where("id=?", id).First(&node)
+func (r *NodeRepo) Get(node string) (ret model.Node) {
+	r.DB.Where("ident=?", node).First(&ret)
 	return
 }

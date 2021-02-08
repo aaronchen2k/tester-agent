@@ -23,7 +23,22 @@ const locale = {
   'menu.dashboard': '仪表盘',
   'menu.dashboard.analysis': '分析页',
   'menu.dashboard.monitor': '监控页',
-  'menu.dashboard.workplace': '工作台'
+  'menu.dashboard.workplace': '工作台',
+
+  'action.create': '创建',
+  'action.edit': '编辑',
+  'action.back': '返回',
+  'form.save': '保存',
+  'form.reset': '重置',
+  'form.cancel': '取消',
+
+  'vm.osPlatform': '系统平台',
+  'vm.osType': '系统类型',
+  'vm.osLevel': 'API级别',
+  'vm.osLang': '系统语言',
+  'vm.osBits': '系统位数',
+  'vm.osVer': '系统版本',
+  'vm.osBuild': '系统构建号'
 }
 
 export default {

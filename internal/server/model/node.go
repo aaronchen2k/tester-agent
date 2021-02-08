@@ -8,8 +8,8 @@ import (
 type Node struct {
 	BaseModel
 
-	Tag  string `gorm:"name" json:"name"`
-	Type string `gorm:"type" json:"type"`
+	Ident string `gorm:"ident" json:"ident"`
+	Type  string `gorm:"type" json:"type"`
 
 	Ip      string `gorm:"ip" json:"ip"`
 	Port    int    `gorm:"port" json:"port"`

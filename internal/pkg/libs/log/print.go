@@ -19,16 +19,20 @@ func Infof(str string, args ...interface{}) {
 
 func Warn(str string) {
 	logger.Warnln(str)
+	log.Println(str)
 }
 func Warnf(str string, args ...interface{}) {
 	logger.Warnf(str, args)
+	log.Printf(str+"\n", args)
 }
 
 func Error(str string) {
 	logger.Errorln(str)
+	log.Println(str)
 }
 func Errorf(str string, args ...interface{}) {
 	logger.Errorf(str, args)
+	log.Printf(str+"\n", args)
 }
 
 func Print(str string) {

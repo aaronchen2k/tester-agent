@@ -15,17 +15,10 @@ func App() {
 
 	srv := server.NewServer()
 
-	if agentConf.Inst.Platform == _const.Host {
-		srv.RegisterName("vmTempl", new(handler.VmTemplAction), "")
-		srv.RegisterName("vm", new(handler.VmAction), "")
-
-		srv.RegisterName("containerImage", new(handler.ContainerImageAction), "")
-		srv.RegisterName("container", new(handler.ContainerAction), "")
-
-	} else if agentConf.Inst.Platform == _const.Vm {
+	if agentConf.Inst.Platform == _const.Vm {
 		srv.RegisterName("selenium", new(handler.SeleniumAction), "")
 
-	} else if agentConf.Inst.Platform == _const.Computer {
+	} else if agentConf.Inst.Platform == _const.Box {
 		srv.RegisterName("appium", new(handler.AppiumAction), "")
 
 	}

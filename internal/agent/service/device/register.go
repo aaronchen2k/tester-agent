@@ -23,7 +23,7 @@ func Register(devices []_domain.DeviceInst, isBusy bool) {
 		devices[i].AppiumStatus = serviceStatus
 	}
 
-	url := _httpUtils.GenUrl(agentConf.Inst.FarmServer, "device/register")
+	url := _httpUtils.GenUrl(agentConf.Inst.Server, "device/register")
 
 	resp, ok := _httpUtils.Post(url, devices)
 

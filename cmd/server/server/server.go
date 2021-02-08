@@ -91,6 +91,8 @@ func injectObj(router *router.Router) {
 		&inject.Object{Value: db.GetInst().DB()},
 
 		// repo
+		&inject.Object{Value: repo.NewEnvRepo()},
+
 		&inject.Object{Value: repo.NewBuildRepo()},
 		&inject.Object{Value: repo.NewCommonRepo()},
 		&inject.Object{Value: repo.NewDeviceRepo()},
@@ -118,6 +120,8 @@ func injectObj(router *router.Router) {
 		&inject.Object{Value: middleware.NewCasbinService()},
 
 		// service
+		&inject.Object{Value: service.NewEnvService()},
+
 		&inject.Object{Value: service.NewAppiumService()},
 		&inject.Object{Value: service.NewBuildService()},
 		&inject.Object{Value: service.NewCommonService()},
@@ -143,7 +147,8 @@ func injectObj(router *router.Router) {
 		&inject.Object{Value: service.NewRpcService()},
 
 		// controller
-		//&inject.Object{Value: handler.NewWsCtrl()},
+		&inject.Object{Value: handler.NewEnvCtrl()},
+
 		&inject.Object{Value: handler.NewAccountCtrl()},
 		&inject.Object{Value: handler.NewAppiumCtrl()},
 		&inject.Object{Value: handler.NewDeviceCtrl()},

@@ -77,9 +77,9 @@ const (
 type WorkPlatform string
 
 const (
-	Host     WorkPlatform = "host"
-	Vm       WorkPlatform = "vm"
-	Computer WorkPlatform = "computer"
+	Host WorkPlatform = "host"
+	Vm   WorkPlatform = "vm"
+	Box  WorkPlatform = "box"
 
 	Android WorkPlatform = "android"
 	Ios     WorkPlatform = "ios"
@@ -104,27 +104,18 @@ const (
 	OsIos     OsPlatform = "ios"
 )
 
-type OsName string
+type OsType string
 
 const (
-	Win10 OsName = "win10"
-	Win7  OsName = "win7"
-	WinXP OsName = "winxp"
+	Win10 OsType = "win10"
+	Win7  OsType = "win7"
+	WinXP OsType = "winxp"
 
-	Ubuntu OsName = "ubuntu"
-	CentOS OsName = "centos"
-	Debian OsName = "debian"
+	Ubuntu OsType = "ubuntu"
+	CentOS OsType = "centos"
+	Debian OsType = "debian"
 
-	Mac OsName = "mac"
-)
-
-type BrowserType string
-
-const (
-	Chrome  BrowserType = "chrome"
-	Firefox BrowserType = "firefox"
-	Edge    BrowserType = "edge"
-	IE      BrowserType = "ie"
+	Mac OsType = "mac"
 )
 
 type SysLang string
@@ -138,6 +129,15 @@ const (
 	JA_JP SysLang = "ja_jp"
 	FR_FR SysLang = "fr_fr"
 	RU_RU SysLang = "ru_ru"
+)
+
+type BrowserType string
+
+const (
+	Chrome  BrowserType = "chrome"
+	Firefox BrowserType = "firefox"
+	Edge    BrowserType = "edge"
+	IE      BrowserType = "ie"
 )
 
 type ResType string

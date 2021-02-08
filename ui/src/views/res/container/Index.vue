@@ -2,10 +2,14 @@
   <div>
     <div class="main">
       <div class="left" :style="{height: colHeight}">
-
+        <container-tree>
+          ref="containerTreePage"
+        </container-tree>
       </div>
       <div class="right" :style="{height: colHeight}">
-
+        <container-edit
+          ref="containerEditPage">
+        </container-edit>
       </div>
     </div>
 
@@ -14,9 +18,12 @@
 
 <script>
 
+import { ContainerTree, ContainerEdit } from './page'
+
 export default {
   name: 'ContainerList',
   components: {
+    ContainerTree, ContainerEdit
   },
   data () {
     return {
@@ -24,10 +31,6 @@ export default {
     }
   },
   computed: {
-    isRoot () {
-      console.log('isRoot', this.selectNode)
-      return !this.selectNode.parentID || this.selectNode.parentID === 0 || this.selectNode.id === 0
-    },
     colHeight () {
       return (document.documentElement.clientHeight - 140) + 'px'
     }

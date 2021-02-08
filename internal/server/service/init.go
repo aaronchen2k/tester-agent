@@ -22,6 +22,11 @@ func (s *InitService) Init() {
 		&model.Role{},
 		&model.Permission{},
 
+		&model.OsPlatform{},
+		&model.OsType{},
+		&model.OsLang{},
+		&model.BrowserType{},
+
 		&model.Device{},
 		&model.Cluster{},
 

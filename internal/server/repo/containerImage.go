@@ -21,7 +21,7 @@ func (r *ContainerImageRepo) Get(id uint) (image model.ContainerImage) {
 	return
 }
 
-func (r *ContainerImageRepo) QueryByOs(platform _const.OsPlatform, osType _const.OsName, osLang _const.SysLang) (ids []int) {
+func (r *ContainerImageRepo) QueryByOs(platform _const.OsPlatform, osType _const.OsType, osLang _const.SysLang) (ids []int) {
 	var db = r.DB.Model(model.ContainerImage{}).Where("NOT disabled AND NOT deleted")
 	if platform != "" {
 		db.Where("osPlatform = ?", platform)
@@ -53,8 +53,8 @@ func (r *ContainerImageRepo) convertEnvToVmTempl(env base.TestEnv) (image model.
 	if env.OsPlatform != "" {
 		image.OsPlatform = env.OsPlatform
 	}
-	if env.OsName != "" {
-		image.OsName = env.OsName
+	if env.OsType != "" {
+		image.OsType = env.OsType
 	}
 	if env.OsLevel != "" {
 		image.OsLevel = env.OsLevel

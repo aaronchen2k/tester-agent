@@ -5,10 +5,12 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	_logUtils "github.com/aaronchen2k/tester/internal/pkg/libs/log"
 	log "github.com/sirupsen/logrus"
 	"io"
 	"io/ioutil"
 	"net/http"
+	"time"
 )
 
 func NewPortainer(c *Config) Portainer {
@@ -24,17 +26,29 @@ func (p *Portainer) Auth() error {
 	authData["Username"] = p.Config.User
 	authData["Password"] = p.Config.Password
 	payload, err := json.Marshal(&authData)
-	res, err := http.Post(p.ApiURL+"/auth", "application/json", bytes.NewReader(payload))
+
+	//res, err := http.Post(, "application/json", bytes.NewReader(payload))
+	req, err := http.NewRequest("post", p.ApiURL+"/auth", bytes.NewReader(payload))
 	if err != nil {
-		log.Fatal(err)
+		log.Printf("http.NewRequest() error: %v\n", err)
+	}
+
+	req.Header.Set("Content-Type", "application/json")
+	c := &http.Client{Timeout: time.Second * 3}
+	res, err := c.Do(req)
+	if err != nil {
+		_logUtils.Error(err.Error())
+		return err
 	}
 	if res.StatusCode != 200 {
 		return errors.New("unauthorized")
 	}
+
 	jwtString, err := ioutil.ReadAll(res.Body)
 	_ = res.Body.Close()
 	if err != nil {
-		log.Fatal(err)
+		_logUtils.Error(err.Error())
+		return err
 	}
 	jwtData := make(map[string]string)
 	_ = json.Unmarshal(jwtString, &jwtData)
@@ -52,7 +66,8 @@ func (p *Portainer) ListEndpoints() ([]Endpoint, error) {
 	data, err := ioutil.ReadAll(res.Body)
 	_ = res.Body.Close()
 	if err != nil {
-		log.Fatal(err)
+		_logUtils.Error(err.Error())
+		return nil, err
 	}
 	var endpoints []Endpoint
 	err = json.Unmarshal(data, &endpoints)
@@ -75,7 +90,8 @@ func (p *Portainer) ListImages(e uint) (images []Image, err error) {
 	data, err := ioutil.ReadAll(res.Body)
 	_ = res.Body.Close()
 	if err != nil {
-		log.Fatal(err)
+		_logUtils.Error(err.Error())
+		return nil, err
 	}
 
 	err = json.Unmarshal(data, &images)
@@ -94,7 +110,8 @@ func (p *Portainer) ListContainers(e uint) ([]Container, error) {
 	data, err := ioutil.ReadAll(res.Body)
 	_ = res.Body.Close()
 	if err != nil {
-		log.Fatal(err)
+		_logUtils.Error(err.Error())
+		return nil, err
 	}
 	var containers []Container
 	err = json.Unmarshal(data, &containers)
@@ -179,7 +196,7 @@ func (p *Portainer) StopContainer(e uint, id string) (int, error) {
 	}
 }
 
-func (p *Portainer) makeRequest(t string, url string, body io.Reader, args map[string]string) (*http.Response, error) {
+func (p *Portainer) makeRequest(tp string, url string, body io.Reader, args map[string]string) (*http.Response, error) {
 	urlargs := "?"
 	for k, v := range args {
 		urlargs += fmt.Sprintf("%s=%s", k, v)
@@ -187,11 +204,12 @@ func (p *Portainer) makeRequest(t string, url string, body io.Reader, args map[s
 	if urlargs == "?" {
 		urlargs = ""
 	}
-	req, err := http.NewRequest(t, p.ApiURL+url+urlargs, body)
+
+	req, err := http.NewRequest(tp, p.ApiURL+url+urlargs, body)
 	if err != nil {
 		log.Printf("http.NewRequest() error: %v\n", err)
 	}
 	req.Header.Add("Authorization", "Bearer "+p.Token)
-	c := &http.Client{}
+	c := &http.Client{Timeout: time.Second * 3}
 	return c.Do(req)
 }

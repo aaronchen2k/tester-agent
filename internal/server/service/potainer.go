@@ -18,7 +18,7 @@ func NewPortainerService() *PortainerService {
 	return &PortainerService{}
 }
 
-func (s *PortainerService) ListContainer(clusterNode *domain.ResNode) (containers []*model.Container, err error) {
+func (s *PortainerService) ListContainer(clusterNode *domain.ResItem) (containers []*model.Container, err error) {
 	s.GetNodeTree(clusterNode)
 
 	return
@@ -41,8 +41,8 @@ func (s *PortainerService) CreateContainer(image model.ContainerImage, node mode
 		return
 	}
 
-	endpoint, _ := strconv.Atoi(node.Tag)
-	vmHostName := serverUtils.GenVmHostName(image.OsPlatform, image.OsName, image.OsLang)
+	endpoint, _ := strconv.Atoi(node.Ident)
+	vmHostName := serverUtils.GenVmHostName(image.OsPlatform, image.OsType, image.OsLang)
 
 	body := map[string]interface{}{}
 	body["Hostname"] = vmHostName
@@ -67,12 +67,12 @@ func (s *PortainerService) CreateContainer(image model.ContainerImage, node mode
 	return
 }
 
-func (s *PortainerService) GetNodeTree(clusterNode *domain.ResNode) (root domain.ResNode, err error) {
+func (s *PortainerService) GetNodeTree(clusterItem *domain.ResItem) (err error) {
 	config := go_portainer.Config{
-		Host:     clusterNode.Ip,
-		Port:     clusterNode.Port,
-		User:     clusterNode.Username,
-		Password: clusterNode.Password,
+		Host:     clusterItem.Ip,
+		Port:     clusterItem.Port,
+		User:     clusterItem.Username,
+		Password: clusterItem.Password,
 		Schema:   "http",
 		URL:      "/api",
 	}
@@ -85,29 +85,29 @@ func (s *PortainerService) GetNodeTree(clusterNode *domain.ResNode) (root domain
 
 	endpoints, _ := portainer.ListEndpoints()
 	for _, endpoint := range endpoints {
-		id := strconv.Itoa(int(endpoint.Id))
+		ident := strconv.Itoa(int(endpoint.Id))
 
-		nodeNode := &domain.ResNode{Name: endpoint.Name + "(节点)", Type: _const.ResNode,
-			Id: id, HostId: clusterNode.Id, Key: string(_const.ResNode) + "-" + id}
-		clusterNode.Children = append(clusterNode.Children, nodeNode)
+		nodeItem := &domain.ResItem{Name: endpoint.Name + "(节点)", Type: _const.ResNode,
+			Ident: ident, Cluster: clusterItem.Ident, Key: string(_const.ResNode) + "-" + ident}
+		clusterItem.Children = append(clusterItem.Children, nodeItem)
 
-		containerFolderNode := &domain.ResNode{Name: "实例", Type: _const.ResFolder,
-			Id: id + "-folder-vms", Key: id + "-folder-container"}
-		nodeNode.Children = append(nodeNode.Children, containerFolderNode)
+		containerFolderItem := &domain.ResItem{Name: "实例", Type: _const.ResFolder,
+			Ident: ident + "-folder-vms", Key: ident + "-folder-container"}
+		nodeItem.Children = append(nodeItem.Children, containerFolderItem)
 
-		imageFolderNode := &domain.ResNode{Name: "镜像", Type: _const.ResFolder,
-			Id: id + "-folder-templs", Key: id + "-folder-image"}
-		nodeNode.Children = append(nodeNode.Children, imageFolderNode)
+		imageFolderItem := &domain.ResItem{Name: "镜像", Type: _const.ResFolder,
+			Ident: ident + "-folder-templs", Key: ident + "-folder-image"}
+		nodeItem.Children = append(nodeItem.Children, imageFolderItem)
 
 		containers, _ := portainer.ListContainers(endpoint.Id)
 		for _, container := range containers {
 			containerId := container.ID
 			name := s.getContainerName(strings.Join(container.Names, "/"))
 
-			vmNode := &domain.ResNode{Name: name, Type: _const.ResContainer, IsTemplate: false,
-				Id: container.ID, HostId: clusterNode.Id, NodeId: nodeNode.Id,
+			containerItem := &domain.ResItem{Name: name, Type: _const.ResContainer, IsTemplate: false,
+				Ident: container.ID, Node: nodeItem.Ident, Cluster: clusterItem.Ident,
 				Key: string(_const.ResContainer) + "-" + containerId}
-			containerFolderNode.Children = append(containerFolderNode.Children, vmNode)
+			containerFolderItem.Children = append(containerFolderItem.Children, containerItem)
 		}
 
 		images, _ := portainer.ListImages(endpoint.Id)
@@ -122,10 +122,10 @@ func (s *PortainerService) GetNodeTree(clusterNode *domain.ResNode) (root domain
 			}
 			name := s.getImageName(path)
 
-			vmNode := &domain.ResNode{Name: name, Path: path, Type: _const.ResImage, IsTemplate: false,
-				Id: image.ID, HostId: clusterNode.Id, NodeId: nodeNode.Id,
+			imageItem := &domain.ResItem{Name: name, Path: path, Type: _const.ResImage, IsTemplate: false,
+				Ident: image.ID, Node: nodeItem.Ident, Cluster: clusterItem.Ident,
 				Key: string(_const.ResContainer) + "-" + containerId}
-			imageFolderNode.Children = append(imageFolderNode.Children, vmNode)
+			imageFolderItem.Children = append(imageFolderItem.Children, imageItem)
 		}
 	}
 

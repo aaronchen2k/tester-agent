@@ -43,7 +43,7 @@ func (s *RpcService) SeleniumTest(build model.Build) (result _domain.RpcResult) 
 
 func (s *RpcService) CreateVm(req _domain.PveReq) (result _domain.RpcResult) {
 	obj := interface{}(req)
-	result = s.Request(req.NodeIp, req.NodePort, "vm", "Create", &obj)
+	result = s.Request(req.NodeIp, req.NodePort, "vm", "Load", &obj)
 
 	result.Success(fmt.Sprintf("success to create vm via rpc %#v.", req))
 	return

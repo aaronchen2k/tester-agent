@@ -2,17 +2,18 @@ package domain
 
 import _const "github.com/aaronchen2k/tester/internal/pkg/const"
 
-type ResNode struct {
-	Id       string         `json:"id"`
+type ResItem struct {
+	Ident   string `json:"ident,omitempty"`
+	Node    string `gorm:"node" json:"node,omitempty"`
+	Cluster string `gorm:"cluster" json:"cluster,omitempty"`
+
 	Name     string         `json:"name"`
 	Path     string         `json:"path"`
 	Type     _const.ResType `json:"type"`
 	Key      string         `json:"key"`
-	Children []*ResNode     `json:"children"`
+	Children []*ResItem     `json:"children"`
 
-	IsTemplate bool   `json:"isTemplate"`
-	HostId     string `json:"hostId,omitempty"`
-	NodeId     string `json:"nodeId,omitempty"`
+	IsTemplate bool `json:"isTemplate"`
 
 	Ip       string `json:"ip,omitempty"`
 	Port     int    `json:"port,omitempty"`

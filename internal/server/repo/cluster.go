@@ -39,8 +39,8 @@ func (r *ClusterRepo) QueryByType(tp string) (clusters []model.Cluster, err erro
 	return
 }
 
-func (r *ClusterRepo) Get(id uint) (cluster model.Cluster) {
-	r.DB.Where("id=?", id).First(&cluster)
+func (r *ClusterRepo) Get(ident string) (cluster model.Cluster) {
+	r.DB.Where("ident=?", ident).First(&cluster)
 	return
 }
 

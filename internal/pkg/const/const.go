@@ -1,14 +1,14 @@
 package _const
 
-import (
-	"fmt"
-	"os"
-)
+import "os"
 
 const (
-	AppServer  = "tester-server"
-	AppAgent   = "tester-agent"
-	AppManager = "tester-manager"
+	AppName = "tester"
+	PthSep  = string(os.PathSeparator)
+
+	LanguageDefault = "en"
+	LanguageEN      = "en"
+	LanguageZH      = "zh"
 
 	UserTokenExpireTime = 365 * 24 * 60 * 60 * 1000
 
@@ -36,14 +36,4 @@ const (
 	Build_Command_Param_SeleniumDriver = "${driverPath}"
 
 	PageSize = 15
-)
-
-var (
-	PthSep = string(os.PathSeparator)
-
-	LanguageDefault = "en"
-	LanguageEN      = "en"
-	LanguageZH      = "zh"
-	EnRes           = fmt.Sprintf("res%sen%smessages.json", string(os.PathSeparator), string(os.PathSeparator))
-	ZhRes           = fmt.Sprintf("res%szh%smessages.json", string(os.PathSeparator), string(os.PathSeparator))
 )

@@ -1,0 +1,9 @@
+version: 1.0
+
+interval: 6 # sec
+language: zh
+
+clients:
+  - name: agent
+    version: 0
+    params: "-s http://localhost:8085 -i 127.0.0.1 -p 8848"

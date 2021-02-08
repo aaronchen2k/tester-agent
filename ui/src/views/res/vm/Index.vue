@@ -8,9 +8,7 @@
       </div>
       <div class="right" :style="{height: colHeight}">
         <vm-edit
-          ref="vmEditPage"
-          :visible="model"
-          :model="model">
+          ref="vmEditPage">
         </vm-edit>
       </div>
     </div>

@@ -4,7 +4,7 @@ import _const "github.com/aaronchen2k/tester/internal/pkg/const"
 
 type TestEnv struct {
 	OsPlatform _const.OsPlatform `gorm:"osPlatform" json:"osPlatform,omitempty"`
-	OsName     _const.OsName     `gorm:"osName" json:"osName,omitempty"`
+	OsType     _const.OsType     `gorm:"osType" json:"osType,omitempty"`
 	OsLevel    string            `gorm:"osLevel" json:"osLevel,omitempty"` // for mobile device only, e.x. android 11
 	OsLang     _const.SysLang    `gorm:"osLang" json:"osLang,omitempty"`
 

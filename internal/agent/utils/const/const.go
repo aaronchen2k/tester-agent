@@ -6,6 +6,7 @@ import (
 )
 
 var (
+	AppType    = "agent"
 	ConfigVer  = 1
 	ConfigFile = fmt.Sprintf("conf%stester.yaml", string(os.PathSeparator))
 
@@ -26,4 +27,6 @@ var (
 	FolderImage = "image/"
 	FolderDef   = "def/"
 	FolderTempl = "templ/"
+
+	ControlActions = []string{"start", "stop", "restart", "install", "uninstall"}
 )

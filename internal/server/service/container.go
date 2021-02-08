@@ -23,8 +23,8 @@ func NewContainerService() *ContainerService {
 
 func (s *ContainerService) Create(containerImageId uint) (dockerId string, err error) {
 	imagePo := s.ContainerImageRepo.Get(containerImageId)
-	node := s.NodeRepo.Get(imagePo.NodeId)
-	cluster := s.ClusterRepo.Get(imagePo.ClusterId)
+	node := s.NodeRepo.Get(imagePo.Node)
+	cluster := s.ClusterRepo.Get(imagePo.Cluster)
 
 	vm, err := s.MachineService.CreateContainer(imagePo, node, cluster)
 	// TODO: save to db?

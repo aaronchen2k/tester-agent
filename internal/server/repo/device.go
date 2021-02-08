@@ -53,8 +53,8 @@ func (r *DeviceRepo) convertEnvToVmTempl(env base.TestEnv) (dev model.Device) {
 	if env.OsPlatform != "" {
 		dev.OsPlatform = env.OsPlatform
 	}
-	if env.OsName != "" {
-		dev.OsName = env.OsName
+	if env.OsType != "" {
+		dev.OsType = env.OsType
 	}
 	if env.OsLevel != "" {
 		dev.OsLevel = env.OsLevel

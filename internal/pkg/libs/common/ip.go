@@ -4,10 +4,10 @@ import (
 	"net"
 )
 
-func GetIp() (net.IP, net.HardwareAddr) {
+func GetIp() (net.IP, net.HardwareAddr, string) {
 	ifaces, err := net.Interfaces()
 	if err != nil {
-		return nil, nil
+		return nil, nil, ""
 	}
 	for _, iface := range ifaces {
 		if iface.Flags&net.FlagUp == 0 {
@@ -18,7 +18,7 @@ func GetIp() (net.IP, net.HardwareAddr) {
 		}
 		addrs, err := iface.Addrs()
 		if err != nil {
-			return nil, nil
+			return nil, nil, ""
 		}
 		for _, addr := range addrs {
 			ip := getIpFromAddr(addr)
@@ -27,10 +27,14 @@ func GetIp() (net.IP, net.HardwareAddr) {
 			}
 
 			macAddr := iface.HardwareAddr
-			return ip, macAddr
+			return ip, macAddr, ""
 		}
 	}
-	return nil, nil
+	return nil, nil, ""
+}
+
+func GetHostName() (name string) {
+	return
 }
 
 func getIpFromAddr(addr net.Addr) net.IP {

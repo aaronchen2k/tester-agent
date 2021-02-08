@@ -24,6 +24,8 @@ type Router struct {
 	TokenService  *middleware.TokenService  `inject:""`
 	CasbinService *middleware.CasbinService `inject:""`
 
+	EnvCtrl *handler.EnvCtrl `inject:""`
+
 	AccountCtrl *handler.AccountCtrl `inject:""`
 	AppiumCtrl  *handler.AppiumCtrl  `inject:""`
 	DeviceCtrl  *handler.DeviceCtrl  `inject:""`
@@ -88,12 +90,18 @@ func (r *Router) App() {
 				admin.Get("/expire", r.AccountCtrl.UserExpire).Name = "刷新Token"
 				admin.Get("/profile", r.UserCtrl.GetProfile).Name = "个人信息"
 
+				admin.PartyFunc("/env", func(party iris.Party) {
+					party.Get("/", r.EnvCtrl.List).Name = "列出环境配置"
+				})
 				admin.PartyFunc("/machines", func(party iris.Party) {
 					party.Get("/listVm", r.MachineCtrl.ListVm).Name = "虚拟机列表"
-					party.Get("/listContainers", r.MachineCtrl.ListContainers).Name = "容器列表"
+					party.Get("/listContainer", r.MachineCtrl.ListContainer).Name = "容器列表"
+				})
+				admin.PartyFunc("/vmTempls", func(party iris.Party) {
+					party.Post("/", r.VmTemplCtrl.Load).Name = "获取必要时创建虚拟机模板"
+					party.Put("/", r.VmTemplCtrl.Update).Name = "更新虚拟机模板"
 				})
 				admin.PartyFunc("/vms", func(party iris.Party) {
-					party.Post("/", r.VmCtrl.Create).Name = "创建虚拟机"
 				})
 				admin.PartyFunc("/containers", func(party iris.Party) {
 					party.Post("/", r.ContainerCtrl.Create).Name = "创建容器"
@@ -150,7 +158,7 @@ func (r *Router) App() {
 		//websocketServer := neffos.New(
 		//	gorilla.Upgrader(gorillaWs.Upgrader{CheckOrigin: func(*http.Request) bool{return true}}),
 		//	mvcApp)
-		//mvcApp.Router.Get("", websocket.Handler(websocketServer))
+		//mvcApp.Router.GetByIdent("", websocket.Handler(websocketServer))
 	}
 
 	//onChat := func(nsConn *neffos.NSConn, msg neffos.Message) error {
@@ -174,7 +182,7 @@ func (r *Router) App() {
 	//			"chat": onChat,
 	//		},
 	//})
-	//websocketAPI.Get("/ws", websocket.Handler(websocketServer))
+	//websocketAPI.GetByIdent("/ws", websocket.Handler(websocketServer))
 
 	//websocketAPI := r.api.Party("/api/v1").AllowMethods(iris.MethodGet)
 	//websocketServer := websocket.New(gorilla.Upgrader(gorillaWs.Upgrader{CheckOrigin: func(*http.Request) bool{return true}}),
@@ -205,7 +213,7 @@ func (r *Router) App() {
 	//websocketServer.OnDisconnect = func(c *websocket.Conn) {
 	//	_logUtils.Infof("[%s] disconnected from server", c.ID())
 	//}
-	//websocketAPI.Get("/ws", websocket.Handler(websocketServer))
+	//websocketAPI.GetByIdent("/ws", websocket.Handler(websocketServer))
 
 	//go func() {
 	//	for {

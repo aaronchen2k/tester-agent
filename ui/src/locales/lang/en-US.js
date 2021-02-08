@@ -46,7 +46,22 @@ const locale = {
   'app.setting.copy': 'Copy Setting',
   'app.setting.loading': 'Loading theme',
   'app.setting.copyinfo': 'copy success，please replace defaultSettings in src/models/setting.js',
-  'app.setting.production.hint': 'Setting panel shows in development environment only, please manually modify'
+  'app.setting.production.hint': 'Setting panel shows in development environment only, please manually modify',
+
+  'action.create': 'Create',
+  'action.edit': 'Edit',
+  'action.back': 'Back',
+  'form.save': 'Save',
+  'form.reset': 'Reset',
+  'form.cancel': 'Cancel',
+
+  'vm.osPlatform': 'OS Platform',
+  'vm.osType': 'OS Type',
+  'vm.osLevel': 'API Level',
+  'vm.osLang': 'OS Lang',
+  'vm.osBits': 'OS Bits',
+  'vm.osVer': 'OS Version',
+  'vm.osBuild': 'OS Build'
 }
 
 export default {

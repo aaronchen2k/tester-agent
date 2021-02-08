@@ -1,0 +1,33 @@
+{
+  "language": "en-US",
+  "messages": [
+    {
+      "id": "for_example",
+      "translation": "e.g. %s"
+    },
+    {
+      "id": "invalid_actions",
+      "translation": "Invalid action %s in %q."
+    },
+    {
+      "id": "launch_in_terminal",
+      "translation": "Launched from terminal."
+    },
+    {
+      "id": "launch_in_service",
+      "translation": "Launched from system service."
+    },
+    {
+      "id": "running",
+      "translation": "I'm running on %v."
+    },
+    {
+      "id": "stopping",
+      "translation": "I'm stopping."
+    },
+    {
+      "id": "start_to_run",
+      "translation": "Start to run scheduled job."
+    }
+  ]
+}

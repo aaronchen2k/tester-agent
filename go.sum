@@ -165,6 +165,7 @@ github.com/dustin/go-humanize v1.0.0/go.mod h1:HtrtbFcZ19U5GC7JDqmcUSB87Iq5E25Kn
 github.com/easysoft/zmanager v0.0.0-20210113092058-fb8dd8b2608e h1:pd3/Sw97wJAMY6PJVrbnKKTOjOvgy42AILN5s7fG+GQ=
 github.com/easysoft/zmanager v0.0.0-20210113092058-fb8dd8b2608e/go.mod h1:eC99A/+59IeixVetA934cjiyLclYt2lS2ZnDkJNLdfc=
 github.com/easysoft/zmanager v0.0.0-20210131004750-d1479d11c12d h1:pMWAQmbQQq1fCrHNRSvpuLgTVflEDdHvnU/5EgkkK4E=
+github.com/easysoft/zmanager v0.0.0-20210131004750-d1479d11c12d/go.mod h1:eC99A/+59IeixVetA934cjiyLclYt2lS2ZnDkJNLdfc=
 github.com/edwingeng/doublejump v0.0.0-20200219153503-7cfc0ed6e836 h1:jg0R0t9zverOVvVZ4Xg/qVPVKoTSgC3Ayeo1yuzu0sk=
 github.com/edwingeng/doublejump v0.0.0-20200219153503-7cfc0ed6e836/go.mod h1:sqbHCF7b7eMiCtiwNY5+2bqhT+Zx6Duj2VU5WigITOQ=
 github.com/eknkc/amber v0.0.0-20171010120322-cdade1c07385 h1:clC1lXBpe2kTj2VHdaIu9ajZQe4kcEY9j0NsnDDBZ3o=

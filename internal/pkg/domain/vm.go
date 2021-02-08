@@ -9,6 +9,7 @@ type Vm struct {
 	Id                int
 	VmId              string
 	Name              string
+	HostName          string
 	DiskSize          int
 	MemorySize        int
 	CdromSys          string

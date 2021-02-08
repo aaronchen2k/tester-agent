@@ -1,4 +1,4 @@
-import VmTree from './Tree'
-import VmEdit from './Edit'
+import ContainerTree from './Tree'
+import ContainerEdit from './Edit'
 
-export { VmTree, VmEdit }
+export { ContainerTree, ContainerEdit }

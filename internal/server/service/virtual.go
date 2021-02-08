@@ -31,36 +31,36 @@ func NewVirtualService() *VirtualService {
 	return inst
 }
 
-func (s *VirtualService) ListVm() (rootNode *domain.ResNode) {
-	rootNode = &domain.ResNode{Name: "虚拟机", Type: _const.ResRoot, Id: "0"}
+func (s *VirtualService) ListVm() (rootNode *domain.ResItem) {
+	rootNode = &domain.ResItem{Name: "虚拟机", Type: _const.ResRoot, Ident: "0"}
 	hosts := s.ClusterService.ListByType("pve")
 
 	for _, host := range hosts {
-		id := strconv.Itoa(int(host.ID))
+		ident := strconv.Itoa(int(host.ID))
 
-		hostNode := &domain.ResNode{
+		clusterItem := &domain.ResItem{
 			Name: host.Name + "(集群)", Type: _const.ResCluster,
-			Id: id, Key: string(_const.ResCluster) + "-" + id,
+			Ident: ident, Key: string(_const.ResCluster) + "-" + ident,
 			Ip: host.Ip, Port: host.Port,
 			Username: host.Username, Password: host.Password}
 
-		rootNode.Children = append(rootNode.Children, hostNode)
+		rootNode.Children = append(rootNode.Children, clusterItem)
 
-		s.VmService.GetNodeTree(hostNode)
+		s.VmService.GetNodeTree(clusterItem)
 	}
 
 	return
 }
 
-func (s *VirtualService) ListContainers() (rootNode *domain.ResNode) {
-	rootNode = &domain.ResNode{Name: "容器", Type: _const.ResRoot, Id: "0"}
+func (s *VirtualService) ListContainers() (rootNode *domain.ResItem) {
+	rootNode = &domain.ResItem{Name: "容器", Type: _const.ResRoot, Ident: "0"}
 	hosts := s.ClusterService.ListByType("portainer")
 
 	for _, host := range hosts {
 		id := strconv.Itoa(int(host.ID))
 
-		hostNode := &domain.ResNode{Name: host.Name + "(集群)", Type: _const.ResCluster,
-			Id: id, Key: string(_const.ResCluster) + "-" + id,
+		hostNode := &domain.ResItem{Name: host.Name + "(集群)", Type: _const.ResCluster,
+			Ident: id, Key: string(_const.ResCluster) + "-" + id,
 			Ip: host.Ip, Port: host.Port,
 			Username: host.Username, Password: host.Password}
 		rootNode.Children = append(rootNode.Children, hostNode)

@@ -3,6 +3,8 @@ package serverConst
 type VmPlatform string
 
 const (
+	AppType = "server"
+
 	PageSize            = 15
 	Kvm      VmPlatform = "kvm"
 	Pve      VmPlatform = "pve"

@@ -183,7 +183,7 @@ func (s *SeederService) CreateAdminUser() {
 	}
 	admin, err := s.UserRepo.GetUser(search)
 	if err != nil {
-		fmt.Println(fmt.Sprintf("Get admin error：%+v\n", err))
+		fmt.Println(fmt.Sprintf("GetByIdent admin error：%+v\n", err))
 	}
 
 	var roleIds []uint

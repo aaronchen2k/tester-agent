@@ -19,7 +19,7 @@ func NewHostService() *ClusterService {
 }
 
 func (s *ClusterService) GetValidForQueue(queue model.Queue) (hostId, backingImageId uint) {
-	imageIds1 := s.DockerImageRepo.QueryByOs(queue.OsPlatform, queue.OsName, queue.OsLang)
+	imageIds1 := s.DockerImageRepo.QueryByOs(queue.OsPlatform, queue.OsType, queue.OsLang)
 	imageIds2 := s.DockerImageRepo.QueryByBrowser(queue.BrowserType, queue.BrowserVer)
 
 	images := make([]uint, 0)

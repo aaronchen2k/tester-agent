@@ -1,7 +1,7 @@
 package agentConf
 
 import (
-	"github.com/aaronchen2k/tester/internal/agent/model"
+	"github.com/aaronchen2k/tester/internal/agent/agentModel"
 	_const "github.com/aaronchen2k/tester/internal/pkg/const"
 	_commonUtils "github.com/aaronchen2k/tester/internal/pkg/libs/common"
 	_fileUtils "github.com/aaronchen2k/tester/internal/pkg/libs/file"
@@ -9,20 +9,18 @@ import (
 )
 
 var (
-	Inst = model.Config{}
+	Inst = agentModel.Config{}
 )
 
 func Init() {
-	if IsVmAgent() {
-		ip, mac := _commonUtils.GetIp()
-		Inst.MacAddress = mac.String()
-		Inst.Ip = ip.String()
-		Inst.Port = _const.RpcPort
-	}
+	ip, _, hostName := _commonUtils.GetIp()
+	Inst.HostName = hostName
+	Inst.Ip = ip.String()
+	Inst.Port = _const.RpcPort
 
 	Inst.KvmDir = _fileUtils.UpdateDir(Inst.KvmDir)
 	Inst.WorkDir = _fileUtils.UpdateDir(Inst.WorkDir)
-	Inst.FarmServer = _httpUtils.UpdateUrl(Inst.FarmServer)
+	Inst.Server = _httpUtils.UpdateUrl(Inst.Server)
 }
 
 func IsDeviceAgent() bool {

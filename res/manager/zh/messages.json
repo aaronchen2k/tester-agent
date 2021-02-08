@@ -6,13 +6,10 @@
       "translation": "帮助："
     },
     {
-      "id": "begin_config",
-      "translation": "开始配置, 输入'exit'退出。"
+      "id": "current_config",
+      "translation": "当前配置："
     },
-    {
-      "id": "enter_language",
-      "translation": "1) 请选择您要使用的语言，中文请输入数字1。\n2) Please select the language. Input 2 for English."
-    },
+
     {
       "id": "find_new_ver",
       "translation": "发现新版本%s。"
@@ -64,8 +61,8 @@
     },
 
     {
-      "id": "valid_actions",
-      "translation": "Valid actions: %q."
+      "id": "invalid_actions",
+      "translation": "无效的动作%s在%q中。"
     },
     {
       "id": "launch_in_terminal",
@@ -86,6 +83,10 @@
     {
       "id": "start_to_run",
       "translation": "执行定时任务。"
+    },
+    {
+      "id": "start_to_check",
+      "translation": "开始检查%s。"
     }
   ]
 }

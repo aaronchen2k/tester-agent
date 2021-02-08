@@ -9,7 +9,7 @@ type Host struct {
 	Name string
 
 	OsPlatform _const.OsPlatform
-	OsType     _const.OsName
+	OsType     _const.OsType
 	OsLang     _const.SysLang
 
 	OsVersion string

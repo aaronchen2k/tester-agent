@@ -1,4 +1,4 @@
-package model
+package agentModel
 
 import "encoding/xml"
 

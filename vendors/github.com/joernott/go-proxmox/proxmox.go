@@ -76,7 +76,7 @@ func NewProxMox(HostName string, UserName string, Password string) (*ProxMox, er
 	}
 	proxmox.Client = &http.Client{
 		Transport: tr,
-		Timeout:   time.Second * 10}
+		Timeout:   time.Second * 3}
 	form = url.Values{
 		"username": {proxmox.Username},
 		"password": {proxmox.password},

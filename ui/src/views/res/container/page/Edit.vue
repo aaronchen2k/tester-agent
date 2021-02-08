@@ -1,5 +1,8 @@
 <template>
-  <div></div>
+  <div>
+    <div v-if="model">
+    </div>
+  </div>
 </template>
 
 <script>
@@ -10,7 +13,7 @@ export default {
   },
   data () {
     return {
-      models: []
+      model: null
     }
   },
   methods: {

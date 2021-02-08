@@ -2,14 +2,14 @@ package androidService
 
 import (
 	"fmt"
-	"github.com/aaronchen2k/tester/internal/agent/model"
+	"github.com/aaronchen2k/tester/internal/agent/agentModel"
 	_shellUtils "github.com/aaronchen2k/tester/internal/pkg/libs/shell"
 	"regexp"
 	"strings"
 )
 
-func GetAppInfo(apkPath string) model.AndroidAppInfo {
-	info := model.AndroidAppInfo{ApkFile: apkPath}
+func GetAppInfo(apkPath string) agentModel.AndroidAppInfo {
+	info := agentModel.AndroidAppInfo{ApkFile: apkPath}
 	cmd := fmt.Sprintf("aapt dump badging %s | grep  -E 'package:|application-label:|launchable-activity:'", apkPath)
 	out, err := _shellUtils.ExeShell(cmd)
 
@@ -20,7 +20,7 @@ func GetAppInfo(apkPath string) model.AndroidAppInfo {
 	return info
 }
 
-func retrieveAppInfoFromAaptCmdOutput(out string, info *model.AndroidAppInfo) {
+func retrieveAppInfoFromAaptCmdOutput(out string, info *agentModel.AndroidAppInfo) {
 	lines := strings.Split(out, "\n")
 	// package: name='com.applitools.helloworld.android' versionCode='2' versionName='1.1'
 	// application-label:'ApplitoolsHelloWorld'

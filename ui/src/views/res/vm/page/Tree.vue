@@ -88,31 +88,6 @@ export default {
     })
   },
   methods: {
-    getModel (id) {
-      console.log('getModel', id)
-
-      if (this.type === 'host') {
-        // getDefField(id).then(res => {
-        //   console.log('getDefField', res)
-        //   this.modelData = res.data
-        //   this.time2 = Date.now() // trigger data refresh
-        // })
-      } else if (this.type === 'node') {
-        // getResRangesItem(id).then(res => {
-        //   console.log('getResRangesItem', res)
-        //   this.modelData = res.data
-        //   this.time2 = Date.now() // trigger data refresh
-        // })
-      } else if (this.type === 'vm') {
-        // getResInstancesItem(id).then(res => {
-        //   console.log('getResInstancesItem', res)
-        //   this.modelData = res.data
-        //   this.time2 = Date.now() // trigger data refresh
-        // })
-      }
-
-      Bus.$emit('modelUpdate', this.model)
-    },
     loadTreeCallback (data, selectedKey) {
       this.getOpenKeys(data)
 
@@ -132,16 +107,11 @@ export default {
 
       const node = this.nodeMap[e.node.eventKey]
       console.log('node', node)
-      if ((this.type === 'def' && node.parentID === 0) || (this.type === 'config' && node.id === 0) ||
-        (node.fields && node.fields.length > 0)) {
-        this.rightVisible = false
-        this.modelData = {}
-      } else {
-        this.rightVisible = true
-        this.tabKey = 'info'
-      }
+      // if (node.type !== 'vm') {
+      //   return
+      // }
 
-      // this.getModel(parseInt(selectedKeys[0]))
+      Bus.$emit('onVmNodeSelected', node)
     },
     menuClick (e) {
       console.log('menuClick', e, this.rightClickNode)

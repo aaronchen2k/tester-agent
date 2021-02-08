@@ -20,7 +20,7 @@ func (c *MachineCtrl) ListVm(ctx iris.Context) {
 	_, _ = ctx.JSON(_utils.ApiRes(200, "请求成功", rootNode))
 }
 
-func (c *MachineCtrl) ListContainers(ctx iris.Context) {
+func (c *MachineCtrl) ListContainer(ctx iris.Context) {
 	rootNode := c.MachineService.ListContainers()
 	_, _ = ctx.JSON(_utils.ApiRes(200, "请求成功", rootNode))
 }

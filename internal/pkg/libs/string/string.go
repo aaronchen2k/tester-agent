@@ -21,7 +21,7 @@ func UcFirst(str string) string {
 	return ""
 }
 
-func FindInArr(str string, arr []string) bool {
+func StrInArr(str string, arr []string) bool {
 	for _, s := range arr {
 		if str == s {
 			return true

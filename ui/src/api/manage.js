@@ -4,10 +4,13 @@ const prefix = '/v1/admin'
 
 const api = {
   profile: `${prefix}/profile`,
+  env: `${prefix}/env`,
   machines: `${prefix}/machines`,
-  plans: `${prefix}/plans`,
   vms: `${prefix}/vms`,
+  vmTempls: `${prefix}/vmTempls`,
   containers: `${prefix}/containers`,
+
+  plans: `${prefix}/plans`,
 
   user: `${prefix}/user`,
   role: `${prefix}/role`,
@@ -34,6 +37,15 @@ export function listPlan () {
     params: {}
   })
 }
+
+export function listEnv () {
+  return request({
+    url: api.env,
+    method: 'get',
+    params: {}
+  })
+}
+
 export function listVm () {
   return request({
     url: api.machines + '/listVm',
@@ -41,9 +53,24 @@ export function listVm () {
     params: {}
   })
 }
+export function loadVmTempl (vm) {
+  return request({
+    url: api.vmTempls,
+    method: 'post',
+    data: vm
+  })
+}
+export function saveVm (model) {
+  return request({
+    url: api.vms,
+    method: 'put',
+    data: model
+  })
+}
+
 export function listContainer (parameter) {
   return request({
-    url: api.machines + '/listContainers',
+    url: api.machines + '/listContainer',
     method: 'get',
     params: parameter
   })
