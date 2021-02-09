@@ -12,7 +12,12 @@
         <div class="filter"></div>
         <div class="buttons"></div>
       </div>
+
       <a-form-model ref="editForm" :model="model" :rules="rules" :label-col="labelCol" :wrapper-col="wrapperCol">
+        <a-form-model-item :label="$t('vm.ident')" prop="ident">
+          {{ model.ident }}
+        </a-form-model-item>
+
         <a-form-model-item :label="$t('vm.osPlatform')" prop="osPlatform">
           <a-select v-model="model.osPlatform" @change="onOsPlatformChanged">
             <a-select-option v-for="item in osPlatforms" :value="item.code" :key="item.code">
@@ -63,7 +68,7 @@
 
 import { labelColLarge, wrapperColLarge } from '../../../../utils/const'
 import Bus from '../../../../components/_util/bus'
-import { loadVmTempl, saveVm, listEnv } from '@/api/manage'
+import { loadVmTempl, saveVmTempl, listEnv } from '@/api/manage'
 
 export default {
   name: 'VmEdit',
@@ -94,6 +99,15 @@ export default {
       model: null
     }
   },
+  created () {
+    listEnv().then(json => {
+      console.log('listEnv', json)
+
+      this.osPlatforms = json.data.osPlatforms
+      this.osTypesAll = json.data.osTypes
+      this.osLangs = json.data.osLangs
+    })
+  },
   mounted () {
     console.log('mounted')
     Bus.$on('onVmNodeSelected', node => {
@@ -102,15 +116,8 @@ export default {
         this.model = null
       }
 
-      listEnv().then(json => {
-        console.log('listEnv', json)
-
-        this.osPlatforms = json.data.osPlatforms
-        this.osTypesAll = json.data.osTypes
-        this.osLangs = json.data.osLangs
-      })
-
-      loadVmTempl(node).then(json => {
+      const data = { name: node.name, type: node.type, isTemplate: node.isTemplate, ident: node.ident, node: node.node, cluster: node.cluster }
+      loadVmTempl(data).then(json => {
         console.log('loadVmTempl', json)
         this.model = json.data
       })
@@ -127,8 +134,8 @@ export default {
           console.log('validation fail')
           return
         }
-        saveVm(this.model).then(json => {
-          console.log('saveVm', json)
+        saveVmTempl(this.model).then(json => {
+          console.log('saveVmTempl', json)
         })
       })
     },

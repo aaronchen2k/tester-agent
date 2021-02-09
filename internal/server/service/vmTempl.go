@@ -22,14 +22,14 @@ func (s *VmTemplService) GetByIdent(ident string) (templ model.VmTempl) {
 	return
 }
 
-func (s *VmTemplService) CreateByNode(node *domain.ResItem) (templ model.VmTempl) {
-	po := model.VmTempl{
+func (s *VmTemplService) CreateByNode(node domain.ResItem) (templ model.VmTempl) {
+	templ = model.VmTempl{
 		Ident:   node.Ident,
 		Node:    node.Node,
 		Cluster: node.Cluster,
 	}
 
-	s.VmTemplRepo.CreateTempl(&po)
+	s.VmTemplRepo.Create(&templ)
 
 	return
 }
@@ -46,6 +46,6 @@ func (s *VmTemplService) Update(data v1.VmData) (err error) {
 		},
 	}
 
-	err = s.VmTemplRepo.UpdateTempl(&po)
+	err = s.VmTemplRepo.Update(&po)
 	return
 }

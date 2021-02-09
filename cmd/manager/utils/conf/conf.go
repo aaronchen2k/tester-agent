@@ -40,13 +40,14 @@ func NewConfig() Config {
 }
 
 func Init() {
+	// in user home
 	managerVari.WorkDir = path.Join(_commonUtils.GetUserHome(), _const.AppName)
-	// just for ide debug
-	if !_commonUtils.IsRelease() {
+
+	if !_commonUtils.IsRelease() { // debug mode
 		managerVari.WorkDir = _fileUtils.AddSepIfNeeded(path.Join("cmd", "manager"))
 	}
 
-	managerVari.ConfFile = managerVari.WorkDir + "conf.yml"
+	managerVari.ConfFile = managerVari.WorkDir + "manager.yml"
 	managerVari.LogFile = managerVari.WorkDir + managerConst.AppName + ".log"
 
 	initInst()

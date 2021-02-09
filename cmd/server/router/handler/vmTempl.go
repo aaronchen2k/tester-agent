@@ -25,11 +25,13 @@ func (c *VmTemplCtrl) Load(ctx iris.Context) {
 		return
 	}
 
-	vm := c.VmTemplService.GetByIdent(item.Ident)
+	templ := c.VmTemplService.GetByIdent(item.Ident)
 
-	if vm.ID == 0 {
-		c.VmTemplService.CreateByNode(&item)
+	if templ.ID == 0 {
+		templ = c.VmTemplService.CreateByNode(item)
 	}
+
+	_, _ = ctx.JSON(_utils.ApiRes(200, "", templ))
 
 	return
 }

@@ -32,6 +32,7 @@ const locale = {
   'form.reset': '重置',
   'form.cancel': '取消',
 
+  'vm.ident': '标识',
   'vm.osPlatform': '系统平台',
   'vm.osType': '系统类型',
   'vm.osLevel': 'API级别',

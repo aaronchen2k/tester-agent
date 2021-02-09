@@ -30,12 +30,12 @@ func (r *VmTemplRepo) GetByEnv(env base.TestEnv) (templ model.VmTempl) {
 	return
 }
 
-func (r *VmTemplRepo) CreateTempl(templ *model.VmTempl) {
-	r.DB.Model(&templ).Updates(templ)
+func (r *VmTemplRepo) Create(templ *model.VmTempl) {
+	r.DB.Model(&templ).Create(templ)
 	return
 }
 
-func (r *VmTemplRepo) UpdateTempl(templ *model.VmTempl) (err error) {
+func (r *VmTemplRepo) Update(templ *model.VmTempl) (err error) {
 	r.DB.Model(&templ).Updates(templ)
 	return
 }

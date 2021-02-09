@@ -55,6 +55,7 @@ const locale = {
   'form.reset': 'Reset',
   'form.cancel': 'Cancel',
 
+  'vm.ident': 'Key',
   'vm.osPlatform': 'OS Platform',
   'vm.osType': 'OS Type',
   'vm.osLevel': 'API Level',

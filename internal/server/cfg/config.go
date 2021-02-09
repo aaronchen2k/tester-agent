@@ -66,6 +66,7 @@ type DBConfig struct {
 }
 
 func Init() {
+	// in current dir
 	exeDir := _utils.GetExeDir()
 	configPath := filepath.Join(exeDir, "server.yml")
 	if !_fileUtils.FileExist(configPath) { // debug mode

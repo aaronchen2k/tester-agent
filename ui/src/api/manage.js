@@ -53,16 +53,16 @@ export function listVm () {
     params: {}
   })
 }
-export function loadVmTempl (vm) {
+export function loadVmTempl (data) {
   return request({
     url: api.vmTempls,
     method: 'post',
-    data: vm
+    data: data
   })
 }
-export function saveVm (model) {
+export function saveVmTempl (model) {
   return request({
-    url: api.vms,
+    url: api.vmTempls,
     method: 'put',
     data: model
   })
