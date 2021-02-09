@@ -8,8 +8,8 @@ import (
 )
 
 type ContainerService struct {
-	RpcService     *RpcService     `inject:""`
-	MachineService *VirtualService `inject:""`
+	RpcService     *RpcService `inject:""`
+	MachineService *ResService `inject:""`
 
 	ContainerRepo      *repo.ContainerRepo      `inject:""`
 	ContainerImageRepo *repo.ContainerImageRepo `inject:""`

@@ -88,8 +88,8 @@ func (s *QueueService) GenerateSeleniumQueue(task model.Task) {
 func (s *QueueService) GenerateUnitTestQueue(task model.Task) {
 	env := task.TestEnv
 
-	vmTempl := s.getVmTemplByEnv(env)
-	env.VmTemplId = vmTempl.ID
+	//containerImage := s.getContainerImageByEnv(env)
+	//env.ContainerImageId = containerImage.ID
 
 	queue := model.NewQueueDetail(
 		_const.UnitTest, task.Priority, task.GroupId, task.ID,

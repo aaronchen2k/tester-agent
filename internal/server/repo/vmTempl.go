@@ -19,8 +19,8 @@ func (r *VmTemplRepo) Get(id uint) (templ model.VmTempl) {
 	r.DB.Where("id=?", id).First(&templ)
 	return
 }
-func (r *VmTemplRepo) GetByIdent(ident string) (templ model.VmTempl) {
-	r.DB.Model(&templ).Where("Ident=?", ident).First(&templ)
+func (r *VmTemplRepo) GetByIdent(ident, node, cluster string) (templ model.VmTempl) {
+	r.DB.Model(&templ).Where("Ident=? AND node=? AND cluster=?", ident, node, cluster).First(&templ)
 	return
 }
 
@@ -37,6 +37,11 @@ func (r *VmTemplRepo) Create(templ *model.VmTempl) {
 
 func (r *VmTemplRepo) Update(templ *model.VmTempl) (err error) {
 	r.DB.Model(&templ).Updates(templ)
+	return
+}
+func (r *VmTemplRepo) UpdateAllSameName(templ *model.VmTempl) (err error) {
+	templ.ID = 0
+	r.DB.Model(&model.VmTempl{}).Where("name = ?", templ.Name).Updates(templ)
 	return
 }
 

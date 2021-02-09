@@ -129,7 +129,7 @@ func injectObj(router *router.Router) {
 		&inject.Object{Value: service.NewCommonService()},
 		&inject.Object{Value: service.NewDeviceService()},
 		&inject.Object{Value: service.NewExecService()},
-		&inject.Object{Value: service.NewHostService()},
+		&inject.Object{Value: service.NewClusterService()},
 
 		&inject.Object{Value: service.NewIsoService()},
 		&inject.Object{Value: service.NewPermService()},
@@ -140,7 +140,7 @@ func injectObj(router *router.Router) {
 		&inject.Object{Value: service.NewTaskService()},
 		&inject.Object{Value: service.NewUserService()},
 
-		&inject.Object{Value: service.NewVirtualService()},
+		&inject.Object{Value: service.NewResService()},
 		&inject.Object{Value: service.NewDockerImageService()},
 		&inject.Object{Value: service.NewContainerService()},
 		&inject.Object{Value: service.NewVmTemplService()},
@@ -156,7 +156,7 @@ func injectObj(router *router.Router) {
 		&inject.Object{Value: handler.NewDeviceCtrl()},
 		&inject.Object{Value: handler.NewFileCtrl()},
 
-		&inject.Object{Value: handler.NewHostCtrl()},
+		&inject.Object{Value: handler.NewClusterCtrl()},
 		&inject.Object{Value: handler.NewInitCtrl()},
 		&inject.Object{Value: handler.NewPermCtrl()},
 		&inject.Object{Value: handler.NewRoleCtrl()},

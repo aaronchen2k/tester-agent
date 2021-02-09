@@ -12,7 +12,7 @@ type ExecService struct {
 	AppiumService   *AppiumService   `inject:""`
 	SeleniumService *SeleniumService `inject:""`
 	TaskService     *TaskService     `inject:""`
-	HostService     *ClusterService  `inject:""`
+	ResService      *ResService      `inject:""`
 
 	ExecRepo   *repo.ExecRepo   `inject:""`
 	QueueRepo  *repo.QueueRepo  `inject:""`
@@ -79,7 +79,7 @@ func (s *ExecService) CheckAndCallSeleniumTest(queue model.Queue) {
 
 	if queue.Progress == _const.ProgressCreated {
 		// 寻找闲置且有能力的宿主机
-		hostId, backingImageId := s.HostService.GetValidForQueue(queue)
+		hostId, backingImageId := s.ResService.GetValidForQueue(queue)
 		if hostId != 0 {
 			// create kvm
 			result := s.VmService.CreateRemote(hostId, backingImageId, queue.ID)

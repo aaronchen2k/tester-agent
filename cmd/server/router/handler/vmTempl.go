@@ -25,7 +25,7 @@ func (c *VmTemplCtrl) Load(ctx iris.Context) {
 		return
 	}
 
-	templ := c.VmTemplService.GetByIdent(item.Ident)
+	templ := c.VmTemplService.GetByIdent(item.Ident, item.Node, item.Cluster)
 
 	if templ.ID == 0 {
 		templ = c.VmTemplService.CreateByNode(item)

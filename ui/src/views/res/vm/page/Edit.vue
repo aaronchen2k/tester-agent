@@ -13,51 +13,78 @@
         <div class="buttons"></div>
       </div>
 
-      <a-form-model ref="editForm" :model="model" :rules="rules" :label-col="labelCol" :wrapper-col="wrapperCol">
-        <a-form-model-item :label="$t('vm.ident')" prop="ident">
-          {{ model.ident }}
-        </a-form-model-item>
+      <a-form-model ref="editForm" :model="model" :rules="rules">
+        <a-row :gutter="colsFull">
+          <a-col :span="colsHalf" style="padding-left: 6px;">
+            <a-form-model-item :label="$t('vm.ident')" prop="ident" :labelCol="labelColHalf" :wrapperCol="wrapperColHalf">
+              {{ model.ident }}
+            </a-form-model-item>
+          </a-col>
+          <a-col :span="colsHalf">
+            <a-form-model-item :label="$t('vm.name')" prop="name" :labelCol="labelColHalf2" :wrapperCol="wrapperColHalf">
+              {{ model.name }}
+            </a-form-model-item>
+          </a-col>
+        </a-row>
 
-        <a-form-model-item :label="$t('vm.osPlatform')" prop="osPlatform">
-          <a-select v-model="model.osPlatform" @change="onOsPlatformChanged">
-            <a-select-option v-for="item in osPlatforms" :value="item.code" :key="item.code">
-              {{ item.name }}</a-select-option>
-          </a-select>
-        </a-form-model-item>
+        <a-row :gutter="colsFull">
+          <a-form-model-item :label="$t('vm.osPlatform')" prop="osPlatform" :labelCol="labelColFull" :wrapperCol="wrapperColFull">
+            <a-select v-model="model.osPlatform" @change="onOsPlatformChanged">
+              <a-select-option v-for="item in osPlatforms" :value="item.code" :key="item.code">
+                {{ item.name }}</a-select-option>
+            </a-select>
+          </a-form-model-item>
+        </a-row>
 
-        <a-form-model-item :label="$t('vm.osType')" prop="osType">
-          <a-select ref="osTypeSelection" v-model="model.osType" @change="onOsTypeChanged">
-            <a-select-option v-for="item in osTypes" :value="item.code" :key="item.code">
-              {{ item.name }}</a-select-option>
-          </a-select>
-        </a-form-model-item>
+        <a-row :gutter="colsFull">
+          <a-form-model-item :label="$t('vm.osType')" prop="osType" :labelCol="labelColFull" :wrapperCol="wrapperColFull">
+            <a-select ref="osTypeSelection" v-model="model.osType" @change="onOsTypeChanged">
+              <a-select-option v-for="item in osTypes" :value="item.code" :key="item.code">
+                {{ item.name }}</a-select-option>
+            </a-select>
+          </a-form-model-item>
+        </a-row>
 
-        <a-form-model-item :label="$t('vm.osVer')" prop="osVer">
-          <a-input v-model="model.osVer" />
-        </a-form-model-item>
+        <a-row :gutter="colsFull">
+          <a-form-model-item :label="$t('vm.osVer')" prop="osVer" :labelCol="labelColFull" :wrapperCol="wrapperColFull">
+            <a-input v-model="model.osVer" />
+          </a-form-model-item>
+        </a-row>
 
-        <a-form-model-item :label="$t('vm.osLang')" prop="osLang">
-          <a-select v-model="model.osLang">
-            <a-select-option v-for="item in osLangs" :value="item.code" :key="item.code">
-              {{ item.name }}</a-select-option>
-          </a-select>
-        </a-form-model-item>
+        <a-row :gutter="colsFull">
+          <a-form-model-item :label="$t('vm.osLang')" prop="osLang" :labelCol="labelColFull" :wrapperCol="wrapperColFull">
+            <a-select v-model="model.osLang">
+              <a-select-option v-for="item in osLangs" :value="item.code" :key="item.code">
+                {{ item.name }}</a-select-option>
+            </a-select>
+          </a-form-model-item>
+        </a-row>
 
-        <a-form-model-item :label="$t('vm.osBits')" prop="osBits">
-          <a-select v-model="model.osBits">
-            <a-select-option v-for="item in osBits" :value="item" :key="item">
-              {{ item }}</a-select-option>
-          </a-select>
-        </a-form-model-item>
+        <a-row :gutter="colsFull">
+          <a-form-model-item :label="$t('vm.osBits')" prop="osBits" :labelCol="labelColFull" :wrapperCol="wrapperColFull">
+            <a-select v-model="model.osBits">
+              <a-select-option v-for="item in osBits" :value="item" :key="item">
+                {{ item }}</a-select-option>
+            </a-select>
+          </a-form-model-item>
+        </a-row>
 
-        <a-form-model-item :wrapper-col="{ span: 14, offset: 6 }">
-          <a-button @click="save" type="primary">
-            {{ $t('form.save') }}
-          </a-button>
-          <a-button @click="reset" style="margin-left: 10px;">
-            {{ $t('form.reset') }}
-          </a-button>
-        </a-form-model-item>
+        <a-row :gutter="colsFull">
+          <a-form-model-item prop="updateAll" :wrapperCol="noLabel">
+            <a-switch default-checked v-model="model.updateAll" />
+          </a-form-model-item>
+        </a-row>
+
+        <a-row :gutter="colsFull">
+          <a-form-model-item  class="center">
+            <a-button @click="save" type="primary">
+              {{ $t('form.save') }}
+            </a-button>
+            <a-button @click="reset" style="margin-left: 10px;">
+              {{ $t('form.reset') }}
+            </a-button>
+          </a-form-model-item>
+        </a-row>
 
       </a-form-model>
     </div>
@@ -66,7 +93,15 @@
 
 <script>
 
-import { labelColLarge, wrapperColLarge } from '../../../../utils/const'
+import {
+  colsFull,
+  colsHalf,
+  labelColFull,
+  labelColHalf,
+  labelColHalf2,
+  wrapperColFull,
+  wrapperColHalf,
+  noLabel } from '../../../../utils/const'
 import Bus from '../../../../components/_util/bus'
 import { loadVmTempl, saveVmTempl, listEnv } from '@/api/manage'
 
@@ -76,8 +111,14 @@ export default {
   },
   data () {
     return {
-      labelCol: labelColLarge,
-      wrapperCol: wrapperColLarge,
+      colsFull: colsFull,
+      colsHalf: colsHalf,
+      labelColFull: labelColFull,
+      wrapperColFull: wrapperColFull,
+      labelColHalf: labelColHalf,
+      labelColHalf2: labelColHalf2,
+      wrapperColHalf: wrapperColHalf,
+      noLabel: noLabel,
 
       rules: {
         osPlatform: [

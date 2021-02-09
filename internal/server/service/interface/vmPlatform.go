@@ -5,8 +5,8 @@ import (
 	"github.com/aaronchen2k/tester/internal/server/model"
 )
 
-type VmInterface interface {
-	MachineInterface
+type VmPlatformInterface interface {
+	VirtualPlatformInterface
 
 	ListVm(clusterNode *domain.ResItem) ([]*model.Vm, error)
 	CreateVm(templ model.VmTempl, node model.Node, cluster model.Cluster) (model.Vm, error)

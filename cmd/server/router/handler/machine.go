@@ -8,7 +8,7 @@ import (
 
 type MachineCtrl struct {
 	Ctx            iris.Context
-	MachineService *service.VirtualService `inject:""`
+	MachineService *service.ResService `inject:""`
 }
 
 func NewMachineCtrl() *MachineCtrl {

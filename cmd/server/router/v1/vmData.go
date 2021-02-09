@@ -4,6 +4,7 @@ import _const "github.com/aaronchen2k/tester/internal/pkg/const"
 
 type VmData struct {
 	Id    uint
+	Name  string
 	Ident string
 
 	OsPlatform _const.OsPlatform
@@ -14,4 +15,6 @@ type VmData struct {
 	OsLevel string
 	OsVer   string
 	OsBuild string
+
+	UpdateAll bool
 }

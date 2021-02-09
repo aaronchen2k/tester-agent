@@ -11,8 +11,8 @@ import (
 )
 
 type VmService struct {
-	RpcService     *RpcService     `inject:""`
-	MachineService *VirtualService `inject:""`
+	RpcService     *RpcService `inject:""`
+	MachineService *ResService `inject:""`
 
 	VmRepo      *repo.VmRepo      `inject:""`
 	VmTemplRepo *repo.VmTemplRepo `inject:""`

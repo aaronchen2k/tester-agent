@@ -31,7 +31,7 @@ type Router struct {
 	DeviceCtrl  *handler.DeviceCtrl  `inject:""`
 	FileCtrl    *handler.FileCtrl    `inject:""`
 	MachineCtrl *handler.MachineCtrl `inject:""`
-	HostCtrl    *handler.HostCtrl    `inject:""`
+	HostCtrl    *handler.ClusterCtrl `inject:""`
 
 	InitCtrl *handler.InitCtrl `inject:""`
 	PermCtrl *handler.PermCtrl `inject:""`

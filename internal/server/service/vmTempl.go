@@ -16,14 +16,15 @@ func NewVmTemplService() *VmTemplService {
 	return &VmTemplService{}
 }
 
-func (s *VmTemplService) GetByIdent(ident string) (templ model.VmTempl) {
-	templ = s.VmTemplRepo.GetByIdent(ident)
+func (s *VmTemplService) GetByIdent(ident, node, cluster string) (templ model.VmTempl) {
+	templ = s.VmTemplRepo.GetByIdent(ident, node, cluster)
 
 	return
 }
 
 func (s *VmTemplService) CreateByNode(node domain.ResItem) (templ model.VmTempl) {
 	templ = model.VmTempl{
+		Name:    node.Name,
 		Ident:   node.Ident,
 		Node:    node.Node,
 		Cluster: node.Cluster,
@@ -36,6 +37,7 @@ func (s *VmTemplService) CreateByNode(node domain.ResItem) (templ model.VmTempl)
 
 func (s *VmTemplService) Update(data v1.VmData) (err error) {
 	po := model.VmTempl{
+		Name:      data.Name,
 		Ident:     data.Ident,
 		BaseModel: model.BaseModel{ID: data.Id},
 		TestEnv: base.TestEnv{
@@ -47,6 +49,11 @@ func (s *VmTemplService) Update(data v1.VmData) (err error) {
 		},
 	}
 
-	err = s.VmTemplRepo.Update(&po)
+	if data.UpdateAll {
+		err = s.VmTemplRepo.UpdateAllSameName(&po)
+	} else {
+		err = s.VmTemplRepo.Update(&po)
+	}
+
 	return
 }
