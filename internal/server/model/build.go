@@ -14,6 +14,9 @@ type Build struct {
 
 	QueueId uint `json:"queueId,omitempty"`
 
+	// info
+	Name string `json:"name,omitempty"`
+
 	// job
 	BuildType _const.BuildType `json:"buildType,omitempty"`
 	Priority  int              `json:"priority,omitempty"`

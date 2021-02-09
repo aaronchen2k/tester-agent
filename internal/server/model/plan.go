@@ -10,6 +10,10 @@ type Plan struct {
 	BaseModel
 	base.TestObject
 
+	// info
+	Name     string `json:"name,omitempty"`
+	UserName string `json:"userName,omitempty"`
+
 	// job
 	BuildType _const.BuildType `json:"buildType,omitempty"`
 	Priority  int              `json:"priority,omitempty"`
@@ -25,10 +29,6 @@ type Plan struct {
 	StartTime   time.Time `json:"startTime,omitempty"`
 	PendingTime time.Time `json:"pendingTime,omitempty"`
 	ResultTime  time.Time `json:"resultTime,omitempty"`
-
-	// desc
-	PlanName string `json:"planName,omitempty"`
-	UserName string `json:"userName,omitempty"`
 }
 
 func NewPlan() Plan {

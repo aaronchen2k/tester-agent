@@ -20,8 +20,8 @@ const (
 	RetryTime    = 3
 	AgentRunTime = 20 // sec
 
-	WebCheckQueueTime = 10 // sec
-	AgentCheckDevice  = 10 // sec
+	WebCheckQueueInterval    = 10 // sec
+	AgentCheckDeviceInterval = 10 // sec
 
 	MaxVmOnHost = 3
 	RpcPort     = 8972

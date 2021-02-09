@@ -9,6 +9,7 @@ import (
 	middlewareUtils "github.com/aaronchen2k/tester/internal/server/biz/middleware/misc"
 	"github.com/aaronchen2k/tester/internal/server/biz/redis"
 	"github.com/aaronchen2k/tester/internal/server/cfg"
+	serverCron "github.com/aaronchen2k/tester/internal/server/cron"
 	"github.com/aaronchen2k/tester/internal/server/db"
 	"github.com/aaronchen2k/tester/internal/server/model"
 	"github.com/aaronchen2k/tester/internal/server/repo"
@@ -120,6 +121,7 @@ func injectObj(router *router.Router) {
 		&inject.Object{Value: middleware.NewCasbinService()},
 
 		// service
+		&inject.Object{Value: serverCron.NewServerCron()},
 		&inject.Object{Value: service.NewEnvService()},
 
 		&inject.Object{Value: service.NewAppiumService()},

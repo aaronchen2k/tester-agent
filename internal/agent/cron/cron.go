@@ -1,4 +1,4 @@
-package cron
+package agentCron
 
 import (
 	"fmt"
@@ -10,7 +10,7 @@ import (
 func Init() {
 	_cronUtils.AddTaskFuc(
 		"check",
-		fmt.Sprintf("@every %ds", _const.AgentCheckDevice),
+		fmt.Sprintf("@every %ds", _const.AgentCheckDeviceInterval),
 		func() {
 			checkService.Check()
 		},

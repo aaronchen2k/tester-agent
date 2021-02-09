@@ -19,6 +19,6 @@ type TestEnv struct {
 	DeviceId uint   `json:"deviceId,omitempty"`
 	Serial   string `json:"serial,omitempty"`
 
-	VmTemplId     uint `json:"vmTemplId,omitempty"`
-	DockerImageId uint `json:"dockerImageId,omitempty"`
+	VmTemplId        uint `json:"vmTemplId,omitempty"`
+	ContainerImageId uint `json:"containerImageId,omitempty"`
 }

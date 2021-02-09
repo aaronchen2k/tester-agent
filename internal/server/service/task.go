@@ -62,7 +62,7 @@ func (s *TaskService) GenerateFromPlan(plan *model.Plan) (count int) {
 	for _, env := range plan.Environments {
 		task := model.NewTask(
 			plan.BuildType, plan.Priority, plan.GroupId, plan.ID,
-			plan.PlanName, plan.UserName,
+			plan.Name, plan.UserName,
 			env, plan.TestObject)
 		s.TaskRepo.Save(&task)
 

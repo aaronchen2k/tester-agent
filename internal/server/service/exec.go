@@ -25,6 +25,12 @@ func NewExecService() *ExecService {
 	return &ExecService{}
 }
 
+func (s *ExecService) CheckAll() {
+	s.CheckExec()
+	s.SetTimeout()
+	s.RetryTimeoutOrFailed()
+}
+
 func (s *ExecService) CheckExec() {
 	queuesToBuild := s.QueueRepo.QueryForExec()
 	for _, queue := range queuesToBuild {

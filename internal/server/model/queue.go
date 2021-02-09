@@ -12,6 +12,9 @@ type Queue struct {
 	base.TestEnv
 	VmId uint `gorm:"vmId" json:"vmId,omitempty"`
 
+	// info
+	Name string `json:"name,omitempty"`
+
 	// job
 	BuildType _const.BuildType `json:"buildType,omitempty"`
 	Priority  int              `json:"priority,omitempty"`
@@ -29,10 +32,6 @@ type Queue struct {
 	TimeoutTime time.Time `json:"timeoutTime,omitempty"`
 
 	Retry int `json:"retry,omitempty"`
-
-	// desc
-	QueueName string `json:"queueName,omitempty"`
-	UserName  string `json:"userName,omitempty"`
 }
 
 func NewQueue() Queue {
@@ -44,8 +43,8 @@ func NewQueue() Queue {
 }
 func NewQueueDetail(
 	buildType _const.BuildType, priority int, groupId uint, taskId uint,
-	queueName string, userName string,
-	testEnv base.TestEnv, testObj base.TestObject) Queue {
+	name string, testObj base.TestObject,
+	testEnv base.TestEnv) Queue {
 
 	queue := Queue{
 		BuildType: buildType,
@@ -53,8 +52,7 @@ func NewQueueDetail(
 		GroupId:   groupId,
 		TaskId:    taskId,
 
-		QueueName: queueName,
-		UserName:  userName,
+		Name: name,
 
 		TestEnv:    testEnv,
 		TestObject: testObj,

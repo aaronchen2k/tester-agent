@@ -42,6 +42,7 @@ func (s *VmTemplService) Update(data v1.VmData) (err error) {
 			OsPlatform: data.OsPlatform,
 			OsType:     data.OsType,
 			OsLang:     data.OsLang,
+			OsVer:      data.OsVer,
 			OsBits:     data.OsBits,
 		},
 	}

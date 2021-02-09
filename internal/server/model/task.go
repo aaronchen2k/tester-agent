@@ -11,6 +11,10 @@ type Task struct {
 	base.TestObject
 	base.TestEnv
 
+	// info
+	Name     string `json:"name,omitempty"`
+	UserName string `json:"userName,omitempty"`
+
 	// job
 	BuildType _const.BuildType `json:"buildType,omitempty"`
 	Priority  int              `json:"priority,omitempty"`
@@ -27,15 +31,11 @@ type Task struct {
 	StartTime   time.Time `json:"startTime,omitempty"`
 	PendingTime time.Time `json:"pendingTime,omitempty"`
 	ResultTime  time.Time `json:"resultTime,omitempty"`
-
-	// desc
-	TaskName string `json:"taskName,omitempty"`
-	UserName string `json:"userName,omitempty"`
 }
 
 func NewTask(
 	buildType _const.BuildType, priority int, groupId uint, planId uint,
-	taskName string, userName string,
+	name string, userName string,
 	testEnv base.TestEnv, testObj base.TestObject) Task {
 
 	task := Task{
@@ -44,7 +44,7 @@ func NewTask(
 		GroupId:   groupId,
 		PlanId:    planId,
 
-		TaskName: taskName,
+		Name:     name,
 		UserName: userName,
 
 		TestEnv:    testEnv,

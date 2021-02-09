@@ -58,8 +58,7 @@ func (s *QueueService) GenerateAppiumQueue(task model.Task) {
 	if device.ID != 0 {
 		queue := model.NewQueueDetail(
 			_const.AppiumTest, task.Priority, task.GroupId, task.ID,
-			task.TaskName, task.UserName,
-			env, task.TestObject)
+			task.Name, task.TestObject, env)
 
 		s.QueueRepo.Save(&queue)
 	}
@@ -79,8 +78,7 @@ func (s *QueueService) GenerateSeleniumQueue(task model.Task) {
 
 	queue := model.NewQueueDetail(
 		_const.SeleniumTest, task.Priority, task.GroupId, task.ID,
-		task.TaskName, task.UserName,
-		env, task.TestObject)
+		task.Name, task.TestObject, env)
 
 	s.QueueRepo.Save(&queue)
 
@@ -95,8 +93,7 @@ func (s *QueueService) GenerateUnitTestQueue(task model.Task) {
 
 	queue := model.NewQueueDetail(
 		_const.UnitTest, task.Priority, task.GroupId, task.ID,
-		task.TaskName, task.UserName,
-		env, task.TestObject)
+		task.Name, task.TestObject, env)
 
 	s.QueueRepo.Save(&queue)
 

@@ -63,7 +63,7 @@ func start() {
 	if err := flagSet.Parse(os.Args[1:]); err == nil {
 		agentConf.Inst.Platform = _const.WorkPlatform(platform)
 
-		cron.Init()
+		agentCron.Init()
 		router.App()
 	}
 }

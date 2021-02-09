@@ -19,8 +19,9 @@ type QueueRepo struct {
 func (r *QueueRepo) QueryForExec() (queues []model.Queue) {
 	queues = make([]model.Queue, 0)
 
-	r.DB.Where("progress=? OR progress=?",
-		_const.ProgressCreated, _const.ProgressPending).Order("priority").Find(&queues)
+	r.DB.Where("progress=? OR progress=?", _const.ProgressCreated, _const.ProgressPending).
+		Order("priority").
+		Find(&queues)
 
 	return
 }
@@ -65,11 +66,14 @@ func (r *QueueRepo) SetTimeout(id uint) (err error) {
 func (r *QueueRepo) QueryTimeout() (queues []model.Queue) {
 	queues = make([]model.Queue, 0)
 
-	r.DB.Where("(progress = ? AND unix_timestamp(NOW()) - unix_timestamp(pending_time) > ?)"+
-		" OR (progress = ? AND unix_timestamp(NOW()) - unix_timestamp(start_time) > ?)",
-		_const.ProgressPending, _const.WaitForExecTime*60*1000,
-		_const.ProgressInProgress, _const.WaitForResultTime*60*1000).
+	tm := time.Now().Add(-time.Minute * _const.WaitForExecTime)
+
+	r.DB.Where("(progress = ? AND start_time < ?)"+
+		" OR (progress = ? AND pending_time < ?)",
+		_const.ProgressInProgress, tm,
+		_const.ProgressPending, tm).
 		Order("priority").Find(&queues)
+
 	return
 }
 func (r *QueueRepo) QueryTimeoutOrFailedForRetry() (queues []model.Queue) {
