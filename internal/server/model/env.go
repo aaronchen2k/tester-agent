@@ -5,6 +5,7 @@ import _const "github.com/aaronchen2k/tester/internal/pkg/const"
 type EnvBase struct {
 	BaseModel
 	Code string `json:"code"`
+	Ord  int    `json:"ord"`
 }
 
 type OsPlatform struct {

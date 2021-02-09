@@ -120,6 +120,7 @@ export default {
       loadVmTempl(data).then(json => {
         console.log('loadVmTempl', json)
         this.model = json.data
+        this.onOsPlatformChanged()
       })
     })
   },
