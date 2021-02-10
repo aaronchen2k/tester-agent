@@ -62,6 +62,7 @@ func (s *PveService) CreateVm(name string, templ model.VmTempl, node model.Node,
 	vm.Cluster = node.Cluster
 	vm.NodeId = node.ID
 	vm.ClusterId = cluster.ID
+	vm.Status = _const.VmCreated
 
 	return
 }
