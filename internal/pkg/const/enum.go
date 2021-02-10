@@ -37,15 +37,12 @@ const (
 type VmStatus string
 
 const (
-	VmCreated VmStatus = "created"
-	//VmLaunch        VmStatus = "launch"
-	//VmRunning       VmStatus = "running"
+	VmCreated       VmStatus = "created"
 	VmActive        VmStatus = "active"
 	VmBusy          VmStatus = "busy"
 	VmDestroy       VmStatus = "destroy"
 	VmFailToCreate  VmStatus = "fail_to_create"
 	VmFailToDestroy VmStatus = "fail_to_destroy"
-	VmUnknown       VmStatus = "unknown"
 )
 
 type HostStatus string

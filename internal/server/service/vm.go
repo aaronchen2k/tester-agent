@@ -35,6 +35,10 @@ func (s *VmService) CreateByQueue(queue model.Queue) (err error) {
 	vmName := fmt.Sprintf("vm-%d", queue.ID)
 	vm, err := s.ResService.CreateVm(vmName, templ, node, cluster)
 
+	if err != nil {
+		return
+	}
+
 	s.VmRepo.Save(vm)
 	queue.VmId = vm.ID
 	s.NodeRepo.LaunchVm(queue)
