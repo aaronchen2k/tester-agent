@@ -44,7 +44,13 @@ func (c *VmTemplCtrl) Update(ctx iris.Context) {
 		return
 	}
 
-	c.VmTemplService.Update(data)
+	err = c.VmTemplService.Update(data)
+	if err != nil {
+		_, _ = ctx.JSON(_utils.ApiRes(400, err.Error(), nil))
+		return
+	}
+
+	_, _ = ctx.JSON(_utils.ApiRes(200, "", nil))
 
 	return
 }

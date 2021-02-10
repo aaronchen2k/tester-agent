@@ -72,6 +72,7 @@
         <a-row :gutter="colsFull">
           <a-form-model-item prop="updateAll" :wrapperCol="noLabel">
             <a-switch default-checked v-model="model.updateAll" />
+            {{ $t('vm.updateAll') }}
           </a-form-model-item>
         </a-row>
 
@@ -178,6 +179,13 @@ export default {
         }
         saveVmTempl(this.model).then(json => {
           console.log('saveVmTempl', json)
+          if (json.code === 200) {
+            this.$notification['success']({
+              message: this.$i18n.t('common.notify'),
+              description: this.$i18n.t('vm.success.update.templ'),
+              duration: 8
+            })
+          }
         })
       })
     },

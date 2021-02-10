@@ -1,9 +1,11 @@
 package repo
 
 import (
+	"fmt"
 	"github.com/aaronchen2k/tester/internal/server/model"
 	"github.com/aaronchen2k/tester/internal/server/model/base"
 	"gorm.io/gorm"
+	"strings"
 )
 
 func NewVmTemplRepo() *VmTemplRepo {
@@ -25,6 +27,35 @@ func (r *VmTemplRepo) GetByIdent(ident, node, cluster string) (templ model.VmTem
 }
 
 func (r *VmTemplRepo) GetByEnv(env base.TestEnv) (templ model.VmTempl) {
+	conditions := make([]string, 0)
+	if templ.OsPlatform != "" {
+		conditions = append(conditions, fmt.Sprintf("templ.os_platform=%s", templ.OsPlatform))
+	}
+	if templ.OsType != "" {
+		conditions = append(conditions, fmt.Sprintf("templ.os_type=%s", templ.OsType))
+	}
+	if templ.OsLang != "" {
+		conditions = append(conditions, fmt.Sprintf("templ.os_lang=%s", templ.OsLang))
+	}
+	if templ.OsVer != "" {
+		conditions = append(conditions, fmt.Sprintf("templ.os_ver=%s", templ.OsVer))
+	}
+	if templ.OsBits != "" {
+		conditions = append(conditions, fmt.Sprintf("templ.os_bits=%s", templ.OsBits))
+	}
+
+	sql := fmt.Sprintf(`SELECT templ.id, templ.name, templ.vm_id,
+		node.id nodeId, node.ident nodeIdent, node.cluster nodeCluster, node.inst_count
+
+	FROM biz_vm_templ templ
+	LEFT JOIN biz_node node ON templ.node = node.ident
+
+	WHERE %s
+	ORDER BY node.inst_count
+	LIMIT 1`, strings.Join(conditions, "AND"))
+
+	r.DB.Raw(sql).Scan(&templ)
+
 	condition := r.convertEnvToVmTempl(env)
 	r.DB.Where(&condition).First(&templ)
 	return

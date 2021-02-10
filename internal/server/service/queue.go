@@ -37,6 +37,25 @@ func (s *QueueService) GenerateFromTask(task model.Task) {
 	return
 }
 
+func (s *QueueService) GenerateSeleniumQueue(task model.Task) {
+	env := task.TestEnv
+
+	vmTempl := s.getVmTemplByEnv(env)
+	if vmTempl.ID == 0 {
+		return
+	}
+
+	env.VmTemplId = vmTempl.ID
+
+	queue := model.NewQueueDetail(
+		_const.SeleniumTest, task.Priority, task.GroupId, task.ID,
+		task.Name, task.TestObject, env)
+
+	s.QueueRepo.Save(&queue)
+
+	return
+}
+
 func (s *QueueService) GenerateAppiumQueue(task model.Task) {
 	env := task.TestEnv
 	serial := strings.TrimSpace(env.Serial)
@@ -62,25 +81,6 @@ func (s *QueueService) GenerateAppiumQueue(task model.Task) {
 
 		s.QueueRepo.Save(&queue)
 	}
-
-	return
-}
-
-func (s *QueueService) GenerateSeleniumQueue(task model.Task) {
-	env := task.TestEnv
-
-	vmTempl := s.getVmTemplByEnv(env)
-	if vmTempl.ID == 0 {
-		return
-	}
-
-	env.VmTemplId = vmTempl.ID
-
-	queue := model.NewQueueDetail(
-		_const.SeleniumTest, task.Priority, task.GroupId, task.ID,
-		task.Name, task.TestObject, env)
-
-	s.QueueRepo.Save(&queue)
 
 	return
 }

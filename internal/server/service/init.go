@@ -16,32 +16,8 @@ func NewInitService() *VmService {
 }
 
 func (s *InitService) Init() {
-
 	err := db.GetInst().DB().AutoMigrate(
-		&model.User{},
-		&model.Role{},
-		&model.Permission{},
-
-		&model.OsPlatform{},
-		&model.OsType{},
-		&model.OsLang{},
-		&model.BrowserType{},
-
-		&model.Device{},
-		&model.Cluster{},
-
-		&model.Iso{},
-		&model.Queue{},
-
-		&model.Plan{},
-		&model.Task{},
-		&model.Queue{},
-		&model.Build{},
-
-		&model.ContainerImage{},
-		&model.Container{},
-		&model.VmTempl{},
-		&model.Vm{},
+		model.Models...,
 	)
 	if err != nil {
 		color.Yellow(fmt.Sprintf("初始化数据表错误 ：%+v", err))

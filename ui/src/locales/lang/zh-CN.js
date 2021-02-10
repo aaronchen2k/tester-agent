@@ -25,6 +25,8 @@ const locale = {
   'menu.dashboard.monitor': '监控页',
   'menu.dashboard.workplace': '工作台',
 
+  'common.notify': '通知',
+
   'action.create': '创建',
   'action.edit': '编辑',
   'action.back': '返回',
@@ -40,7 +42,9 @@ const locale = {
   'vm.osLang': '系统语言',
   'vm.osBits': '系统位数',
   'vm.osVer': '系统版本',
-  'vm.osBuild': '系统构建号'
+  'vm.osBuild': '系统构建号',
+  'vm.updateAll': '更新所有同名虚拟机',
+  'vm.success.update.templ': '成功更新虚拟机模板。'
 }
 
 export default {

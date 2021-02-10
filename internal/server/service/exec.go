@@ -46,39 +46,12 @@ func (s *ExecService) CheckAndCall(queue model.Queue) {
 	}
 }
 
-func (s *ExecService) CheckAndCallAppiumTest(queue model.Queue) {
-	serial := queue.Serial
-	device := s.DeviceRepo.GetBySerial(serial)
-
-	originalProgress := queue.Progress
-	var newProgress _const.BuildProgress
-
-	if s.DeviceService.IsDeviceReady(device) {
-		rpcResult := s.AppiumService.Start(queue)
-
-		if rpcResult.IsSuccess() {
-			s.QueueRepo.Start(queue) // start
-			newProgress = _const.ProgressInProgress
-		} else {
-			s.QueueRepo.Pending(queue.ID) // pending
-			newProgress = _const.ProgressPending
-		}
-	} else {
-		s.QueueRepo.Pending(queue.ID) // pending
-		newProgress = _const.ProgressPending
-	}
-
-	if originalProgress != newProgress { // progress changed
-		s.TaskService.SetProgress(queue.TaskId, newProgress)
-	}
-}
-
 func (s *ExecService) CheckAndCallSeleniumTest(queue model.Queue) {
 	originalProgress := queue.Progress
 	var newProgress _const.BuildProgress
 
 	if queue.Progress == _const.ProgressCreated {
-		// 寻找闲置且有能力的宿主机
+		// find valid host node
 		hostId, backingImageId := s.ResService.GetValidForQueue(queue)
 		if hostId != 0 {
 			// create kvm
@@ -107,6 +80,33 @@ func (s *ExecService) CheckAndCallSeleniumTest(queue model.Queue) {
 
 	if originalProgress != newProgress { // queue's progress changed
 		s.TaskRepo.SetProgress(queue.TaskId, newProgress)
+	}
+}
+
+func (s *ExecService) CheckAndCallAppiumTest(queue model.Queue) {
+	serial := queue.Serial
+	device := s.DeviceRepo.GetBySerial(serial)
+
+	originalProgress := queue.Progress
+	var newProgress _const.BuildProgress
+
+	if s.DeviceService.IsDeviceReady(device) {
+		rpcResult := s.AppiumService.Start(queue)
+
+		if rpcResult.IsSuccess() {
+			s.QueueRepo.Start(queue) // start
+			newProgress = _const.ProgressInProgress
+		} else {
+			s.QueueRepo.Pending(queue.ID) // pending
+			newProgress = _const.ProgressPending
+		}
+	} else {
+		s.QueueRepo.Pending(queue.ID) // pending
+		newProgress = _const.ProgressPending
+	}
+
+	if originalProgress != newProgress { // progress changed
+		s.TaskService.SetProgress(queue.TaskId, newProgress)
 	}
 }
 

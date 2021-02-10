@@ -48,6 +48,8 @@ const locale = {
   'app.setting.copyinfo': 'copy success，please replace defaultSettings in src/models/setting.js',
   'app.setting.production.hint': 'Setting panel shows in development environment only, please manually modify',
 
+  'common.notify': 'Notification',
+
   'action.create': 'Create',
   'action.edit': 'Edit',
   'action.back': 'Back',
@@ -63,7 +65,9 @@ const locale = {
   'vm.osLang': 'OS Lang',
   'vm.osBits': 'OS Bits',
   'vm.osVer': 'OS Version',
-  'vm.osBuild': 'OS Build'
+  'vm.osBuild': 'OS Build',
+  'vm.updateAll': 'Update all VM with same name',
+  'vm.success.update.templ': 'Success to update VM template.'
 }
 
 export default {

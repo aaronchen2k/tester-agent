@@ -10,3 +10,32 @@ type BaseModel struct {
 	UpdatedAt time.Time  `json:"updatedAt"`
 	DeletedAt *time.Time `sql:"index" json:"deletedAt"`
 }
+
+var (
+	Models = []interface{}{
+		&User{},
+		&Role{},
+		&Permission{},
+
+		&OsPlatform{},
+		&OsType{},
+		&OsLang{},
+		&BrowserType{},
+		&Device{},
+
+		&Iso{},
+		&Queue{},
+
+		&Plan{},
+		&Task{},
+		&Queue{},
+		&Build{},
+
+		&Cluster{},
+		&Node{},
+		&ContainerImage{},
+		&Container{},
+		&VmTempl{},
+		&Vm{},
+	}
+)

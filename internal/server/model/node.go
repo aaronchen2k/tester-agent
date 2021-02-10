@@ -8,6 +8,9 @@ import (
 type Node struct {
 	BaseModel
 
+	Cluster   string `json:"cluster"`
+	InstCount int    `gorm:"default:0" json:"instCount"`
+
 	Ident string `json:"ident"`
 	Type  string `json:"type"`
 
