@@ -3,7 +3,7 @@ package service
 import (
 	"fmt"
 	_domain "github.com/aaronchen2k/tester/internal/pkg/domain"
-	_logUtils "github.com/aaronchen2k/tester/internal/pkg/libs/log"
+	"github.com/aaronchen2k/tester/internal/server/model"
 	"github.com/aaronchen2k/tester/internal/server/repo"
 )
 
@@ -21,14 +21,11 @@ func NewContainerService() *ContainerService {
 	return &ContainerService{}
 }
 
-func (s *ContainerService) Create(containerImageId uint) (dockerId string, err error) {
-	imagePo := s.ContainerImageRepo.Get(containerImageId)
-	node := s.NodeRepo.Get(imagePo.Node)
-	cluster := s.ClusterRepo.Get(imagePo.Cluster)
+func (s *ContainerService) CreateByQueue(queue model.Queue) (dockerId string, err error) {
+	//imagePo := s.ContainerImageRepo.Get(queue.ContainerImageId)
+	//node := s.NodeRepo.GetByIndent(imagePo.Node)
+	//cluster := s.ClusterRepo.Get(imagePo.Cluster)
 
-	vm, err := s.MachineService.CreateContainer(imagePo, node, cluster)
-	// TODO: save to db?
-	_logUtils.Info(fmt.Sprintf("%#v, %s", vm, err.Error()))
 	return
 }
 

@@ -33,7 +33,7 @@ func (s *VmTemplService) CreateByNode(item domain.ResItem) (templ model.VmTempl)
 	s.VmTemplRepo.Create(&templ)
 
 	// create parent node
-	node := s.NodeRepo.GetByIndent(&item.NodeObj.Ident)
+	node := s.NodeRepo.GetByIndent(item.NodeObj.Ident)
 	if node.ID == 0 {
 		node = model.Node{
 			Ident:   item.NodeObj.Ident,

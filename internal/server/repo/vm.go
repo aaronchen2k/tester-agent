@@ -32,21 +32,15 @@ func (r *VmRepo) GetById(id uint) (vm model.Vm) {
 	return
 }
 
-func (r *VmRepo) GetByMac(mac string) (vm model.Vm) {
-	r.DB.Where("mac=?", mac).First(&vm)
+func (r *VmRepo) Save(po *model.Vm) {
+	r.DB.Model(po).Omit("").Create(po)
 	return
 }
 
-func (r *VmRepo) Save(po model.Vm) {
-	r.DB.Model(&po).Omit("").Create(&po)
-	return
-}
-
-func (r *VmRepo) Launch(vm _domain.Vm) {
-	r.DB.Model(&vm).Where("id=?", vm.Id).
+func (r *VmRepo) UpdateStatus(vmId uint, status _const.VmStatus) {
+	r.DB.Model(&model.Vm{}).Where("id=?", vmId).
 		Updates(
-			map[string]interface{}{"status": "launch", "imagePath": vm.ImagePath,
-				"defPath": vm.DefPath, "updatedAt": time.Now()})
+			map[string]interface{}{"status": status})
 
 	return
 }

@@ -6,7 +6,6 @@ import (
 	_logUtils "github.com/aaronchen2k/tester/internal/pkg/libs/log"
 	"github.com/aaronchen2k/tester/internal/server/domain"
 	"github.com/aaronchen2k/tester/internal/server/model"
-	serverUtils "github.com/aaronchen2k/tester/internal/server/utils/common"
 	go_proxmox "github.com/aaronchen2k/tester/vendors/github.com/joernott/go-proxmox"
 	"strconv"
 )
@@ -24,7 +23,8 @@ func (s *PveService) ListVm(clusterNode *domain.ResItem) (vms []*model.Vm, err e
 	return
 }
 
-func (s *PveService) CreateVm(name string, templ model.VmTempl, node model.Node, cluster model.Cluster) (vm model.Vm, err error) {
+func (s *PveService) CreateVm(hostName string, templ model.VmTempl, node model.Node, cluster model.Cluster) (
+	vmIdent string, err error) {
 	address := fmt.Sprintf("%s:%d", cluster.Ip, cluster.Port)
 	pve, err := go_proxmox.NewProxMox(address, cluster.Username, cluster.Password)
 	if err != nil {
@@ -32,22 +32,22 @@ func (s *PveService) CreateVm(name string, templ model.VmTempl, node model.Node,
 		return
 	}
 
-	newVmIdStr, _ := pve.NextVMId()
+	vmIdent, _ = pve.NextVMId()
 	templVm, err := pve.FindVM(templ.Ident)
 	if err != nil {
-		_logUtils.Info("fail to find vm, error: " + err.Error())
+		_logUtils.Info("fail to find vm templ, error: " + err.Error())
 		return
 	}
 
-	newVmId, _ := strconv.ParseFloat(newVmIdStr, 64)
-	vmHostName := serverUtils.GenVmHostName(name, templ.OsPlatform, templ.OsType, templ.OsLang)
-	task, err := templVm.Clone(newVmId, vmHostName, node.Ident)
+	newVmId, _ := strconv.ParseFloat(vmIdent, 64)
+
+	task, err := templVm.Clone(newVmId, hostName, node.Ident)
 	if err != nil {
 		_logUtils.Info("fail to clone vm, error: " + err.Error())
 		return
 	}
 
-	newVm, err := pve.FindVM(newVmIdStr)
+	newVm, err := pve.FindVM(vmIdent)
 	err = newVm.Start()
 	if err != nil {
 		_logUtils.Info("fail to start vm, error: " + err.Error())
@@ -55,14 +55,6 @@ func (s *PveService) CreateVm(name string, templ model.VmTempl, node model.Node,
 	}
 
 	_logUtils.Info("success to clone vm, task: " + task.ID)
-
-	vm.Name = vmHostName
-	vm.Ident = newVmIdStr
-	vm.Node = node.Ident
-	vm.Cluster = node.Cluster
-	vm.NodeId = node.ID
-	vm.ClusterId = cluster.ID
-	vm.Status = _const.VmCreated
 
 	return
 }

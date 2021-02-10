@@ -9,5 +9,5 @@ type ContainerPlatformInterface interface {
 	VirtualPlatformInterface
 
 	ListContainer(clusterNode *domain.ResItem) ([]*model.Container, error)
-	CreateContainer(image model.ContainerImage, node model.Node, cluster model.Cluster) (model.Container, error)
+	CreateContainer(queueId uint, image model.ContainerImage, node model.Node, cluster model.Cluster) (model.Container, error)
 }

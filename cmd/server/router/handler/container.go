@@ -1,11 +1,8 @@
 package handler
 
 import (
-	"fmt"
 	_domain "github.com/aaronchen2k/tester/internal/pkg/domain"
-	_logUtils "github.com/aaronchen2k/tester/internal/pkg/libs/log"
-	"github.com/aaronchen2k/tester/internal/pkg/utils"
-	"github.com/aaronchen2k/tester/internal/server/domain"
+	_utils "github.com/aaronchen2k/tester/internal/pkg/utils"
 	"github.com/aaronchen2k/tester/internal/server/service"
 	"github.com/kataras/iris/v12"
 )
@@ -19,29 +16,15 @@ func NewContainerCtrl() *ContainerCtrl {
 	return &ContainerCtrl{}
 }
 
-func (c *ContainerCtrl) Create(ctx iris.Context) {
-	req := domain.VmReq{}
-	err := ctx.ReadJSON(&req)
-	if err != nil {
-		_, _ = ctx.JSON(_utils.ApiRes(400, err.Error(), nil))
-		return
-	}
-
-	c.ContainerService.Create(req.TemplId)
-
-	return
-}
-
-func (c *ContainerCtrl) Register() (result _domain.RpcResult) {
+func (c *ContainerCtrl) Register(ctx iris.Context) {
 	var container _domain.Container
 	if err := c.Ctx.ReadJSON(&container); err != nil {
-		_logUtils.Error(err.Error())
-		result.Fail("wrong request data")
+		_, _ = ctx.JSON(_utils.ApiRes(400, err.Error(), ""))
 		return
 	}
 
-	po := c.ContainerService.Register(container)
+	c.ContainerService.Register(container)
 
-	result.Success(fmt.Sprintf("succes to register host %d.", po))
-	return result
+	_, _ = ctx.JSON(_utils.ApiRes(200, "", ""))
+	return
 }

@@ -105,7 +105,7 @@ func (r *Router) App() {
 					party.Post("/register", r.VmCtrl.Register).Name = "Agent更新虚拟机的状态"
 				})
 				admin.PartyFunc("/containers", func(party iris.Party) {
-					party.Post("/", r.ContainerCtrl.Create).Name = "创建容器"
+					party.Post("/register", r.ContainerCtrl.Register).Name = "Agent更新容器的状态"
 				})
 
 				admin.PartyFunc("/plans", func(party iris.Party) {

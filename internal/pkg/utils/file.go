@@ -24,7 +24,7 @@ func GetExeDir() string { // where exe file in
 	dir, _ = filepath.Abs(dir)
 	dir = AddSepIfNeeded(dir)
 
-	//fmt.Printf("Debug: Launch %s in %s \n", arg1, dir)
+	//fmt.Printf("Debug: UpdateStatus %s in %s \n", arg1, dir)
 	return dir
 }
 

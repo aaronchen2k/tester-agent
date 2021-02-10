@@ -24,7 +24,7 @@ func (s *PortainerService) ListContainer(clusterNode *domain.ResItem) (container
 	return
 }
 
-func (s *PortainerService) CreateContainer(image model.ContainerImage, node model.Node, cluster model.Cluster) (
+func (s *PortainerService) CreateContainer(queueId uint, image model.ContainerImage, node model.Node, cluster model.Cluster) (
 	container model.Container, err error) {
 	config := go_portainer.Config{
 		Host:     cluster.Ip,
@@ -42,7 +42,7 @@ func (s *PortainerService) CreateContainer(image model.ContainerImage, node mode
 	}
 
 	endpoint, _ := strconv.Atoi(node.Ident)
-	vmHostName := serverUtils.GenVmHostName("", image.OsPlatform, image.OsType, image.OsLang)
+	vmHostName := serverUtils.GenVmHostName(queueId, image.OsPlatform, image.OsType, image.OsLang)
 
 	body := map[string]interface{}{}
 	body["Hostname"] = vmHostName

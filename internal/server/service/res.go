@@ -51,19 +51,6 @@ func (s *ResService) GetValidForQueue(queue model.Queue) (hostId, templOrImageId
 	return
 }
 
-//func (s *ResService) getIdleHost() (ids []uint) {
-//	// keys: hostId, vmCount
-//	hostToVmCountList := s.HostRepo.QueryIdle(_const.MaxVmOnHost)
-//
-//	hostIds := make([]uint, 0)
-//	for _, mp := range hostToVmCountList {
-//		hostId := mp["hostId"]
-//		hostIds = append(hostIds, hostId)
-//	}
-//
-//	return hostIds
-//}
-
 func (s *ResService) ListVm() (rootNode *domain.ResItem) {
 	rootNode = &domain.ResItem{Name: "虚拟机", Type: _const.ResRoot, Ident: "0"}
 	clusters := s.ClusterService.ListByType("pve")
@@ -105,17 +92,17 @@ func (s *ResService) ListContainers() (rootNode *domain.ResItem) {
 }
 
 func (s *ResService) CreateVm(name string, templ model.VmTempl, node model.Node, cluster model.Cluster) (
-	vm model.Vm, err error) {
+	vmIdent string, err error) {
 
-	vm, err = s.VmPlatform.CreateVm(name, templ, node, cluster)
+	vmIdent, err = s.VmPlatform.CreateVm(name, templ, node, cluster)
 
 	return
 }
 
-func (s *ResService) CreateContainer(image model.ContainerImage, node model.Node, cluster model.Cluster) (
+func (s *ResService) CreateContainer(queueId uint, image model.ContainerImage, node model.Node, cluster model.Cluster) (
 	container model.Container, err error) {
 
-	container, err = s.ContainerPlatform.CreateContainer(image, node, cluster)
+	container, err = s.ContainerPlatform.CreateContainer(queueId, image, node, cluster)
 
 	return
 }

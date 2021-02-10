@@ -2,10 +2,12 @@ package service
 
 import (
 	"fmt"
+	_const "github.com/aaronchen2k/tester/internal/pkg/const"
 	_domain "github.com/aaronchen2k/tester/internal/pkg/domain"
 	_stringUtils "github.com/aaronchen2k/tester/internal/pkg/libs/string"
 	"github.com/aaronchen2k/tester/internal/server/model"
 	"github.com/aaronchen2k/tester/internal/server/repo"
+	serverUtils "github.com/aaronchen2k/tester/internal/server/utils/common"
 	"math/rand"
 	"strings"
 )
@@ -32,16 +34,27 @@ func (s *VmService) CreateByQueue(queue model.Queue) (err error) {
 	node := s.NodeRepo.GetByIndent(templ.Node)
 	cluster := s.ClusterRepo.Get(templ.Cluster)
 
-	vmName := fmt.Sprintf("vm-%d", queue.ID)
-	vm, err := s.ResService.CreateVm(vmName, templ, node, cluster)
+	vmName := serverUtils.GenVmHostName(queue.ID, templ.OsPlatform, templ.OsType, templ.OsLang)
+	vmIdent, err := s.ResService.CreateVm(vmName, templ, node, cluster)
 
-	if err != nil {
+	if err != nil || vmIdent == "" { //  fail to create
 		return
 	}
 
-	s.VmRepo.Save(vm)
+	vm := model.Vm{
+		Name:      vmName,
+		Ident:     vmIdent,
+		Node:      node.Ident,
+		Cluster:   node.Cluster,
+		NodeId:    node.ID,
+		ClusterId: cluster.ID,
+		Status:    _const.VmCreated,
+	}
+	s.VmRepo.Save(&vm) // status: created
+
 	queue.VmId = vm.ID
-	s.NodeRepo.LaunchVm(queue)
+	s.NodeRepo.LaunchVm(queue)                      // progress: launch_vm
+	s.VmRepo.UpdateStatus(vm.ID, _const.VmLaunched) // progress: launched
 
 	return
 }
@@ -59,18 +72,6 @@ func (s *VmService) genVmName(imageName string) (name string) {
 	name = strings.Replace(imageName, "backing", uuid, -1)
 
 	return
-}
-
-func (s *VmService) genValidMacAddress() (mac string) {
-	for i := 0; i < 10; i++ {
-		mac := s.genRandomMac()
-		vm := s.VmRepo.GetByMac(mac)
-		if vm.ID == 0 {
-			return mac
-		}
-	}
-
-	return "N/A"
 }
 
 func (s *VmService) genRandomMac() (mac string) {

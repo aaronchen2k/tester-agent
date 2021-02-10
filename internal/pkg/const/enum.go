@@ -38,6 +38,7 @@ type VmStatus string
 
 const (
 	VmCreated       VmStatus = "created"
+	VmLaunched      VmStatus = "launched"
 	VmActive        VmStatus = "active"
 	VmBusy          VmStatus = "busy"
 	VmDestroy       VmStatus = "destroy"
