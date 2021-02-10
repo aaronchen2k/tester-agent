@@ -50,11 +50,13 @@ func (s *VmService) CreateByQueue(queue model.Queue) (err error) {
 		ClusterId: cluster.ID,
 		Status:    _const.VmCreated,
 	}
-	s.VmRepo.Save(&vm) // status: created
+	s.VmRepo.Save(&vm) // vm status: created
 
 	queue.VmId = vm.ID
-	s.NodeRepo.LaunchVm(queue)                      // progress: launch_vm
-	s.VmRepo.UpdateStatus(vm.ID, _const.VmLaunched) // progress: launched
+	s.NodeRepo.LaunchVm(queue)                      // queue progress: launch_vm
+	s.VmRepo.UpdateStatus(vm.ID, _const.VmLaunched) // vm status: launched
+
+	s.NodeRepo.AddInstCount(node.ID)
 
 	return
 }

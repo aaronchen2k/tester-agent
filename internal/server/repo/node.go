@@ -35,3 +35,8 @@ func (r *NodeRepo) LaunchVm(queue model.Queue) (err error) {
 
 	return
 }
+
+func (r *NodeRepo) AddInstCount(id uint) {
+	r.DB.Model(&model.Node{}).Where("id = ?", id).
+		UpdateColumn("instCount", gorm.Expr("instCount + 1"))
+}
