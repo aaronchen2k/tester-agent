@@ -10,6 +10,7 @@ import (
 
 type VmTemplService struct {
 	VmTemplRepo *repo.VmTemplRepo `inject:""`
+	NodeRepo    *repo.NodeRepo    `inject:""`
 }
 
 func NewVmTemplService() *VmTemplService {
@@ -22,15 +23,25 @@ func (s *VmTemplService) GetByIdent(ident, node, cluster string) (templ model.Vm
 	return
 }
 
-func (s *VmTemplService) CreateByNode(node domain.ResItem) (templ model.VmTempl) {
+func (s *VmTemplService) CreateByNode(item domain.ResItem) (templ model.VmTempl) {
 	templ = model.VmTempl{
-		Name:    node.Name,
-		Ident:   node.Ident,
-		Node:    node.Node,
-		Cluster: node.Cluster,
+		Name:    item.Name,
+		Ident:   item.Ident,
+		Node:    item.Node,
+		Cluster: item.Cluster,
 	}
-
 	s.VmTemplRepo.Create(&templ)
+
+	// create parent node
+	node := s.NodeRepo.GetByIndent(&item.NodeObj.Ident)
+	if node.ID == 0 {
+		node = model.Node{
+			Ident:   item.NodeObj.Ident,
+			Name:    item.NodeObj.Name,
+			Cluster: item.Cluster,
+		}
+		s.NodeRepo.Create(&node)
+	}
 
 	return
 }

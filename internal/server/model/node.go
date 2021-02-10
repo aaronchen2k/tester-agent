@@ -2,7 +2,6 @@ package model
 
 import (
 	_const "github.com/aaronchen2k/tester/internal/pkg/const"
-	"time"
 )
 
 type Node struct {
@@ -10,9 +9,11 @@ type Node struct {
 
 	Cluster   string `json:"cluster"`
 	InstCount int    `gorm:"default:0" json:"instCount"`
+	TaskCount int    `gorm:"-" json:"taskCount"`
 
 	Ident string `json:"ident"`
 	Type  string `json:"type"`
+	Name  string `json:"name"`
 
 	Ip      string `json:"ip"`
 	Port    int    `son:"port"`
@@ -24,9 +25,6 @@ type Node struct {
 	SshPort int               `json:"sshPort,omitempty"`
 	VncPort int               `json:"vncPort,omitempty"`
 	Status  _const.HostStatus `json:"status"`
-
-	LastRegisterDate time.Time `json:"lastRegisterDate"`
-	TaskCount        int       `gorm:"-" json:"taskCount"`
 }
 
 func NewNode() Node {

@@ -1,6 +1,9 @@
 package domain
 
-import _const "github.com/aaronchen2k/tester/internal/pkg/const"
+import (
+	_const "github.com/aaronchen2k/tester/internal/pkg/const"
+	"github.com/aaronchen2k/tester/internal/server/model"
+)
 
 type ResItem struct {
 	Ident   string `json:"ident,omitempty"`
@@ -19,4 +22,6 @@ type ResItem struct {
 	Port     int    `json:"port,omitempty"`
 	Username string `json:"-"`
 	Password string `json:"-"`
+
+	NodeObj model.Node `gorm:"-" json:"node"` // only for node data persistence
 }
