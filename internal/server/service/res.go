@@ -104,10 +104,10 @@ func (s *ResService) ListContainers() (rootNode *domain.ResItem) {
 	return
 }
 
-func (s *ResService) CreateVm(templ model.VmTempl, node model.Node, cluster model.Cluster) (
+func (s *ResService) CreateVm(name string, templ model.VmTempl, node model.Node, cluster model.Cluster) (
 	vm model.Vm, err error) {
 
-	vm, err = s.VmPlatform.CreateVm(templ, node, cluster)
+	vm, err = s.VmPlatform.CreateVm(name, templ, node, cluster)
 
 	return
 }

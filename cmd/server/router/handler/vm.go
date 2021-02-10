@@ -1,9 +1,9 @@
 package handler
 
 import (
-	"fmt"
 	_domain "github.com/aaronchen2k/tester/internal/pkg/domain"
 	_logUtils "github.com/aaronchen2k/tester/internal/pkg/libs/log"
+	_utils "github.com/aaronchen2k/tester/internal/pkg/utils"
 	"github.com/aaronchen2k/tester/internal/server/service"
 	"github.com/kataras/iris/v12"
 )
@@ -17,16 +17,16 @@ func NewVmCtrl() *VmCtrl {
 	return &VmCtrl{}
 }
 
-func (c *VmCtrl) Register() (result _domain.RpcResult) {
+func (c *VmCtrl) Register(ctx iris.Context) {
 	var vm _domain.Vm
 	if err := c.Ctx.ReadJSON(&vm); err != nil {
 		_logUtils.Error(err.Error())
-		result.Fail("wrong request data")
+		_, _ = ctx.JSON(_utils.ApiRes(400, err.Error(), ""))
 		return
 	}
 
-	po := c.VmService.Register(vm)
+	c.VmService.Register(vm)
 
-	result.Success(fmt.Sprintf("succes to register host %d.", po))
-	return result
+	_, _ = ctx.JSON(_utils.ApiRes(200, "", ""))
+	return
 }

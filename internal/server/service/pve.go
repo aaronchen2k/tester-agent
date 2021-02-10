@@ -24,7 +24,7 @@ func (s *PveService) ListVm(clusterNode *domain.ResItem) (vms []*model.Vm, err e
 	return
 }
 
-func (s *PveService) CreateVm(templ model.VmTempl, node model.Node, cluster model.Cluster) (vm model.Vm, err error) {
+func (s *PveService) CreateVm(name string, templ model.VmTempl, node model.Node, cluster model.Cluster) (vm model.Vm, err error) {
 	address := fmt.Sprintf("%s:%d", cluster.Ip, cluster.Port)
 	pve, err := go_proxmox.NewProxMox(address, cluster.Username, cluster.Password)
 	if err != nil {
@@ -40,7 +40,7 @@ func (s *PveService) CreateVm(templ model.VmTempl, node model.Node, cluster mode
 	}
 
 	newVmId, _ := strconv.ParseFloat(newVmIdStr, 64)
-	vmHostName := serverUtils.GenVmHostName(templ.OsPlatform, templ.OsType, templ.OsLang)
+	vmHostName := serverUtils.GenVmHostName(name, templ.OsPlatform, templ.OsType, templ.OsLang)
 	task, err := templVm.Clone(newVmId, vmHostName, node.Ident)
 	if err != nil {
 		_logUtils.Info("fail to clone vm, error: " + err.Error())
@@ -56,7 +56,10 @@ func (s *PveService) CreateVm(templ model.VmTempl, node model.Node, cluster mode
 
 	_logUtils.Info("success to clone vm, task: " + task.ID)
 
+	vm.Name = vmHostName
 	vm.Ident = newVmIdStr
+	vm.Node = node.Ident
+	vm.Cluster = node.Cluster
 	vm.NodeId = node.ID
 	vm.ClusterId = cluster.ID
 

@@ -7,12 +7,12 @@ import (
 )
 
 type ExecService struct {
+	ResService      *ResService      `inject:""`
 	DeviceService   *DeviceService   `inject:""`
 	VmService       *VmService       `inject:""`
 	AppiumService   *AppiumService   `inject:""`
 	SeleniumService *SeleniumService `inject:""`
 	TaskService     *TaskService     `inject:""`
-	ResService      *ResService      `inject:""`
 
 	ExecRepo   *repo.ExecRepo   `inject:""`
 	QueueRepo  *repo.QueueRepo  `inject:""`
@@ -39,10 +39,10 @@ func (s *ExecService) CheckExec() {
 }
 
 func (s *ExecService) CheckAndCall(queue model.Queue) {
-	if queue.BuildType == _const.AppiumTest {
-		s.CheckAndCallAppiumTest(queue)
-	} else if queue.BuildType == _const.SeleniumTest {
+	if queue.BuildType == _const.SeleniumTest {
 		s.CheckAndCallSeleniumTest(queue)
+	} else if queue.BuildType == _const.AppiumTest {
+		s.CheckAndCallAppiumTest(queue)
 	}
 }
 
@@ -51,17 +51,14 @@ func (s *ExecService) CheckAndCallSeleniumTest(queue model.Queue) {
 	var newProgress _const.BuildProgress
 
 	if queue.Progress == _const.ProgressCreated {
-		// find valid host node
-		hostId, backingImageId := s.ResService.GetValidForQueue(queue)
-		if hostId != 0 {
-			// create kvm
-			result := s.VmService.CreateRemote(hostId, backingImageId, queue.ID)
-			if result.IsSuccess() { // success to create
-				newProgress = _const.ProgressInProgress
-			} else {
-				newProgress = _const.ProgressPending
-			}
+		// create kvm
+		err := s.VmService.CreateByQueue(queue)
+		if err == nil { // success to create
+			newProgress = _const.ProgressInProgress
+		} else {
+			newProgress = _const.ProgressPending
 		}
+
 	} else if queue.Progress == _const.ProgressLaunchVm {
 		vmId := queue.VmId
 		vm := s.VmRepo.GetById(vmId)

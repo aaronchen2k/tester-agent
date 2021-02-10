@@ -9,5 +9,5 @@ type VmPlatformInterface interface {
 	VirtualPlatformInterface
 
 	ListVm(clusterNode *domain.ResItem) ([]*model.Vm, error)
-	CreateVm(templ model.VmTempl, node model.Node, cluster model.Cluster) (model.Vm, error)
+	CreateVm(name string, templ model.VmTempl, node model.Node, cluster model.Cluster) (model.Vm, error)
 }

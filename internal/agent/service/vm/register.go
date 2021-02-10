@@ -19,7 +19,7 @@ func RegisterVm(isBusy bool) {
 		vm.Status = _const.VmActive
 	}
 
-	url := _httpUtils.GenUrl(agentConf.Inst.Server, "vm/register")
+	url := _httpUtils.GenUrl(agentConf.Inst.Server, "vms/register")
 	resp, ok := _httpUtils.Post(url, vm)
 
 	if ok {

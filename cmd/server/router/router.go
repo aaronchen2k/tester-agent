@@ -102,6 +102,7 @@ func (r *Router) App() {
 					party.Put("/", r.VmTemplCtrl.Update).Name = "更新虚拟机模板"
 				})
 				admin.PartyFunc("/vms", func(party iris.Party) {
+					party.Post("/register", r.VmCtrl.Register).Name = "Agent更新虚拟机的状态"
 				})
 				admin.PartyFunc("/containers", func(party iris.Party) {
 					party.Post("/", r.ContainerCtrl.Create).Name = "创建容器"

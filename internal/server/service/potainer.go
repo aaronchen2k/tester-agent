@@ -42,7 +42,7 @@ func (s *PortainerService) CreateContainer(image model.ContainerImage, node mode
 	}
 
 	endpoint, _ := strconv.Atoi(node.Ident)
-	vmHostName := serverUtils.GenVmHostName(image.OsPlatform, image.OsType, image.OsLang)
+	vmHostName := serverUtils.GenVmHostName("", image.OsPlatform, image.OsType, image.OsLang)
 
 	body := map[string]interface{}{}
 	body["Hostname"] = vmHostName

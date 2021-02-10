@@ -42,6 +42,8 @@ type Vm struct {
 	LastRegisterDate time.Time `gorm:"json:"lastRegisterDate,omitempty"`
 
 	Ident     string `json:"ident"`
+	Node      string `json:"node"`
+	Cluster   string `json:"cluster"`
 	NodeId    uint   `json:"nodeId"`
 	ClusterId uint   `json:"clusterId"`
 }
