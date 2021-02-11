@@ -19,8 +19,8 @@ type QueueRepo struct {
 func (r *QueueRepo) QueryForExec() (queues []model.Queue) {
 	queues = make([]model.Queue, 0)
 
-	r.DB.Where("progress=? OR progress=?", _const.ProgressCreated, _const.ProgressPending).
-		Order("priority").
+	r.DB.Where("progress IN ?", []_const.BuildProgress{_const.ProgressCreated, _const.ProgressPending}).
+		Order("id").
 		Find(&queues)
 
 	return
@@ -76,12 +76,12 @@ func (r *QueueRepo) QueryTimeout() (queueIds []uint) {
 	return
 }
 
-func (r *QueueRepo) QueryTimeoutOrFailedForRetry() (queues []model.Queue) {
+func (r *QueueRepo) QueryForRetry() (queues []model.Queue) {
 	queues = make([]model.Queue, 0)
 
-	r.DB.Where("retry < ?"+" AND (progress = ? OR status = ? )",
+	r.DB.Where("retry < ? AND (progress = ? OR status = ? )",
 		_const.RetryTime, _const.ProgressTimeout, _const.StatusFail).
-		Order("priority").Find(&queues)
+		Order("id").Find(&queues)
 	return
 }
 

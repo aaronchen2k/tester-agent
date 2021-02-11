@@ -26,19 +26,20 @@ func NewExecService() *ExecService {
 }
 
 func (s *ExecService) CheckAll() {
-	s.CheckExec()
 	s.SetTimeout()
-	s.RetryTimeoutOrFailed()
+
+	s.Run()
+	s.Retry()
 }
 
-func (s *ExecService) CheckExec() {
+func (s *ExecService) Run() {
 	queuesToBuild := s.QueueRepo.QueryForExec()
 	for _, queue := range queuesToBuild {
-		s.CheckAndCall(queue)
+		s.Exec(queue)
 	}
 }
 
-func (s *ExecService) CheckAndCall(queue model.Queue) {
+func (s *ExecService) Exec(queue model.Queue) {
 	if queue.BuildType == _const.SeleniumTest {
 		s.CheckAndCallSeleniumTest(queue)
 	} else if queue.BuildType == _const.AppiumTest {
@@ -112,10 +113,10 @@ func (s *ExecService) SetTimeout() {
 	s.QueueRepo.SetTimeout(queueIds)
 }
 
-func (s *ExecService) RetryTimeoutOrFailed() {
-	queues := s.QueueRepo.QueryTimeoutOrFailedForRetry()
+func (s *ExecService) Retry() {
+	queues := s.QueueRepo.QueryForRetry()
 
 	for _, queue := range queues {
-		s.CheckAndCall(queue)
+		s.Exec(queue)
 	}
 }
