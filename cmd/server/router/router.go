@@ -110,7 +110,7 @@ func (r *Router) App() {
 					party.Post("/register", r.ContainerCtrl.Register).Name = "Agent更新容器的状态"
 				})
 				admin.PartyFunc("/build", func(party iris.Party) {
-					party.Post("/updateResult", r.BuildCtrl.UpdateResult).Name = "上传测试结果"
+					party.Post("/upload", r.BuildCtrl.UpdateResult).Name = "上传测试结果"
 				})
 
 				admin.PartyFunc("/plans", func(party iris.Party) {
