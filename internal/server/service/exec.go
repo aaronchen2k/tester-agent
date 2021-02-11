@@ -41,13 +41,13 @@ func (s *ExecService) Run() {
 
 func (s *ExecService) Exec(queue model.Queue) {
 	if queue.BuildType == _const.SeleniumTest {
-		s.CheckAndCallSeleniumTest(queue)
+		s.SeleniumTest(queue)
 	} else if queue.BuildType == _const.AppiumTest {
-		s.CheckAndCallAppiumTest(queue)
+		s.AppiumTest(queue)
 	}
 }
 
-func (s *ExecService) CheckAndCallSeleniumTest(queue model.Queue) {
+func (s *ExecService) SeleniumTest(queue model.Queue) {
 	originalProgress := queue.Progress
 	var newProgress _const.BuildProgress
 
@@ -81,7 +81,7 @@ func (s *ExecService) CheckAndCallSeleniumTest(queue model.Queue) {
 	}
 }
 
-func (s *ExecService) CheckAndCallAppiumTest(queue model.Queue) {
+func (s *ExecService) AppiumTest(queue model.Queue) {
 	serial := queue.Serial
 	device := s.DeviceRepo.GetBySerial(serial)
 
@@ -118,5 +118,13 @@ func (s *ExecService) Retry() {
 
 	for _, queue := range queues {
 		s.Exec(queue)
+	}
+}
+
+func (s *ExecService) DestroyVm() {
+	vms := s.VmRepo.QueryForDestroy()
+	for _, vm := range vms {
+		_ = vm
+		// TODO: Destroy VM
 	}
 }

@@ -55,18 +55,17 @@ func (r *VmRepo) UpdateStatusByNames(vms []string, status _const.VmStatus) {
 	db.Updates(map[string]interface{}{"status": status, "updatedAt": time.Now()})
 }
 
-func (r *VmRepo) DestroyMissedVmsStatus(vms []string, hostId uint) {
-	db := r.DB.Model(&model.Vm{}).Where("hostId=? AND status!=?", hostId, "destroy")
-
-	if len(vms) > 0 {
-		db.Where("AND name NOT IN (?)", vms)
-	}
-
-	db.Updates(map[string]interface{}{"status": "destroy", "updatedAt": time.Now()})
-}
-
 func (r *VmRepo) FailToCreate(id uint, msg string) {
 	r.DB.Model(&model.Vm{}).
 		Where("id=?", id).
 		Updates(map[string]interface{}{"msg": _const.VmFailToCreate, "updatedAt": time.Now()})
+}
+
+func (r *VmRepo) QueryForDestroy() (vms []model.Vm) {
+	tm := time.Now().Add(-time.Minute * _const.WaitForExecTime) // 60 min before
+
+	r.DB.Where("status != ? AND created_at < ?",
+		_const.VmDestroy, tm).
+		Order("id").Find(&vms)
+	return
 }

@@ -39,6 +39,8 @@ func (c *BuildCtrl) UpdateResult(ctx iris.Context) {
 
 	c.BuildService.SaveResult(buildResult, filePath)
 
+	// TODO: Destroy VM
+
 	_, _ = ctx.JSON(_utils.ApiRes(200, "请求成功", nil))
 }
 
