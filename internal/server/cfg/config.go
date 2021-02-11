@@ -53,6 +53,9 @@ var Config = struct {
 		Secretkey string `env:"QiniuSecretkey" default:""`
 		Bucket    string `env:"QiniuBucket" default:""`
 	}
+	Options struct {
+		UploadMaxSize int64 `env:"uploadMaxSize" default:"100"`
+	}
 }{}
 
 type DBConfig struct {

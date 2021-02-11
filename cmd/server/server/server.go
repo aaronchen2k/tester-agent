@@ -156,13 +156,16 @@ func injectObj(router *router.Router) {
 		&inject.Object{Value: handler.NewDeviceCtrl()},
 		&inject.Object{Value: handler.NewFileCtrl()},
 
-		&inject.Object{Value: handler.NewClusterCtrl()},
 		&inject.Object{Value: handler.NewInitCtrl()},
 		&inject.Object{Value: handler.NewPermCtrl()},
-		&inject.Object{Value: handler.NewRoleCtrl()},
-		&inject.Object{Value: handler.NewTaskCtrl()},
 		&inject.Object{Value: handler.NewUserCtrl()},
 
+		&inject.Object{Value: handler.NewTaskCtrl()},
+
+		&inject.Object{Value: handler.NewRoleCtrl()},
+		&inject.Object{Value: handler.NewBuildCtrl()},
+
+		&inject.Object{Value: handler.NewClusterCtrl()},
 		&inject.Object{Value: handler.NewMachineCtrl()},
 		&inject.Object{Value: handler.NewContainerImageCtrl()},
 		&inject.Object{Value: handler.NewContainerCtrl()},

@@ -1,11 +1,9 @@
 package service
 
 import (
-	_const "github.com/aaronchen2k/tester/internal/pkg/const"
 	_domain "github.com/aaronchen2k/tester/internal/pkg/domain"
 	"github.com/aaronchen2k/tester/internal/server/model"
 	"github.com/aaronchen2k/tester/internal/server/repo"
-	"github.com/mitchellh/mapstructure"
 )
 
 type AppiumService struct {
@@ -39,24 +37,4 @@ func (s *AppiumService) Start(queue model.Queue) (result _domain.RpcResult) {
 
 	result.Success("")
 	return
-}
-
-func (s *AppiumService) SaveResult(buildResult _domain.RpcResult, resultPath string) {
-	appiumTestTo := _domain.BuildTo{}
-	mp := buildResult.Payload.(map[string]interface{})
-	mapstructure.Decode(mp, &appiumTestTo)
-
-	progress := _const.ProgressCompleted
-	var status _const.BuildStatus
-	if buildResult.IsSuccess() {
-		status = _const.StatusPass
-	} else {
-		status = _const.StatusFail
-	}
-
-	s.BuildRepo.SaveResult(appiumTestTo, resultPath, progress, status, buildResult.Msg)
-	s.QueueService.SetQueueResult(appiumTestTo.QueueId, progress, status)
-	if progress == _const.ProgressTimeout {
-		s.BuildRepo.SetTimeoutByQueueId(appiumTestTo.QueueId)
-	}
 }

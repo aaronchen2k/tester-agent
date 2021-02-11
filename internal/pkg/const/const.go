@@ -26,7 +26,7 @@ const (
 	MaxVmOnHost = 3
 	RpcPort     = 8972
 
-	UploadDir          = ""
+	UploadDir          = "uploads"
 	Sep_Of_Mac_Address = ":"
 
 	Build_Command_Param_AppPath        = "${appPath}"

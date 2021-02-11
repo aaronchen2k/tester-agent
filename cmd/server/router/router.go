@@ -46,8 +46,9 @@ type Router struct {
 	VmTemplCtrl *handler.VmTemplCtrl `inject:""`
 	VmCtrl      *handler.VmCtrl      `inject:""`
 
-	PlanCtrl *handler.PlanCtrl `inject:""`
-	TaskCtrl *handler.TaskCtrl `inject:""`
+	PlanCtrl  *handler.PlanCtrl  `inject:""`
+	TaskCtrl  *handler.TaskCtrl  `inject:""`
+	BuildCtrl *handler.BuildCtrl `inject:""`
 
 	WsCtrl *handler.WsCtrl `inject:""`
 
@@ -62,6 +63,7 @@ func NewRouter(app *iris.Application) *Router {
 }
 
 func (r *Router) App() {
+	iris.LimitRequestBodySize(serverConf.Config.Options.UploadMaxSize)
 	r.api.UseRouter(middlewareUtils.CrsAuth())
 
 	app := r.api.Party("/api").AllowMethods(iris.MethodOptions)
@@ -106,6 +108,9 @@ func (r *Router) App() {
 				})
 				admin.PartyFunc("/containers", func(party iris.Party) {
 					party.Post("/register", r.ContainerCtrl.Register).Name = "Agent更新容器的状态"
+				})
+				admin.PartyFunc("/build", func(party iris.Party) {
+					party.Post("/updateResult", r.BuildCtrl.UpdateResult).Name = "上传测试结果"
 				})
 
 				admin.PartyFunc("/plans", func(party iris.Party) {
