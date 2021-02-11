@@ -57,25 +57,25 @@ func (r *QueueRepo) Pending(queueId uint) (err error) {
 	return
 }
 
-func (r *QueueRepo) SetTimeout(id uint) (err error) {
-	r.DB.Model(&model.Queue{}).Where("id=?", id).Updates(
+func (r *QueueRepo) SetTimeout(queueIds []uint) (err error) {
+	r.DB.Model(&model.Queue{}).Where("id IN ?", queueIds).Updates(
 		map[string]interface{}{"progress": _const.ProgressTimeout, "timeout_time": time.Now()})
 	return
 }
 
-func (r *QueueRepo) QueryTimeout() (queues []model.Queue) {
-	queues = make([]model.Queue, 0)
+func (r *QueueRepo) QueryTimeout() (queueIds []uint) {
+	tm := time.Now().Add(-time.Minute * _const.WaitForExecTime) // 60 min before
 
-	tm := time.Now().Add(-time.Minute * _const.WaitForExecTime)
-
-	r.DB.Where("(progress = ? AND start_time < ?)"+
-		" OR (progress = ? AND pending_time < ?)",
+	r.DB.Where("(progress = ? AND pending_time < ?)"+
+		" OR (progress = ? AND start_time < ?)",
+		_const.ProgressPending, tm,
 		_const.ProgressInProgress, tm,
-		_const.ProgressPending, tm).
-		Order("priority").Find(&queues)
+	).
+		Order("id").Find(&queueIds)
 
 	return
 }
+
 func (r *QueueRepo) QueryTimeoutOrFailedForRetry() (queues []model.Queue) {
 	queues = make([]model.Queue, 0)
 

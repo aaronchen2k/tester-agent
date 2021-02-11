@@ -108,11 +108,8 @@ func (s *ExecService) CheckAndCallAppiumTest(queue model.Queue) {
 }
 
 func (s *ExecService) SetTimeout() {
-	queues := s.QueueRepo.QueryTimeout()
-
-	for _, queue := range queues {
-		s.QueueRepo.SetTimeout(queue.ID)
-	}
+	queueIds := s.QueueRepo.QueryTimeout()
+	s.QueueRepo.SetTimeout(queueIds)
 }
 
 func (s *ExecService) RetryTimeoutOrFailed() {
