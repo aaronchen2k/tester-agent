@@ -20,7 +20,6 @@ var (
 	BuildParamAppActivity = "${appActivity}"
 	BuildParamAppiumPort  = "${appiumPort}"
 
-	BuildParamSeleniumDriverType = "${driverType}"
 	BuildParamSeleniumDriverPath = "${driverPath}"
 
 	FolderIso   = "iso/"

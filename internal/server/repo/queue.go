@@ -53,7 +53,7 @@ func (r *QueueRepo) SetAndLaunchVm(queue model.Queue) (err error) {
 	return
 }
 
-func (r *QueueRepo) Start(queue model.Queue) (err error) {
+func (r *QueueRepo) Run(queue model.Queue) (err error) {
 	r.DB.Model(&queue).Where("id=?", queue.ID).Updates(
 		map[string]interface{}{"progress": _const.ProgressInProgress, "start_time": time.Now(), "retry": gorm.Expr("retry +1")})
 	return

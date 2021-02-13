@@ -68,7 +68,7 @@ func (s *ExecService) SeleniumTest(queue model.Queue) {
 		if vm.Status == _const.VmActive { // find ready vm, begin to run test
 			result := s.SeleniumService.Run(queue)
 			if result.IsSuccess() {
-				s.QueueRepo.Start(queue)
+				s.QueueRepo.Run(queue)
 				newProgress = _const.ProgressInProgress
 			} else { // busy, pending
 				s.QueueRepo.Pending(queue.ID)
@@ -93,7 +93,7 @@ func (s *ExecService) AppiumTest(queue model.Queue) {
 		rpcResult := s.AppiumService.Run(queue)
 
 		if rpcResult.IsSuccess() {
-			s.QueueRepo.Start(queue) // start
+			s.QueueRepo.Run(queue) // start
 			newProgress = _const.ProgressInProgress
 		} else {
 			s.QueueRepo.Pending(queue.ID) // pending

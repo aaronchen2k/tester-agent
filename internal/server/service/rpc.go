@@ -19,7 +19,7 @@ func NewRpcService() *RpcService {
 }
 
 func (s *RpcService) AppiumTest(build model.Build) (result _domain.RpcResult) {
-	appiumTestTo := model.NewTestTo(build)
+	appiumTestTo := model.NewBuildTo(build)
 	appiumTestTo.AppiumPort = build.AppiumPort
 
 	obj := interface{}(appiumTestTo)
@@ -31,9 +31,7 @@ func (s *RpcService) AppiumTest(build model.Build) (result _domain.RpcResult) {
 
 func (s *RpcService) SeleniumTest(build model.Build) (result _domain.RpcResult) {
 
-	seleniumTestTo := model.NewTestTo(build)
-	seleniumTestTo.SeleniumDriverType = build.BrowserType
-	seleniumTestTo.SeleniumDriverVersion = build.BrowserVer
+	seleniumTestTo := model.NewBuildTo(build)
 
 	obj := interface{}(seleniumTestTo)
 	s.Request(build.NodeIp, build.NodePort, "selenium", "SeleniumTest", &obj)

@@ -58,7 +58,7 @@ func NewBuildDetail(queueId uint, vmId uint, nodeIp string, nodePort int) Build 
 	return build
 }
 
-func NewTestTo(build Build) _domain.BuildTo {
+func NewBuildTo(build Build) _domain.BuildTo {
 	toValue := _domain.BuildTo{
 		ID:        build.ID,
 		QueueId:   build.QueueId,
@@ -81,6 +81,9 @@ func NewTestTo(build Build) _domain.BuildTo {
 		BuildCommands:   build.BuildCommands,
 		ResultFiles:     build.ResultFiles,
 		KeepResultFiles: build.KeepResultFiles,
+
+		SeleniumDriverType:    build.BrowserType,
+		SeleniumDriverVersion: build.BrowserVer,
 	}
 
 	return toValue

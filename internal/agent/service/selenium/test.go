@@ -35,11 +35,8 @@ func ExecTest(build *_domain.BuildTo) {
 
 func parseBuildCommand(build *_domain.BuildTo) {
 	// mvn clean test -Dtestng.suite=target/test-classes/baidu-test.xml
-	//				  -DdriverType=${driverType}
-	//		 		  -DdriverPath=${driverPath}
+	//		 		  -DdriverPath=${driverPath}  // computer in web page by browser type and version
 
-	command := strings.ReplaceAll(build.BuildCommands, agentConst.BuildParamSeleniumDriverType, build.SeleniumDriverVersion)
-	command = strings.ReplaceAll(command, agentConst.BuildParamSeleniumDriverPath, build.SeleniumDriverPath)
-
+	command := strings.ReplaceAll(build.BuildCommands, agentConst.BuildParamSeleniumDriverPath, build.SeleniumDriverPath)
 	build.BuildCommands = command
 }
