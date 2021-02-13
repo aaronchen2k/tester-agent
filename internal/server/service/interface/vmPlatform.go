@@ -10,4 +10,5 @@ type VmPlatformInterface interface {
 
 	ListVm(clusterNode *domain.ResItem) ([]*model.Vm, error)
 	CreateVm(name string, templ model.VmTempl, node model.Node, cluster model.Cluster) (string, error)
+	DestroyVm(ident string, cluster model.Cluster) error
 }

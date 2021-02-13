@@ -62,7 +62,7 @@ func (r *VmRepo) FailToCreate(id uint, msg string) {
 }
 
 func (r *VmRepo) QueryForDestroy() (vms []model.Vm) {
-	tm := time.Now().Add(-time.Minute * _const.WaitForExecTime) // 60 min before
+	tm := time.Now().Add(-time.Minute * _const.VmTimeout) // 30 min before
 
 	r.DB.Where("status != ? AND created_at < ?",
 		_const.VmDestroy, tm).

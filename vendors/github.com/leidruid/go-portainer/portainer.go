@@ -196,6 +196,29 @@ func (p *Portainer) StopContainer(e uint, id string) (int, error) {
 	}
 }
 
+//noinspection GoNilness
+func (p *Portainer) RemoveContainer(e uint, id string) (int, error) {
+	url := fmt.Sprintf("/endpoints/%d/docker/containers/%s/remove", e, id)
+	res, err := p.makeRequest("DELETE", url, nil, nil)
+	if err != nil {
+		log.Printf("http.Do(%v) error: %v\n", res.Request.URL, err)
+		return 0, err
+	}
+	_ = res.Body.Close()
+	switch res.StatusCode {
+	case http.StatusNoContent:
+		return res.StatusCode, nil
+	case http.StatusInternalServerError:
+		return res.StatusCode, errors.New(fmt.Sprintf("InternalServerError: (%s)", url))
+	case http.StatusNotFound:
+		return res.StatusCode, errors.New(fmt.Sprintf("Not found: (%s)", url))
+	case http.StatusNotModified:
+		return res.StatusCode, errors.New(fmt.Sprintf("Already started: (%s)", url))
+	default:
+		return res.StatusCode, errors.New(fmt.Sprintf("UnhandledError %d: (%s)", res.StatusCode, url))
+	}
+}
+
 func (p *Portainer) makeRequest(tp string, url string, body io.Reader, args map[string]string) (*http.Response, error) {
 	urlargs := "?"
 	for k, v := range args {

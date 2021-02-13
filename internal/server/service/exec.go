@@ -27,9 +27,10 @@ func NewExecService() *ExecService {
 
 func (s *ExecService) CheckAll() {
 	s.SetTimeout()
-
 	s.Run()
 	s.Retry()
+
+	s.ResService.DestroyTimeout()
 }
 
 func (s *ExecService) Run() {
@@ -65,7 +66,7 @@ func (s *ExecService) SeleniumTest(queue model.Queue) {
 		vm := s.VmRepo.GetById(vmId)
 
 		if vm.Status == _const.VmActive { // find ready vm, begin to run test
-			result := s.SeleniumService.Start(queue)
+			result := s.SeleniumService.Run(queue)
 			if result.IsSuccess() {
 				s.QueueRepo.Start(queue)
 				newProgress = _const.ProgressInProgress
@@ -89,7 +90,7 @@ func (s *ExecService) AppiumTest(queue model.Queue) {
 	var newProgress _const.BuildProgress
 
 	if s.DeviceService.IsDeviceReady(device) {
-		rpcResult := s.AppiumService.Start(queue)
+		rpcResult := s.AppiumService.Run(queue)
 
 		if rpcResult.IsSuccess() {
 			s.QueueRepo.Start(queue) // start
@@ -118,13 +119,5 @@ func (s *ExecService) Retry() {
 
 	for _, queue := range queues {
 		s.Exec(queue)
-	}
-}
-
-func (s *ExecService) DestroyVm() {
-	vms := s.VmRepo.QueryForDestroy()
-	for _, vm := range vms {
-		_ = vm
-		// TODO: Destroy VM
 	}
 }

@@ -67,6 +67,33 @@ func (s *PortainerService) CreateContainer(queueId uint, image model.ContainerIm
 	return
 }
 
+func (s *PortainerService) DestroyContainer(ident string, node model.Node, cluster model.Cluster) (err error) {
+	config := go_portainer.Config{
+		Host:     cluster.Ip,
+		Port:     cluster.Port,
+		User:     cluster.Username,
+		Password: cluster.Password,
+		Schema:   "http",
+		URL:      "/api",
+	}
+	portainer := go_portainer.NewPortainer(&config)
+	err = portainer.Auth()
+	if err != nil {
+		_logUtils.Print("fail to connect portainer, error: " + err.Error())
+		return
+	}
+
+	endpoint, _ := strconv.Atoi(node.Ident)
+
+	dockerId, err := portainer.RemoveContainer(uint(endpoint), ident)
+	if err != nil {
+		_logUtils.Printf("fail to create container, error: %d-%s", dockerId, err.Error())
+		return
+	}
+
+	return
+}
+
 func (s *PortainerService) GetNodeTree(clusterItem *domain.ResItem) (err error) {
 	config := go_portainer.Config{
 		Host:     clusterItem.Ip,

@@ -17,6 +17,12 @@ type ResService struct {
 	VmPlatform        serviceInterface.VmPlatformInterface
 	ContainerPlatform serviceInterface.ContainerPlatformInterface
 
+	ClusterRepo repo.ClusterRepo
+	NodeRepo    repo.NodeRepo
+
+	BuildRepo          repo.BuildRepo
+	VmRepo             repo.VmRepo
+	ContainerRepo      repo.ContainerRepo
 	VmTemplRepo        repo.VmTemplRepo
 	ContainerImageRepo repo.ContainerImageRepo
 }
@@ -33,22 +39,6 @@ func NewResService() *ResService {
 	}
 
 	return inst
-}
-
-func (s *ResService) GetValidForQueue(queue model.Queue) (hostId, templOrImageId uint) {
-	buildType := queue.BuildType
-
-	if buildType == _const.SeleniumTest {
-		//templ := s.VmTemplRepo.Get(queue.VmTemplId)
-		//node := templ.Node
-
-	} else if buildType == _const.AppiumTest {
-
-	} else if buildType == _const.UnitTest {
-
-	}
-
-	return
 }
 
 func (s *ResService) ListVm() (rootNode *domain.ResItem) {
@@ -98,11 +88,56 @@ func (s *ResService) CreateVm(name string, templ model.VmTempl, node model.Node,
 
 	return
 }
-
 func (s *ResService) CreateContainer(queueId uint, image model.ContainerImage, node model.Node, cluster model.Cluster) (
 	container model.Container, err error) {
 
 	container, err = s.ContainerPlatform.CreateContainer(queueId, image, node, cluster)
+
+	return
+}
+
+func (s *ResService) DestroyByBuild(buildId uint) {
+	build := s.BuildRepo.GetBuild(buildId)
+	if build.BuildType == _const.SeleniumTest {
+		vm := s.VmRepo.GetById(build.VmId)
+		cluster := s.ClusterRepo.Get(vm.ClusterId)
+
+		s.DestroyVm(vm.Ident, cluster)
+	} else if build.BuildType == _const.AppiumTest {
+		container := s.VmRepo.GetById(build.ContainerId)
+		node := s.NodeRepo.Get(container.NodeId)
+		cluster := s.ClusterRepo.Get(container.ClusterId)
+
+		s.DestroyContainer(container.Ident, node, cluster)
+	}
+}
+
+func (s *ResService) DestroyTimeout() {
+	s.DestroyTimeoutVm()
+	s.DestroyTimeoutContainer()
+}
+func (s *ResService) DestroyTimeoutVm() {
+	vms := s.VmRepo.QueryForDestroy()
+	for _, vm := range vms {
+		cluster := s.ClusterRepo.Get(vm.ClusterId)
+		s.DestroyVm(vm.Ident, cluster)
+	}
+}
+func (s *ResService) DestroyTimeoutContainer() {
+	containers := s.ContainerRepo.QueryForDestroy()
+	for _, container := range containers {
+		cluster := s.ClusterRepo.Get(container.ClusterId)
+		s.DestroyVm(container.Ident, cluster)
+	}
+}
+
+func (s *ResService) DestroyVm(vmIdent string, cluster model.Cluster) (err error) {
+	err = s.VmPlatform.DestroyVm(vmIdent, cluster)
+
+	return
+}
+func (s *ResService) DestroyContainer(containerIdent string, node model.Node, cluster model.Cluster) (err error) {
+	err = s.ContainerPlatform.DestroyContainer(containerIdent, node, cluster)
 
 	return
 }

@@ -10,4 +10,5 @@ type ContainerPlatformInterface interface {
 
 	ListContainer(clusterNode *domain.ResItem) ([]*model.Container, error)
 	CreateContainer(queueId uint, image model.ContainerImage, node model.Node, cluster model.Cluster) (model.Container, error)
+	DestroyContainer(ident string, node model.Node, cluster model.Cluster) error
 }

@@ -20,11 +20,11 @@ func NewSeleniumService() *SeleniumService {
 	return &SeleniumService{}
 }
 
-func (s *SeleniumService) Start(queue model.Queue) (result _domain.RpcResult) {
+func (s *SeleniumService) Run(queue model.Queue) (result _domain.RpcResult) {
 	vmId := queue.VmId
 	vm := s.VmRepo.GetById(vmId)
 
-	build := model.NewBuildDetail(queue.ID, vm.Ip, vm.Port)
+	build := model.NewBuildDetail(queue.ID, vmId, vm.Ip, vm.Port)
 	s.BuildRepo.Save(&build)
 
 	build = s.BuildRepo.GetBuild(build.ID)

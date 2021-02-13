@@ -10,7 +10,6 @@ type Queue struct {
 	BaseModel
 	base.TestObject
 	base.TestEnv
-	VmId uint `gorm:"vmId" json:"vmId,omitempty"`
 
 	// info
 	Name string `json:"name,omitempty"`

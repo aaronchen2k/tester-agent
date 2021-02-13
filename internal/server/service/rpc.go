@@ -58,7 +58,7 @@ func (s *RpcService) DestroyVm(req _domain.PveReq) (result _domain.RpcResult) {
 }
 func (s *RpcService) StartVm(req _domain.PveReq) (result _domain.RpcResult) {
 	obj := interface{}(req)
-	s.Request(req.NodeIp, req.NodePort, "vm", "Start", &obj)
+	s.Request(req.NodeIp, req.NodePort, "vm", "Run", &obj)
 
 	result.Success(fmt.Sprintf("success to start vm via rpc %#v.", req))
 	return

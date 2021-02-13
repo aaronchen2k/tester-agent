@@ -22,9 +22,9 @@ func NewContainerService() *ContainerService {
 }
 
 func (s *ContainerService) CreateByQueue(queue model.Queue) (dockerId string, err error) {
-	//imagePo := s.ContainerImageRepo.Get(queue.ContainerImageId)
+	//imagePo := s.ContainerImageRepo.GetByIdent(queue.ContainerImageId)
 	//node := s.NodeRepo.GetByIndent(imagePo.Node)
-	//cluster := s.ClusterRepo.Get(imagePo.Cluster)
+	//cluster := s.ClusterRepo.GetByIdent(imagePo.Cluster)
 
 	return
 }

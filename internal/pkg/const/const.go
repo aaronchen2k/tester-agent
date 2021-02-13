@@ -14,8 +14,7 @@ const (
 
 	RegisterExpireTime = 5  // min
 	WaitForExecTime    = 60 // min
-	WaitForResultTime  = 30 // min
-	VmTimeout          = 20 // min
+	VmTimeout          = 30 // min
 
 	RetryTime    = 3
 	AgentRunTime = 20 // sec

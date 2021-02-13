@@ -19,6 +19,9 @@ type TestEnv struct {
 	DeviceId uint   `json:"deviceId,omitempty"`
 	Serial   string `json:"serial,omitempty"`
 
+	VmId        uint `gorm:"vmId" json:"vmId,omitempty"`
+	ContainerId uint `gorm:"ContainerId" json:"ContainerId,omitempty"`
+
 	VmTemplId        uint `json:"vmTemplId,omitempty"`
 	ContainerImageId uint `json:"containerImageId,omitempty"`
 }

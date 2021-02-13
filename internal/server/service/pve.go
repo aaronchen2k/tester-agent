@@ -59,6 +59,29 @@ func (s *PveService) CreateVm(hostName string, templ model.VmTempl, node model.N
 	return
 }
 
+func (s *PveService) DestroyVm(ident string, cluster model.Cluster) (err error) {
+	address := fmt.Sprintf("%s:%d", cluster.Ip, cluster.Port)
+	pve, err := go_proxmox.NewProxMox(address, cluster.Username, cluster.Password)
+	if err != nil {
+		_logUtils.Info("fail to connect proxmox, error: " + err.Error())
+		return
+	}
+
+	vm, err := pve.FindVM(ident)
+	if err != nil {
+		_logUtils.Info("fail to find vm templ, error: " + err.Error())
+		return
+	}
+
+	_, err = vm.Delete()
+	if err != nil {
+		_logUtils.Info("fail to delete vm, error: " + err.Error())
+		return
+	}
+
+	return
+}
+
 func (s *PveService) GetNodeTree(clusterItem *domain.ResItem) (err error) {
 	address := fmt.Sprintf("%s:%d", clusterItem.Ip, clusterItem.Port)
 	go_proxmox.Proxmox, err = go_proxmox.NewProxMox(address, clusterItem.Username, clusterItem.Password)

@@ -22,7 +22,7 @@ func (p *Program) Start(s service.Service) error {
 	}
 	p.exit = make(chan struct{})
 
-	// Start should not block. Do the actual work async.
+	// Run should not block. Do the actual work async.
 	go p.run()
 	return nil
 }

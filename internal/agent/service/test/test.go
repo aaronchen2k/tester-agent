@@ -10,10 +10,10 @@ import (
 func Exec(build _domain.BuildTo) {
 	StartTask()
 
-	if build.BuildType == _const.AppiumTest {
-		appiumService.ExecTest(&build)
-	} else if build.BuildType == _const.SeleniumTest {
+	if build.BuildType == _const.SeleniumTest {
 		seleniumService.ExecTest(&build)
+	} else if build.BuildType == _const.AppiumTest {
+		appiumService.ExecTest(&build)
 	}
 
 	RemoveTask()

@@ -72,3 +72,12 @@ func (r *ContainerRepo) FailToCreate(id uint, msg string) {
 		Where("id=?", id).
 		Updates(map[string]interface{}{"msg": _const.VmFailToCreate, "updatedAt": time.Now()})
 }
+
+func (r *ContainerRepo) QueryForDestroy() (containers []model.Container) {
+	tm := time.Now().Add(-time.Minute * _const.VmTimeout) // 30 min before
+
+	r.DB.Where("status != ? AND created_at < ?",
+		_const.VmDestroy, tm).
+		Order("id").Find(&containers)
+	return
+}

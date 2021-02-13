@@ -12,10 +12,9 @@ type BuildService struct {
 	BuildRepo    *repo.BuildRepo `inject:""`
 }
 
-func (s BuildService) SaveResult(result _domain.RpcResult, path string) {
-	appiumTestTo := _domain.BuildTo{}
+func (s BuildService) SaveResult(result _domain.RpcResult, path string) (buildTo _domain.BuildTo) {
 	mp := result.Payload.(map[string]interface{})
-	mapstructure.Decode(mp, &appiumTestTo)
+	mapstructure.Decode(mp, &buildTo)
 
 	progress := _const.ProgressCompleted
 	var status _const.BuildStatus
@@ -25,11 +24,10 @@ func (s BuildService) SaveResult(result _domain.RpcResult, path string) {
 		status = _const.StatusFail
 	}
 
-	s.BuildRepo.SaveResult(appiumTestTo, path, progress, status, result.Msg)
-	s.QueueService.SetQueueResult(appiumTestTo.QueueId, progress, status)
-	if progress == _const.ProgressTimeout {
-		s.BuildRepo.SetTimeoutByQueueId(appiumTestTo.QueueId)
-	}
+	s.BuildRepo.SaveResult(buildTo, path, progress, status, result.Msg)
+	s.QueueService.SetQueueResult(buildTo.QueueId, progress, status)
+
+	return buildTo
 }
 
 func NewBuildService() *BuildService {

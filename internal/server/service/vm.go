@@ -32,7 +32,7 @@ func NewVmService() *VmService {
 func (s *VmService) CreateByQueue(queue model.Queue) (err error) {
 	templ := s.VmTemplRepo.Get(queue.VmTemplId)
 	node := s.NodeRepo.GetByIndent(templ.Node)
-	cluster := s.ClusterRepo.Get(templ.Cluster)
+	cluster := s.ClusterRepo.GetByIdent(templ.Cluster)
 
 	vmName := serverUtils.GenVmHostName(queue.ID, templ.OsPlatform, templ.OsType, templ.OsLang)
 	vmIdent, err := s.ResService.CreateVm(vmName, templ, node, cluster)
@@ -53,7 +53,7 @@ func (s *VmService) CreateByQueue(queue model.Queue) (err error) {
 	s.VmRepo.Save(&vm) // vm status: created
 
 	queue.VmId = vm.ID
-	s.NodeRepo.LaunchVm(queue)                      // queue progress: launch_vm
+	s.QueueRepo.SetAndLaunchVm(queue)               // queue progress: launch_vm
 	s.VmRepo.UpdateStatus(vm.ID, _const.VmLaunched) // vm status: launched
 
 	s.NodeRepo.AddInstCount(node.ID)

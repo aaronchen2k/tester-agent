@@ -11,7 +11,6 @@ type Build struct {
 	BaseModel
 	base.TestObject
 	base.TestEnv
-
 	QueueId uint `json:"queueId,omitempty"`
 
 	// info
@@ -43,7 +42,7 @@ func NewBuild() Build {
 	return build
 }
 
-func NewBuildDetail(queueId uint, nodeIp string, nodePort int) Build {
+func NewBuildDetail(queueId uint, vmId uint, nodeIp string, nodePort int) Build {
 	build := Build{
 		QueueId: queueId,
 
@@ -52,6 +51,8 @@ func NewBuildDetail(queueId uint, nodeIp string, nodePort int) Build {
 
 		Progress: _const.ProgressCreated,
 		Status:   _const.StatusCreated,
+
+		TestEnv: base.TestEnv{VmId: vmId},
 	}
 
 	return build

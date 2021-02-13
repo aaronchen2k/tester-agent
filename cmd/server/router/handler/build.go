@@ -8,6 +8,7 @@ import (
 	_fileUtils "github.com/aaronchen2k/tester/internal/pkg/libs/file"
 	_stringUtils "github.com/aaronchen2k/tester/internal/pkg/libs/string"
 	_utils "github.com/aaronchen2k/tester/internal/pkg/utils"
+	"github.com/aaronchen2k/tester/internal/server/repo"
 	"github.com/aaronchen2k/tester/internal/server/service"
 	"github.com/kataras/iris/v12"
 	"mime/multipart"
@@ -18,6 +19,9 @@ import (
 type BuildCtrl struct {
 	Ctx          iris.Context
 	BuildService *service.BuildService `inject:""`
+	ResService   *service.ResService   `inject:""`
+
+	BuildRepo *repo.BuildRepo `inject:""`
 }
 
 func NewBuildCtrl() *BuildCtrl {
@@ -37,9 +41,8 @@ func (c *BuildCtrl) UpdateResult(ctx iris.Context) {
 	_, info, _ := ctx.FormFile("file")
 	filePath := dir + info.Filename
 
-	c.BuildService.SaveResult(buildResult, filePath)
-
-	// TODO: Destroy VM
+	buildTo := c.BuildService.SaveResult(buildResult, filePath)
+	c.ResService.DestroyByBuild(buildTo.ID)
 
 	_, _ = ctx.JSON(_utils.ApiRes(200, "请求成功", nil))
 }

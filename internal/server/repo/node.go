@@ -1,7 +1,6 @@
 package repo
 
 import (
-	_const "github.com/aaronchen2k/tester/internal/pkg/const"
 	"github.com/aaronchen2k/tester/internal/server/model"
 	"gorm.io/gorm"
 )
@@ -26,13 +25,6 @@ func (r *NodeRepo) GetByIndent(ident string) (ret model.Node) {
 
 func (r *NodeRepo) Create(node *model.Node) {
 	r.DB.Model(&node).Create(node)
-	return
-}
-
-func (r *NodeRepo) LaunchVm(queue model.Queue) (err error) {
-	err = r.DB.Model(&queue).Updates(
-		map[string]interface{}{"vm_id": queue.VmId, "progress": _const.ProgressLaunchVm}).Error
-
 	return
 }
 
