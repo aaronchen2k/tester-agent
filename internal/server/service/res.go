@@ -12,19 +12,18 @@ import (
 )
 
 type ResService struct {
-	ClusterService *ClusterService `inject:""`
-
+	ClusterService    *ClusterService `inject:""`
 	VmPlatform        serviceInterface.VmPlatformInterface
 	ContainerPlatform serviceInterface.ContainerPlatformInterface
 
-	ClusterRepo repo.ClusterRepo
-	NodeRepo    repo.NodeRepo
+	ClusterRepo *repo.ClusterRepo `inject:""`
+	NodeRepo    *repo.NodeRepo    `inject:""`
 
-	BuildRepo          repo.BuildRepo
-	VmRepo             repo.VmRepo
-	ContainerRepo      repo.ContainerRepo
-	VmTemplRepo        repo.VmTemplRepo
-	ContainerImageRepo repo.ContainerImageRepo
+	BuildRepo          *repo.BuildRepo          `inject:""`
+	VmRepo             *repo.VmRepo             `inject:""`
+	ContainerRepo      *repo.ContainerRepo      `inject:""`
+	VmTemplRepo        *repo.VmTemplRepo        `inject:""`
+	ContainerImageRepo *repo.ContainerImageRepo `inject:""`
 }
 
 func NewResService() *ResService {

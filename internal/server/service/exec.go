@@ -30,7 +30,7 @@ func (s *ExecService) CheckAll() {
 	s.Run()
 	s.Retry()
 
-	s.ResService.DestroyTimeout()
+	s.DestroyTimeout()
 }
 
 func (s *ExecService) Run() {
@@ -120,4 +120,8 @@ func (s *ExecService) Retry() {
 	for _, queue := range queues {
 		s.Exec(queue)
 	}
+}
+
+func (s *ExecService) DestroyTimeout() {
+	s.ResService.DestroyTimeout()
 }

@@ -9,13 +9,13 @@ import (
 	"strings"
 )
 
+func NewClusterRepo() *ClusterRepo {
+	return &ClusterRepo{}
+}
+
 type ClusterRepo struct {
 	CommonRepo
 	DB *gorm.DB `inject:""`
-}
-
-func NewClusterRepo() *ClusterRepo {
-	return &ClusterRepo{}
 }
 
 func (r *ClusterRepo) Query(keywords string, pageNo, pageSize int) (clusters []model.Cluster, total int64, err error) {
