@@ -48,6 +48,7 @@ func (c *WsCtrl) OnChat(msg websocket.Message) (err error) {
 
 	c.Conn.Server().Broadcast(nil, websocket.Message{
 		Namespace: msg.Namespace,
+		Room:      "room1",
 		Event:     msg.Event,
 		Body:      []byte(fmt.Sprintf("%d", 2)),
 	})

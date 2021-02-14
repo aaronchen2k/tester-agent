@@ -23,6 +23,7 @@ export default {
       data: [],
       status: 'all',
       wsConn: null,
+      room1: null,
       inputModel: 'abc',
       outputModel: ''
     }
@@ -55,13 +56,14 @@ export default {
 
               that.addMessage('connected to namespace: ' + msg.Namespace)
               that.wsConn = nsConn
+              that.wsConn.joinRoom('room1')
             },
             _OnNamespaceDisconnect: (nsConn, msg) => {
               that.addMessage('disconnected from namespace: ' + msg.Namespace)
             },
             OnChat: (nsConn, msg) => {
               console.log('OnChat')
-              that.addMessage(msg.Body)
+              that.addMessage(msg.Room + ': ' + msg.Body)
             },
             OnVisit: (nsConn, msg) => {
               console.log('OnVisit', msg)
@@ -78,14 +80,9 @@ export default {
       this.outputModel += msg + '\n'
     },
 
-    handleError (reason) {
-      console.log(reason)
-      window.alert(reason)
-    },
-
     onClick () {
       // console.log('onClick', this.inputModel, this.wsConn)
-      this.wsConn.emit('OnChat', 'this.inputModel')
+      this.wsConn.room('room1').emit('OnChat', 'this.inputModel')
       this.outputModel += 'Me: ' + this.inputModel + '\n'
     }
   }
