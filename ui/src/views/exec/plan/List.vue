@@ -1,8 +1,8 @@
 <template>
   <div>
-    <input id="input" type="text" />
-    <button id="sendBtn" disabled>Send</button>
-    <pre id="output"></pre>
+    <input id="input" type="text" v-model="inputModel" />
+    <button id="sendBtn" @click="onClick">Send</button>
+    <pre id="output">{{ outputModel }}</pre>
   </div>
 </template>
 
@@ -22,73 +22,57 @@ export default {
     return {
       data: [],
       status: 'all',
-      socket: null
+      wsConn: null,
+      inputModel: 'abc',
+      outputModel: ''
     }
   },
   computed: {
   },
   mounted () {
+    console.log('mounted')
   },
   created () {
     console.log('created')
-
-    this.initConn()
     listPlan().then(json => {
       console.log('listPlan', json)
       this.data = json.data
     })
+
+    this.initConn()
   },
 
   methods: {
-    initConn () {
-      const events = {}
-      events._OnNamespaceConnected = function (nsConn, msg) {
-        if (nsConn.conn.wasReconnected()) {
-          this.addMessage('re-connected after ' + nsConn.conn.reconnectTries.toString() + ' trie(s)')
-        }
-
-        this.addMessage('connected to namespace: ' + msg.Namespace)
-        this.handleNamespaceConnectedConn(nsConn)
-      }
-
-      events._OnNamespaceDisconnect = function (nsConn, msg) {
-        this.addMessage('disconnected from namespace: ' + msg.Namespace)
-      }
-
-      events.chat = function (nsConn, msg) { // "chat" event.
-        this.addMessage(msg.Body)
-      }
-
-      /* OR regiter those events as:
-          neffos.dial(wsURL, {default: {
-              chat: function (nsConn, msg) { [...] }
-          }});
-      */
-
-      // If "await" and "async" are available, use them instead^, all modern browsers support those,
-      // so all of the examples will be written using async/await method instead of promise then/catch callbacks.
-      // A usage example of promise then/catch follows:
+    async initConn () {
       const that = this
-      neffos.dial(WsApi, {
-        default: { // "default" namespace.
-          _OnNamespaceConnected: function (ns, msg) {
+
+      await neffos.dial(WsApi, {
+        default: {
+          _OnNamespaceConnected: (nsConn, msg) => {
+            if (nsConn.conn.wasReconnected()) {
+              that.addMessage('re-connected after ' + nsConn.conn.reconnectTries.toString() + ' trie(s)')
+            }
+
             that.addMessage('connected to namespace: ' + msg.Namespace)
+            that.wsConn = nsConn
           },
-          _OnNamespaceDisconnect: function (ns, msg) {
+          _OnNamespaceDisconnect: (nsConn, msg) => {
             that.addMessage('disconnected from namespace: ' + msg.Namespace)
           },
-          OnChat: function (ns, msg) { // "chat" event.
+          OnChat: (nsConn, msg) => {
             that.addMessage(msg.Body)
+          },
+          OnVisit: (nsConn, msg) => {
+            console.log('OnVisit', msg)
           }
         }
       }).then(function (conn) {
-        conn.connect('default').then(that.handleNamespaceConnectedConn).catch(that.handleError)
+        conn.connect('default').catch(that.handleError)
       }).catch(that.handleError)
     },
 
     addMessage (msg) {
-      const outputTxt = document.getElementById('output')
-      outputTxt.innerHTML += msg + '\n'
+      this.outputModel += msg + '\n'
     },
 
     handleError (reason) {
@@ -96,18 +80,10 @@ export default {
       window.alert(reason)
     },
 
-    handleNamespaceConnectedConn (nsConn) {
-      const inputTxt = document.getElementById('input')
-      const sendBtn = document.getElementById('sendBtn')
-
-      sendBtn.disabled = false
-      const that = this
-      sendBtn.onclick = function () {
-        const input = inputTxt.value
-        inputTxt.value = ''
-          nsConn.emit('OnChat', input)
-        that.addMessage('Me: ' + input)
-      }
+    onClick () {
+      console.log('onClick', this.inputModel, this.wsConn)
+      this.wsConn.emit('OnChat', 'this.inputModel')
+      this.outputModel += 'Me: ' + this.inputModel + '\n'
     }
   }
 }
