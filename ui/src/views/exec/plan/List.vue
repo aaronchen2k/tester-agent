@@ -45,30 +45,33 @@ export default {
   methods: {
     async initConn () {
       const that = this
+      try {
+        const conn = await neffos.dial(WsApi, {
+          default: {
+            _OnNamespaceConnected: (nsConn, msg) => {
+              if (nsConn.conn.wasReconnected()) {
+                that.addMessage('re-connected after ' + nsConn.conn.reconnectTries.toString() + ' trie(s)')
+              }
 
-      await neffos.dial(WsApi, {
-        default: {
-          _OnNamespaceConnected: (nsConn, msg) => {
-            if (nsConn.conn.wasReconnected()) {
-              that.addMessage('re-connected after ' + nsConn.conn.reconnectTries.toString() + ' trie(s)')
+              that.addMessage('connected to namespace: ' + msg.Namespace)
+              that.wsConn = nsConn
+            },
+            _OnNamespaceDisconnect: (nsConn, msg) => {
+              that.addMessage('disconnected from namespace: ' + msg.Namespace)
+            },
+            OnChat: (nsConn, msg) => {
+              console.log('OnChat')
+              that.addMessage(msg.Body)
+            },
+            OnVisit: (nsConn, msg) => {
+              console.log('OnVisit', msg)
             }
-
-            that.addMessage('connected to namespace: ' + msg.Namespace)
-            that.wsConn = nsConn
-          },
-          _OnNamespaceDisconnect: (nsConn, msg) => {
-            that.addMessage('disconnected from namespace: ' + msg.Namespace)
-          },
-          OnChat: (nsConn, msg) => {
-            that.addMessage(msg.Body)
-          },
-          OnVisit: (nsConn, msg) => {
-            console.log('OnVisit', msg)
           }
-        }
-      }).then(function (conn) {
-        conn.connect('default').catch(that.handleError)
-      }).catch(that.handleError)
+        })
+        await conn.connect('default')
+      } catch (err) {
+        console.log(err)
+      }
     },
 
     addMessage (msg) {
@@ -81,7 +84,7 @@ export default {
     },
 
     onClick () {
-      console.log('onClick', this.inputModel, this.wsConn)
+      // console.log('onClick', this.inputModel, this.wsConn)
       this.wsConn.emit('OnChat', 'this.inputModel')
       this.outputModel += 'Me: ' + this.inputModel + '\n'
     }
