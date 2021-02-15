@@ -9,38 +9,38 @@ import (
 )
 
 type VmTemplService struct {
-	VmTemplRepo *repo.VmTemplRepo `inject:""`
-	NodeRepo    *repo.NodeRepo    `inject:""`
+	VmTemplRepo  *repo.VmTemplRepo  `inject:""`
+	ComputerRepo *repo.ComputerRepo `inject:""`
 }
 
 func NewVmTemplService() *VmTemplService {
 	return &VmTemplService{}
 }
 
-func (s *VmTemplService) GetByIdent(ident, node, cluster string) (templ model.VmTempl) {
-	templ = s.VmTemplRepo.GetByIdent(ident, node, cluster)
+func (s *VmTemplService) GetByIdent(ident, computer, cluster string) (templ model.VmTempl) {
+	templ = s.VmTemplRepo.GetByIdent(ident, computer, cluster)
 
 	return
 }
 
-func (s *VmTemplService) CreateByNode(item domain.ResItem) (templ model.VmTempl) {
+func (s *VmTemplService) CreateByComputer(item domain.ResItem) (templ model.VmTempl) {
 	templ = model.VmTempl{
-		Name:    item.Name,
-		Ident:   item.Ident,
-		Node:    item.Node,
-		Cluster: item.Cluster,
+		Name:     item.Name,
+		Ident:    item.Ident,
+		Computer: item.Computer,
+		Cluster:  item.Cluster,
 	}
 	s.VmTemplRepo.Create(&templ)
 
-	// create parent node
-	node := s.NodeRepo.GetByIndent(item.NodeObj.Ident)
-	if node.ID == 0 {
-		node = model.Node{
-			Ident:   item.NodeObj.Ident,
-			Name:    item.NodeObj.Name,
+	// create parent computer
+	computer := s.ComputerRepo.GetByIndent(item.ComputerObj.Ident)
+	if computer.ID == 0 {
+		newComputer := model.Computer{
+			Ident:   item.ComputerObj.Ident,
+			Name:    item.ComputerObj.Name,
 			Cluster: item.Cluster,
 		}
-		s.NodeRepo.Create(&node)
+		s.ComputerRepo.Create(&newComputer)
 	}
 
 	return

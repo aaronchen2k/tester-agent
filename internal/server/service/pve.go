@@ -17,13 +17,13 @@ func NewPveService() *PveService {
 	return &PveService{}
 }
 
-func (s *PveService) ListVm(clusterNode *domain.ResItem) (vms []*model.Vm, err error) {
-	s.GetNodeTree(clusterNode)
+func (s *PveService) ListVm(clusterItem *domain.ResItem) (vms []*model.Vm, err error) {
+	s.GetNodeTree(clusterItem)
 
 	return
 }
 
-func (s *PveService) CreateVm(hostName string, templ model.VmTempl, node model.Node, cluster model.Cluster) (
+func (s *PveService) CreateVm(hostName string, templ model.VmTempl, computer model.Computer, cluster model.Cluster) (
 	vmIdent string, err error) {
 	address := fmt.Sprintf("%s:%d", cluster.Ip, cluster.Port)
 	pve, err := go_proxmox.NewProxMox(address, cluster.Username, cluster.Password)
@@ -41,7 +41,7 @@ func (s *PveService) CreateVm(hostName string, templ model.VmTempl, node model.N
 
 	newVmId, _ := strconv.ParseFloat(vmIdent, 64)
 
-	task, err := templVm.Clone(newVmId, hostName, node.Ident)
+	task, err := templVm.Clone(newVmId, hostName, computer.Ident)
 	if err != nil {
 		_logUtils.Info("fail to clone vm, error: " + err.Error())
 		return
@@ -90,23 +90,23 @@ func (s *PveService) GetNodeTree(clusterItem *domain.ResItem) (err error) {
 		return
 	}
 
-	nodes, _ := go_proxmox.Proxmox.Nodes()
-	for _, node := range nodes {
-		ident := node.Id
+	computers, _ := go_proxmox.Proxmox.Nodes()
+	for _, computer := range computers {
+		ident := computer.Id
 
-		nodeItem := &domain.ResItem{Name: node.Node + "(节点)", Type: _const.ResNode,
-			Ident: ident, Cluster: clusterItem.Ident, Key: string(_const.ResNode) + "-" + ident}
-		clusterItem.Children = append(clusterItem.Children, nodeItem)
+		computerItem := &domain.ResItem{Name: computer.Node + "(节点)", Type: _const.ResComputer,
+			Ident: ident, Cluster: clusterItem.Ident, Key: string(_const.ResComputer) + "-" + ident}
+		clusterItem.Children = append(clusterItem.Children, computerItem)
 
 		vmFolderItem := &domain.ResItem{Name: "实例", Type: _const.ResFolder,
 			Ident: ident + "-folder-vms", Key: ident + "-folder-vms"}
-		nodeItem.Children = append(nodeItem.Children, vmFolderItem)
+		computerItem.Children = append(computerItem.Children, vmFolderItem)
 
 		templFolderItem := &domain.ResItem{Name: "模板", Type: _const.ResFolder,
 			Ident: ident + "-folder-templs", Key: ident + "-folder-templs"}
-		nodeItem.Children = append(nodeItem.Children, templFolderItem)
+		computerItem.Children = append(computerItem.Children, templFolderItem)
 
-		vms, _ := node.Qemu()
+		vms, _ := computer.Qemu()
 		for _, vm := range vms {
 			vmId := strconv.FormatFloat(vm.VMId, 'f', 0, 64)
 			isTemplate := false
@@ -115,7 +115,7 @@ func (s *PveService) GetNodeTree(clusterItem *domain.ResItem) (err error) {
 			}
 
 			vmItem := &domain.ResItem{Name: vm.Name, Type: _const.ResVm, IsTemplate: isTemplate,
-				Ident: vmId, Node: nodeItem.Ident, Cluster: clusterItem.Ident, Key: string(_const.ResVm) + "-" + vmId}
+				Ident: vmId, Computer: computerItem.Ident, Cluster: clusterItem.Ident, Key: string(_const.ResVm) + "-" + vmId}
 
 			if !isTemplate {
 				vmFolderItem.Children = append(vmFolderItem.Children, vmItem)

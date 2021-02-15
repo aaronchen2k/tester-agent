@@ -21,9 +21,9 @@ type Build struct {
 	Priority  int              `json:"priority,omitempty"`
 
 	// env
-	NodeIp     string `json:"nodeIp,omitempty"`
-	NodePort   int    `json:"nodePort,omitempty"`
-	AppiumPort int    `json:"appiumPort,omitempty"`
+	ComputerIp   string `json:"computerIp,omitempty"`
+	ComputerPort int    `json:"computerPort,omitempty"`
+	AppiumPort   int    `json:"appiumPort,omitempty"`
 
 	// status
 	StartTime    time.Time `json:"startTime,omitempty"`
@@ -42,12 +42,12 @@ func NewBuild() Build {
 	return build
 }
 
-func NewBuildDetail(queueId uint, vmId uint, nodeIp string, nodePort int) Build {
+func NewBuildDetail(queueId uint, vmId uint, computerIp string, computerPort int) Build {
 	build := Build{
 		QueueId: queueId,
 
-		NodeIp:   nodeIp,
-		NodePort: nodePort,
+		ComputerIp:   computerIp,
+		ComputerPort: computerPort,
 
 		Progress: _const.ProgressCreated,
 		Status:   _const.StatusCreated,
@@ -60,13 +60,13 @@ func NewBuildDetail(queueId uint, vmId uint, nodeIp string, nodePort int) Build 
 
 func NewBuildTo(build Build) _domain.BuildTo {
 	toValue := _domain.BuildTo{
-		ID:        build.ID,
-		QueueId:   build.QueueId,
-		BuildType: build.BuildType,
-		Serial:    build.Serial,
-		Priority:  build.Priority,
-		NodeIp:    build.NodeIp,
-		NodePort:  build.NodePort,
+		ID:           build.ID,
+		QueueId:      build.QueueId,
+		BuildType:    build.BuildType,
+		Serial:       build.Serial,
+		Priority:     build.Priority,
+		ComputerIp:   build.ComputerIp,
+		ComputerPort: build.ComputerPort,
 
 		AppUrl: build.AppUrl,
 

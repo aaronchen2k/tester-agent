@@ -10,12 +10,12 @@ type BuildTo struct {
 	ProjectDir string
 	AppPath    string
 
-	ID       uint
-	Serial   string
-	Priority int
-	NodeIp   string
-	NodePort int
-	DeviceIp string
+	ID           uint
+	Serial       string
+	Priority     int
+	ComputerIp   string
+	ComputerPort int
+	DeviceIp     string
 
 	BuildType             _const.BuildType
 	AppiumPort            int

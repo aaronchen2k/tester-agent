@@ -8,8 +8,8 @@ import (
 type DeviceInst struct {
 	DeviceSpec
 
-	NodeIp           string               `json:"nodeIp"`
-	NodePort         int                  `json:"rpcPort"`
+	ComputerIp       string               `json:"computerIp"`
+	ComputerPort     int                  `json:"computerPort"`
 	AppiumPort       int                  `json:"appiumPort"`
 	DeviceStatus     _const.DeviceStatus  `json:"deviceStatus"`
 	AppiumStatus     _const.ServiceStatus `json:"appiumStatus"`

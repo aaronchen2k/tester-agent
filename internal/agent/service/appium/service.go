@@ -31,7 +31,7 @@ func CheckService(devices []_domain.DeviceInst) {
 			devices[i].AppiumStatus = _const.ServiceOn
 		} else {
 			validPort := getValidPort(appiumPortMap)
-			appium := _domain.Appium{DeviceSerial: serial, AppiumPort: validPort, NodeIp: devices[0].NodeIp}
+			appium := _domain.Appium{DeviceSerial: serial, AppiumPort: validPort, ComputerIp: devices[0].ComputerIp}
 			appiumObjMap[serial] = appium
 
 			result := restartService(serial, validPort)
@@ -54,7 +54,7 @@ func getServices(serials []string) (map[string]_domain.Appium, map[int]bool) {
 	processMap := getAppiumProcesses(serials)
 
 	for serial, port := range processMap {
-		appium := _domain.Appium{DeviceSerial: serial, AppiumPort: port, NodeIp: agentConf.Inst.Ip}
+		appium := _domain.Appium{DeviceSerial: serial, AppiumPort: port, ComputerIp: agentConf.Inst.Ip}
 		appiumMap[serial] = appium
 
 		portMap[port] = true
@@ -130,7 +130,7 @@ func checkService(dev *_domain.DeviceInst) bool {
 		return false
 	}
 
-	url := fmt.Sprintf("http://%s:%d/wd/hub/status", dev.NodeIp, dev.AppiumPort)
+	url := fmt.Sprintf("http://%s:%d/wd/hub/status", dev.ComputerIp, dev.AppiumPort)
 	result, ok := _httpUtils.GetObj(url, "appium")
 
 	if ok && result != nil {

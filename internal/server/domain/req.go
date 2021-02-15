@@ -8,6 +8,6 @@ type VmReq struct {
 	Username string `json:"-"`
 	Password string `json:"-"`
 
-	VmId string `json:"vmId"`
-	Node string `json:"node"`
+	VmId     string `json:"vmId"`
+	Computer string `json:"computer"`
 }

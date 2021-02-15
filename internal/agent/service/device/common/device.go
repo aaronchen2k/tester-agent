@@ -13,8 +13,8 @@ func SpecToDevInsts(specs []_domain.DeviceSpec) []_domain.DeviceInst {
 		inst := _domain.DeviceInst{}
 		copier.Copy(&inst, spec)
 
-		inst.NodeIp = agentConf.Inst.Ip
-		inst.NodePort = agentConf.Inst.Port
+		inst.ComputerIp = agentConf.Inst.Ip
+		inst.ComputerPort = agentConf.Inst.Port
 
 		insts = append(insts, inst)
 	}

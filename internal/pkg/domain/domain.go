@@ -1,8 +1,8 @@
 package _domain
 
 type RpcReq struct {
-	NodeIp   string
-	NodePort int
+	ComputerIp   string
+	ComputerPort int
 
 	ApiPath   string
 	ApiMethod string

@@ -6,9 +6,9 @@ import (
 )
 
 type ResItem struct {
-	Ident   string `json:"ident,omitempty"`
-	Node    string `gorm:"node" json:"node,omitempty"`
-	Cluster string `gorm:"cluster" json:"cluster,omitempty"`
+	Ident    string `json:"ident,omitempty"`
+	Computer string `json:"computer,omitempty"`
+	Cluster  string `json:"cluster,omitempty"`
 
 	Name     string         `json:"name"`
 	Path     string         `json:"path"`
@@ -23,5 +23,5 @@ type ResItem struct {
 	Username string `json:"-"`
 	Password string `json:"-"`
 
-	NodeObj model.Node `gorm:"-" json:"node"` // only for node data persistence
+	ComputerObj model.Computer `gorm:"-" json:"computer"` // only for computer data persistence
 }

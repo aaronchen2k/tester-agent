@@ -41,11 +41,11 @@ type Vm struct {
 	DestroyAt        time.Time `json:"destroyAt,omitempty"`
 	LastRegisterDate time.Time `gorm:"json:"lastRegisterDate,omitempty"`
 
-	Ident     string `json:"ident"`
-	Node      string `json:"node"`
-	Cluster   string `json:"cluster"`
-	NodeId    uint   `json:"nodeId"`
-	ClusterId uint   `json:"clusterId"`
+	Ident      string `json:"ident"`
+	Computer   string `json:"computer"`
+	Cluster    string `json:"cluster"`
+	ComputerId uint   `json:"computerId"`
+	ClusterId  uint   `json:"clusterId"`
 }
 
 func GenVmTo(vmPo Vm) (to _domain.Vm) {

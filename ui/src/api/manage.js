@@ -5,7 +5,7 @@ const prefix = '/v1/admin'
 const api = {
   profile: `${prefix}/profile`,
   env: `${prefix}/env`,
-  machines: `${prefix}/machines`,
+  res: `${prefix}/res`,
   vms: `${prefix}/vms`,
   vmTempls: `${prefix}/vmTempls`,
   containers: `${prefix}/containers`,
@@ -48,7 +48,7 @@ export function listEnv () {
 
 export function listVm () {
   return request({
-    url: api.machines + '/listVm',
+    url: api.res + '/listVm',
     method: 'get',
     params: {}
   })
@@ -70,7 +70,7 @@ export function saveVmTempl (model) {
 
 export function listContainer (parameter) {
   return request({
-    url: api.machines + '/listContainer',
+    url: api.res + '/listContainer',
     method: 'get',
     params: parameter
   })

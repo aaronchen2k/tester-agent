@@ -21,8 +21,8 @@ func (r *VmTemplRepo) Get(id uint) (templ model.VmTempl) {
 	r.DB.Where("id=?", id).First(&templ)
 	return
 }
-func (r *VmTemplRepo) GetByIdent(ident, node, cluster string) (templ model.VmTempl) {
-	r.DB.Model(&templ).Where("Ident=? AND node=? AND cluster=?", ident, node, cluster).First(&templ)
+func (r *VmTemplRepo) GetByIdent(ident, computer, cluster string) (templ model.VmTempl) {
+	r.DB.Model(&templ).Where("Ident=? AND computer=? AND cluster=?", ident, computer, cluster).First(&templ)
 	return
 }
 
@@ -45,13 +45,14 @@ func (r *VmTemplRepo) GetByEnv(env base.TestEnv) (templ model.VmTempl) {
 	}
 
 	sql := fmt.Sprintf(`SELECT templ.id, templ.name, templ.vm_id,
-		node.id nodeId, node.ident nodeIdent, node.cluster nodeCluster, node.inst_count
+		computer.id computerId, computer.ident computerIdent, 
+		computer.cluster computerCluster, computer.inst_count
 
 	FROM biz_vm_templ templ
-	LEFT JOIN biz_node node ON templ.node = node.ident
+	LEFT JOIN biz_computer computer ON templ.computer = computer.ident
 
 	WHERE %s
-	ORDER BY node.inst_count
+	ORDER BY computer.inst_count
 	LIMIT 1`, strings.Join(conditions, "AND"))
 
 	r.DB.Raw(sql).Scan(&templ)

@@ -31,9 +31,9 @@ type Container struct {
 	DestroyAt        time.Time `json:"destroyAt,omitempty"`
 	LastRegisterDate time.Time `json:"lastRegisterDate,omitempty"`
 
-	Ident     string `json:"ident"`
-	NodeId    uint   `json:"nodeId"`
-	ClusterId uint   `json:"clusterId"`
+	Ident      string `json:"ident"`
+	ComputerId uint   `json:"computerId"`
+	ClusterId  uint   `json:"clusterId"`
 }
 
 func (Container) GenContainerTo(containerPo Container) (to _domain.Container) {

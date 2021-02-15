@@ -14,7 +14,7 @@ type ContainerService struct {
 	ContainerRepo      *repo.ContainerRepo      `inject:""`
 	ContainerImageRepo *repo.ContainerImageRepo `inject:""`
 	ClusterRepo        *repo.ClusterRepo        `inject:""`
-	NodeRepo           *repo.NodeRepo           `inject:""`
+	ComputerRepo       *repo.ComputerRepo       `inject:""`
 }
 
 func NewContainerService() *ContainerService {
@@ -23,7 +23,7 @@ func NewContainerService() *ContainerService {
 
 func (s *ContainerService) CreateByQueue(queue model.Queue) (dockerId string, err error) {
 	//imagePo := s.ContainerImageRepo.GetByIdent(queue.ContainerImageId)
-	//node := s.NodeRepo.GetByIndent(imagePo.Node)
+	//computer := s.ComputerRepo.GetByIndent(imagePo.Computer)
 	//cluster := s.ClusterRepo.GetByIdent(imagePo.Cluster)
 
 	return

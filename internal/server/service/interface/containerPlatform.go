@@ -8,7 +8,7 @@ import (
 type ContainerPlatformInterface interface {
 	VirtualPlatformInterface
 
-	ListContainer(clusterNode *domain.ResItem) ([]*model.Container, error)
-	CreateContainer(queueId uint, image model.ContainerImage, node model.Node, cluster model.Cluster) (model.Container, error)
-	DestroyContainer(ident string, node model.Node, cluster model.Cluster) error
+	ListContainer(clusterItem *domain.ResItem) ([]*model.Container, error)
+	CreateContainer(queueId uint, image model.ContainerImage, computer model.Computer, cluster model.Cluster) (model.Container, error)
+	DestroyContainer(ident string, computer model.Computer, cluster model.Cluster) error
 }

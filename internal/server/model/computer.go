@@ -4,7 +4,7 @@ import (
 	_const "github.com/aaronchen2k/tester/internal/pkg/const"
 )
 
-type Node struct {
+type Computer struct {
 	BaseModel
 
 	Cluster   string `json:"cluster"`
@@ -27,11 +27,11 @@ type Node struct {
 	Status  _const.HostStatus `json:"status"`
 }
 
-func NewNode() Node {
-	node := Node{}
-	return node
+func NewComputer() Computer {
+	computer := Computer{}
+	return computer
 }
 
-func (Node) TableName() string {
-	return "biz_node"
+func (Computer) TableName() string {
+	return "biz_computer"
 }

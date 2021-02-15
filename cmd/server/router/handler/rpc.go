@@ -32,7 +32,7 @@ func (c *RpcCtrl) Request(ctx iris.Context) {
 		obj = interface{}(vm)
 	}
 
-	rpcResult := c.RpcService.Request(rpcReq.NodeIp, rpcReq.NodePort, rpcReq.ApiPath, rpcReq.ApiMethod, &obj)
+	rpcResult := c.RpcService.Request(rpcReq.ComputerIp, rpcReq.ComputerPort, rpcReq.ApiPath, rpcReq.ApiMethod, &obj)
 
 	_, _ = ctx.JSON(_utils.ApiRes(200, "请求成功", rpcResult))
 }

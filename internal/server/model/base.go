@@ -32,7 +32,7 @@ var (
 		&Build{},
 
 		&Cluster{},
-		&Node{},
+		&Computer{},
 		&ContainerImage{},
 		&Container{},
 		&VmTempl{},

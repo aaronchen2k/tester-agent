@@ -23,7 +23,7 @@ func (s *RpcService) AppiumTest(build model.Build) (result _domain.RpcResult) {
 	appiumTestTo.AppiumPort = build.AppiumPort
 
 	obj := interface{}(appiumTestTo)
-	s.Request(build.NodeIp, build.NodePort, "appium", "AppiumTest", &obj)
+	s.Request(build.ComputerIp, build.ComputerPort, "appium", "AppiumTest", &obj)
 
 	result.Success(fmt.Sprintf("success to send rpc build request %#v.", build))
 	return
@@ -34,7 +34,7 @@ func (s *RpcService) SeleniumTest(build model.Build) (result _domain.RpcResult) 
 	seleniumTestTo := model.NewBuildTo(build)
 
 	obj := interface{}(seleniumTestTo)
-	s.Request(build.NodeIp, build.NodePort, "selenium", "SeleniumTest", &obj)
+	s.Request(build.ComputerIp, build.ComputerPort, "selenium", "SeleniumTest", &obj)
 
 	result.Success(fmt.Sprintf("success to send rpc build request %#v.", build))
 	return
@@ -42,28 +42,28 @@ func (s *RpcService) SeleniumTest(build model.Build) (result _domain.RpcResult) 
 
 func (s *RpcService) CreateVm(req _domain.PveReq) (result _domain.RpcResult) {
 	obj := interface{}(req)
-	result = s.Request(req.NodeIp, req.NodePort, "vm", "Load", &obj)
+	result = s.Request(req.ComputerIp, req.ComputerPort, "vm", "Load", &obj)
 
 	result.Success(fmt.Sprintf("success to create vm via rpc %#v.", req))
 	return
 }
 func (s *RpcService) DestroyVm(req _domain.PveReq) (result _domain.RpcResult) {
 	obj := interface{}(req)
-	s.Request(req.NodeIp, req.NodePort, "vm", "destroy", &obj)
+	s.Request(req.ComputerIp, req.ComputerPort, "vm", "destroy", &obj)
 
 	result.Success(fmt.Sprintf("success to stop vm via rpc %#v.", req))
 	return
 }
 func (s *RpcService) StartVm(req _domain.PveReq) (result _domain.RpcResult) {
 	obj := interface{}(req)
-	s.Request(req.NodeIp, req.NodePort, "vm", "Run", &obj)
+	s.Request(req.ComputerIp, req.ComputerPort, "vm", "Run", &obj)
 
 	result.Success(fmt.Sprintf("success to start vm via rpc %#v.", req))
 	return
 }
 func (s *RpcService) StopVm(req _domain.PveReq) (result _domain.RpcResult) {
 	obj := interface{}(req)
-	s.Request(req.NodeIp, req.NodePort, "vm", "Stop", &obj)
+	s.Request(req.ComputerIp, req.ComputerPort, "vm", "Stop", &obj)
 
 	result.Success(fmt.Sprintf("success to stop vm via rpc %#v.", req))
 	return
@@ -71,7 +71,7 @@ func (s *RpcService) StopVm(req _domain.PveReq) (result _domain.RpcResult) {
 
 func (s *RpcService) ConvertVmToTempl(req _domain.PveReq) (result _domain.RpcResult) {
 	obj := interface{}(req)
-	s.Request(req.NodeIp, req.NodePort, "vm", "ConvertToBackingImage", &obj)
+	s.Request(req.ComputerIp, req.ComputerPort, "vm", "ConvertToBackingImage", &obj)
 
 	result.Success(fmt.Sprintf("success to convert vm to backingImage via rpc %#v.", req))
 	return

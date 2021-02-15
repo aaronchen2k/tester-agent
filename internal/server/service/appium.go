@@ -22,7 +22,7 @@ func (s *AppiumService) Run(queue model.Queue) (result _domain.RpcResult) {
 	serial := queue.Serial
 	device := s.DeviceRepo.GetBySerial(serial)
 
-	build := model.NewBuildDetail(queue.ID, 0, device.NodeIp, device.NodePort)
+	build := model.NewBuildDetail(queue.ID, 0, device.ComputerIp, device.ComputerPort)
 	s.BuildRepo.Save(&build)
 
 	build = s.BuildRepo.GetBuild(build.ID)

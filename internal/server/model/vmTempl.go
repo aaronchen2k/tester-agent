@@ -18,9 +18,9 @@ type VmTempl struct {
 	SysIsoId    uint `json:"sysIsoId,omitempty"`
 	DriverIsoId uint `json:"driverIsoId,omitempty"`
 
-	Ident   string `json:"ident"`
-	Node    string `json:"node"`
-	Cluster string `json:"cluster"`
+	Ident    string `json:"ident"`
+	Computer string `json:"computer"`
+	Cluster  string `json:"cluster"`
 }
 
 func (VmTempl) TableName() string {

@@ -8,7 +8,7 @@ type Appium struct {
 	Name             string
 	Version          string
 	DeviceSerial     string
-	NodeIp           string
+	ComputerIp       string
 	AppiumPort       int
 	LastRegisterDate time.Time
 }

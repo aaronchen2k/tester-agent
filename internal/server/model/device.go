@@ -9,7 +9,7 @@ type Device struct {
 	BaseModel
 	base.TestEnv
 
-	// from node register
+	// from computer register
 	_domain.DeviceInst
 
 	// info to maintain

@@ -3,8 +3,8 @@ package _domain
 type PveReq struct {
 	StartAfterCreated bool `json:"startAfterCreated"`
 
-	NodeIp   string `json:"-"`
-	NodePort int    `json:"-"`
+	ComputerIp   string `json:"-"`
+	ComputerPort int    `json:"-"`
 
 	VmPublicIp   string `json:"vmPublicIp"`
 	VmPrivateIp  string `json:"vmPrivateIp"`

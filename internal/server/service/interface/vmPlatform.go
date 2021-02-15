@@ -8,7 +8,7 @@ import (
 type VmPlatformInterface interface {
 	VirtualPlatformInterface
 
-	ListVm(clusterNode *domain.ResItem) ([]*model.Vm, error)
-	CreateVm(name string, templ model.VmTempl, node model.Node, cluster model.Cluster) (string, error)
+	ListVm(clusterItem *domain.ResItem) ([]*model.Vm, error)
+	CreateVm(name string, templ model.VmTempl, computer model.Computer, cluster model.Cluster) (string, error)
 	DestroyVm(ident string, cluster model.Cluster) error
 }

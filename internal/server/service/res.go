@@ -16,8 +16,8 @@ type ResService struct {
 	VmPlatform        serviceInterface.VmPlatformInterface
 	ContainerPlatform serviceInterface.ContainerPlatformInterface
 
-	ClusterRepo *repo.ClusterRepo `inject:""`
-	NodeRepo    *repo.NodeRepo    `inject:""`
+	ClusterRepo  *repo.ClusterRepo  `inject:""`
+	ComputerRepo *repo.ComputerRepo `inject:""`
 
 	BuildRepo          *repo.BuildRepo          `inject:""`
 	VmRepo             *repo.VmRepo             `inject:""`
@@ -40,8 +40,8 @@ func NewResService() *ResService {
 	return inst
 }
 
-func (s *ResService) ListVm() (rootNode *domain.ResItem) {
-	rootNode = &domain.ResItem{Name: "虚拟机", Type: _const.ResRoot, Ident: "0"}
+func (s *ResService) ListVm() (rootItem *domain.ResItem) {
+	rootItem = &domain.ResItem{Name: "虚拟机", Type: _const.ResRoot, Ident: "0"}
 	clusters := s.ClusterService.ListByType("pve")
 
 	for _, cluster := range clusters {
@@ -53,7 +53,7 @@ func (s *ResService) ListVm() (rootNode *domain.ResItem) {
 			Ip: cluster.Ip, Port: cluster.Port,
 			Username: cluster.Username, Password: cluster.Password}
 
-		rootNode.Children = append(rootNode.Children, clusterItem)
+		rootItem.Children = append(rootItem.Children, clusterItem)
 
 		s.VmPlatform.GetNodeTree(clusterItem)
 	}
@@ -61,36 +61,36 @@ func (s *ResService) ListVm() (rootNode *domain.ResItem) {
 	return
 }
 
-func (s *ResService) ListContainers() (rootNode *domain.ResItem) {
-	rootNode = &domain.ResItem{Name: "容器", Type: _const.ResRoot, Ident: "0"}
+func (s *ResService) ListContainers() (rootItem *domain.ResItem) {
+	rootItem = &domain.ResItem{Name: "容器", Type: _const.ResRoot, Ident: "0"}
 	clusters := s.ClusterService.ListByType("portainer")
 
 	for _, cluster := range clusters {
 		id := strconv.Itoa(int(cluster.ID))
 
-		hostNode := &domain.ResItem{Name: cluster.Name + "(集群)", Type: _const.ResCluster,
+		hostItem := &domain.ResItem{Name: cluster.Name + "(集群)", Type: _const.ResCluster,
 			Ident: id, Key: string(_const.ResCluster) + "-" + id,
 			Ip: cluster.Ip, Port: cluster.Port,
 			Username: cluster.Username, Password: cluster.Password}
-		rootNode.Children = append(rootNode.Children, hostNode)
+		rootItem.Children = append(rootItem.Children, hostItem)
 
-		s.ContainerPlatform.GetNodeTree(hostNode)
+		s.ContainerPlatform.GetNodeTree(hostItem)
 	}
 
 	return
 }
 
-func (s *ResService) CreateVm(name string, templ model.VmTempl, node model.Node, cluster model.Cluster) (
+func (s *ResService) CreateVm(name string, templ model.VmTempl, computer model.Computer, cluster model.Cluster) (
 	vmIdent string, err error) {
 
-	vmIdent, err = s.VmPlatform.CreateVm(name, templ, node, cluster)
+	vmIdent, err = s.VmPlatform.CreateVm(name, templ, computer, cluster)
 
 	return
 }
-func (s *ResService) CreateContainer(queueId uint, image model.ContainerImage, node model.Node, cluster model.Cluster) (
+func (s *ResService) CreateContainer(queueId uint, image model.ContainerImage, computer model.Computer, cluster model.Cluster) (
 	container model.Container, err error) {
 
-	container, err = s.ContainerPlatform.CreateContainer(queueId, image, node, cluster)
+	container, err = s.ContainerPlatform.CreateContainer(queueId, image, computer, cluster)
 
 	return
 }
@@ -104,10 +104,10 @@ func (s *ResService) DestroyByBuild(buildId uint) {
 		s.DestroyVm(vm.Ident, cluster)
 	} else if build.BuildType == _const.AppiumTest {
 		container := s.VmRepo.GetById(build.ContainerId)
-		node := s.NodeRepo.Get(container.NodeId)
+		computer := s.ComputerRepo.Get(container.ComputerId)
 		cluster := s.ClusterRepo.Get(container.ClusterId)
 
-		s.DestroyContainer(container.Ident, node, cluster)
+		s.DestroyContainer(container.Ident, computer, cluster)
 	}
 }
 
@@ -135,8 +135,8 @@ func (s *ResService) DestroyVm(vmIdent string, cluster model.Cluster) (err error
 
 	return
 }
-func (s *ResService) DestroyContainer(containerIdent string, node model.Node, cluster model.Cluster) (err error) {
-	err = s.ContainerPlatform.DestroyContainer(containerIdent, node, cluster)
+func (s *ResService) DestroyContainer(containerIdent string, computer model.Computer, cluster model.Cluster) (err error) {
+	err = s.ContainerPlatform.DestroyContainer(containerIdent, computer, cluster)
 
 	return
 }

@@ -16,10 +16,10 @@ type VmService struct {
 	RpcService *RpcService `inject:""`
 	ResService *ResService `inject:""`
 
-	VmRepo      *repo.VmRepo      `inject:""`
-	VmTemplRepo *repo.VmTemplRepo `inject:""`
-	ClusterRepo *repo.ClusterRepo `inject:""`
-	NodeRepo    *repo.NodeRepo    `inject:""`
+	VmRepo       *repo.VmRepo       `inject:""`
+	VmTemplRepo  *repo.VmTemplRepo  `inject:""`
+	ClusterRepo  *repo.ClusterRepo  `inject:""`
+	ComputerRepo *repo.ComputerRepo `inject:""`
 
 	IsoRepo   *repo.IsoRepo   `inject:""`
 	QueueRepo *repo.QueueRepo `inject:""`
@@ -31,24 +31,24 @@ func NewVmService() *VmService {
 
 func (s *VmService) CreateByQueue(queue model.Queue) (err error) {
 	templ := s.VmTemplRepo.Get(queue.VmTemplId)
-	node := s.NodeRepo.GetByIndent(templ.Node)
+	computer := s.ComputerRepo.GetByIndent(templ.Computer)
 	cluster := s.ClusterRepo.GetByIdent(templ.Cluster)
 
 	vmName := serverUtils.GenVmHostName(queue.ID, templ.OsPlatform, templ.OsType, templ.OsLang)
-	vmIdent, err := s.ResService.CreateVm(vmName, templ, node, cluster)
+	vmIdent, err := s.ResService.CreateVm(vmName, templ, computer, cluster)
 
 	if err != nil || vmIdent == "" { //  fail to create
 		return
 	}
 
 	vm := model.Vm{
-		Name:      vmName,
-		Ident:     vmIdent,
-		Node:      node.Ident,
-		Cluster:   node.Cluster,
-		NodeId:    node.ID,
-		ClusterId: cluster.ID,
-		Status:    _const.VmCreated,
+		Name:       vmName,
+		Ident:      vmIdent,
+		Computer:   computer.Ident,
+		Cluster:    computer.Cluster,
+		ComputerId: computer.ID,
+		ClusterId:  cluster.ID,
+		Status:     _const.VmCreated,
 	}
 	s.VmRepo.Save(&vm) // vm status: created
 
@@ -56,7 +56,7 @@ func (s *VmService) CreateByQueue(queue model.Queue) (err error) {
 	s.QueueRepo.SetAndLaunchVm(queue)               // queue progress: launch_vm
 	s.VmRepo.UpdateStatus(vm.ID, _const.VmLaunched) // vm status: launched
 
-	s.NodeRepo.AddInstCount(node.ID)
+	s.ComputerRepo.AddInstCount(computer.ID)
 
 	return
 }

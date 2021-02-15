@@ -17,7 +17,7 @@ func ExecTest(build *_domain.BuildTo) {
 
 	device, ok := deviceService.GetDevice(build.Serial)
 	if !ok {
-		result.Fail(fmt.Sprintf("can't find device %s@%s。", device.Serial, device.NodeIp))
+		result.Fail(fmt.Sprintf("can't find device %s@%s。", device.Serial, device.ComputerIp))
 		return
 	}
 

@@ -30,7 +30,7 @@ type Router struct {
 	AppiumCtrl  *handler.AppiumCtrl  `inject:""`
 	DeviceCtrl  *handler.DeviceCtrl  `inject:""`
 	FileCtrl    *handler.FileCtrl    `inject:""`
-	MachineCtrl *handler.MachineCtrl `inject:""`
+	MachineCtrl *handler.ResCtrl     `inject:""`
 	HostCtrl    *handler.ClusterCtrl `inject:""`
 
 	InitCtrl *handler.InitCtrl `inject:""`
@@ -95,7 +95,7 @@ func (r *Router) App() {
 				admin.PartyFunc("/env", func(party iris.Party) {
 					party.Get("/", r.EnvCtrl.List).Name = "列出环境配置"
 				})
-				admin.PartyFunc("/machines", func(party iris.Party) {
+				admin.PartyFunc("/res", func(party iris.Party) {
 					party.Get("/listVm", r.MachineCtrl.ListVm).Name = "虚拟机列表"
 					party.Get("/listContainer", r.MachineCtrl.ListContainer).Name = "容器列表"
 				})
@@ -158,86 +158,7 @@ func (r *Router) App() {
 			gorilla.Upgrader(gorillaWs.Upgrader{CheckOrigin: func(*http.Request) bool { return true }}),
 			m)
 		websocketAPI.Get("/", websocket.Handler(websocketServer))
-
-		//mvcApp := mvc.New(r.api.Party("/api/v1/ws"))
-		//mvcApp.HandleWebsocket(handler.NewWsCtrl())
-		//websocketServer := neffos.New(
-		//	gorilla.Upgrader(gorillaWs.Upgrader{CheckOrigin: func(*http.Request) bool{return true}}),
-		//	mvcApp)
-		//mvcApp.Router.GetByIdent("", websocket.Handler(websocketServer))
 	}
-
-	//onChat := func(nsConn *neffos.NSConn, msg neffos.Message) error {
-	//	ret, _ := r.WsCtrl.Chat(msg, nsConn)
-	//	jsonStr, _ := json.Marshal(ret)
-	//
-	//	mg := websocket.Message{
-	//		Body:     jsonStr,
-	//		//IsNative: true,
-	//	}
-	//
-	//	nsConn.Conn.Write(mg)
-	//	return nil
-	//}
-	//
-	//websocketAPI := r.api.Party("/api/v1")
-	//websocketServer := neffos.New(
-	//	gorilla.Upgrader(gorillaWs.Upgrader{CheckOrigin: func(*http.Request) bool{return true}}),
-	//	neffos.Namespaces{
-	//		"default": neffos.Events {
-	//			"chat": onChat,
-	//		},
-	//})
-	//websocketAPI.GetByIdent("/ws", websocket.Handler(websocketServer))
-
-	//websocketAPI := r.api.Party("/api/v1").AllowMethods(iris.MethodGet)
-	//websocketServer := websocket.New(gorilla.Upgrader(gorillaWs.Upgrader{CheckOrigin: func(*http.Request) bool{return true}}),
-	//	websocket.Events{
-	//		websocket.OnNativeMessage: func(nsConn *websocket.NSConn, msg websocket.Message) error {
-	//			_logUtils.Infof("server got: %s from [%s]", msg.Body, nsConn.Conn.ID())
-	//
-	//			ctx := websocket.GetContext(nsConn.Conn)
-	//			ret, _ := r.WsCtrl.OnChat(msg, ctx)
-	//			jsonStr, _ := json.Marshal(ret)
-	//
-	//			mg := websocket.Message{
-	//				Body:     jsonStr,
-	//				IsNative: true,
-	//			}
-	//
-	//			nsConn.Conn.Write(mg)
-	//
-	//			return nil
-	//		},
-	//	})
-	//
-	//websocketServer.OnConnect = func(c *websocket.Conn) error {
-	//	_logUtils.Infof("[%s] connected to server!", c.ID())
-	//	return nil
-	//}
-	//
-	//websocketServer.OnDisconnect = func(c *websocket.Conn) {
-	//	_logUtils.Infof("[%s] disconnected from server", c.ID())
-	//}
-	//websocketAPI.GetByIdent("/ws", websocket.Handler(websocketServer))
-
-	//go func() {
-	//	for {
-	//		time.Sleep(1 * time.Second)
-	//
-	//		conns := websocketServer.GetConnections()
-	//		for _, con := range conns {
-	//			_logUtils.Infof("send to client [%s]", con.ID())
-	//
-	//			mg := websocket.Message{
-	//				Body:     []byte("11111"),
-	//				IsNative: true,
-	//			}
-	//			con.Write(mg)
-	//		}
-	//	}
-	//}()
-
 }
 
 type prefixedLogger struct {
