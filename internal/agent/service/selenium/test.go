@@ -39,9 +39,9 @@ func parseBuildCommand(build *_domain.BuildTo) {
 	//		 		  -DdriverPath=${driverPath}
 	dir := ""
 	if _commonUtils.IsWin() {
-		dir = agentConst.WorkPathWin
+		dir = agentConst.ResPathWin
 	} else {
-		dir = agentConst.WorkPathLinux
+		dir = agentConst.ResPathLinux
 	}
 	driverFolder := path.Join(dir, agentConst.BrowserDriverDir, string(build.BrowserType))
 	driverFile := fmt.Sprintf("%s-%s", _commonUtils.GetOs(), build.BrowserVer)
