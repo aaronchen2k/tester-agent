@@ -10,7 +10,6 @@ type Config struct {
 
 	Language string
 	HostName string
-	KvmDir   string
 	WorkDir  string
 	LogDir   string
 }

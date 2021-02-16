@@ -82,8 +82,8 @@ func NewBuildTo(build Build) _domain.BuildTo {
 		ResultFiles:     build.ResultFiles,
 		KeepResultFiles: build.KeepResultFiles,
 
-		SeleniumDriverType:    build.BrowserType,
-		SeleniumDriverVersion: build.BrowserVer,
+		BrowserType: build.BrowserType,
+		BrowserVer:  build.BrowserVer,
 	}
 
 	return toValue

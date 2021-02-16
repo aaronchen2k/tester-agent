@@ -13,7 +13,8 @@ var (
 	EnRes = fmt.Sprintf("res%smessages_en.json", string(os.PathSeparator))
 	ZhRes = fmt.Sprintf("res%smessages_zh.json", string(os.PathSeparator))
 
-	LogDir = fmt.Sprintf("log%s", string(os.PathSeparator))
+	BrowserDriverDir = "browser_driver"
+	LogDir           = fmt.Sprintf("log%s", string(os.PathSeparator))
 
 	BuildParamAppPath     = "${appPath}"
 	BuildParamAppPackage  = "${appPackage}"

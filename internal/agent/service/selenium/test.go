@@ -2,11 +2,13 @@ package seleniumService
 
 import (
 	"fmt"
+	agentConf "github.com/aaronchen2k/tester/internal/agent/conf"
 	commonService "github.com/aaronchen2k/tester/internal/agent/service/common"
 	execService "github.com/aaronchen2k/tester/internal/agent/service/exec"
 	agentConst "github.com/aaronchen2k/tester/internal/agent/utils/const"
 	_domain "github.com/aaronchen2k/tester/internal/pkg/domain"
-	"strings"
+	_commonUtils "github.com/aaronchen2k/tester/internal/pkg/libs/common"
+	"path"
 )
 
 func ExecTest(build *_domain.BuildTo) {
@@ -35,8 +37,11 @@ func ExecTest(build *_domain.BuildTo) {
 
 func parseBuildCommand(build *_domain.BuildTo) {
 	// mvn clean test -Dtestng.suite=target/test-classes/baidu-test.xml
-	//		 		  -DdriverPath=${driverPath}  // computer in web page by browser type and version
-
-	command := strings.ReplaceAll(build.BuildCommands, agentConst.BuildParamSeleniumDriverPath, build.SeleniumDriverPath)
-	build.BuildCommands = command
+	//		 		  -DdriverPath=${driverPath}
+	driverFolder := path.Join(agentConf.Inst.WorkDir, agentConst.BrowserDriverDir, string(build.BrowserType))
+	driverFile := fmt.Sprintf("%s-%s", _commonUtils.GetOs(), build.BrowserVer)
+	if _commonUtils.IsWin() {
+		driverFile += ".exe"
+	}
+	build.BuildCommands = build.BuildCommands + " -DdriverPath=" + path.Join(driverFolder, driverFile)
 }

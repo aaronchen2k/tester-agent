@@ -17,11 +17,10 @@ type BuildTo struct {
 	ComputerPort int
 	DeviceIp     string
 
-	BuildType             _const.BuildType
-	AppiumPort            int
-	SeleniumDriverType    _const.BrowserType
-	SeleniumDriverVersion string
-	SeleniumDriverPath    string
+	BuildType   _const.BuildType
+	BrowserType _const.BrowserType
+	BrowserVer  string
+	AppiumPort  int
 
 	QueueId uint
 

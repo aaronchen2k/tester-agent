@@ -28,7 +28,6 @@ func (s *SeleniumService) Run(queue model.Queue) (result _domain.RpcResult) {
 	s.BuildRepo.Save(&build)
 
 	build = s.BuildRepo.GetBuild(build.ID)
-
 	rpcResult := s.RpcService.SeleniumTest(build)
 	if rpcResult.IsSuccess() {
 		s.BuildRepo.Start(build)

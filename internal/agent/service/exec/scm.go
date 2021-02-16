@@ -18,7 +18,7 @@ func GetTestScript(build *_domain.BuildTo) _domain.RpcResult {
 	} else if strings.Index(build.ScriptUrl, "http://") == 0 {
 		DownloadCodes(build)
 	} else {
-		build.ProjectDir = _fileUtils.UpdateDir(build.ScriptUrl)
+		build.ProjectDir = _fileUtils.AddPathSepIfNeeded(build.ScriptUrl)
 	}
 
 	result := _domain.RpcResult{}

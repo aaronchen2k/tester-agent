@@ -8,6 +8,8 @@ import (
 	_fileUtils "github.com/aaronchen2k/tester/internal/pkg/libs/file"
 	_httpUtils "github.com/aaronchen2k/tester/internal/pkg/libs/http"
 	_i118Utils "github.com/aaronchen2k/tester/internal/pkg/libs/i118"
+	"os/user"
+	"path"
 )
 
 var (
@@ -22,8 +24,8 @@ func Init() {
 	Inst.Ip = ip.String()
 	Inst.Port = _const.RpcPort
 
-	Inst.KvmDir = _fileUtils.UpdateDir(Inst.KvmDir)
-	Inst.WorkDir = _fileUtils.UpdateDir(Inst.WorkDir)
+	usr, _ := user.Current()
+	Inst.WorkDir = _fileUtils.AddPathSepIfNeeded(path.Join(usr.HomeDir, "tester"))
 	Inst.Server = _httpUtils.UpdateUrl(Inst.Server)
 }
 
