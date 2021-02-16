@@ -20,6 +20,11 @@ const locale = {
   'menu.vm': '虚拟机',
   'menu.container': '容器',
 
+  'menu.cijob': 'CI Job',
+  'menu.devops': 'DevOps',
+  'menu.jenkins': 'Jenkins',
+  'menu.gitlab': 'GitLab',
+
   'menu.dashboard': '仪表盘',
   'menu.dashboard.analysis': '分析页',
   'menu.dashboard.monitor': '监控页',

@@ -62,6 +62,34 @@ export const asyncRouterMap = [
           }
         ]
       },
+      {
+        path: '/devops',
+        name: 'devops',
+        redirect: '/devops/job/list',
+        component: RouteView,
+        meta: { title: 'menu.devops', icon: bxAnaalyse, permission: [ 'devops' ] },
+        hideChildrenInMenu: false,
+        children: [
+          {
+            path: '/devops/cijob/list',
+            name: 'cijob-list',
+            component: () => import('@/views/devops/cijob/List'),
+            meta: { title: 'menu.cijob', permission: [ 'devops' ] }
+          },
+          {
+            path: '/devops/jenkins/list',
+            name: 'jenkins-list',
+            component: () => import('@/views/devops/jenkins/List'),
+            meta: { title: 'menu.jenkins', permission: [ 'devops' ] }
+          },
+          {
+            path: '/devops/gitlab/list',
+            name: 'gitlab-list',
+            component: () => import('@/views/devops/gitlab/List'),
+            meta: { title: 'menu.gitlab', permission: [ 'devops' ] }
+          }
+        ]
+      },
 
       // dashboard
       {

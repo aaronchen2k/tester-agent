@@ -1,5 +1,5 @@
 logLevel: info  #日志级别 info debug
-debug: false #调试模式
+debug: true #调试模式
 binData: false #二进制模式
 https: false #https
 host: 127.0.0.1
