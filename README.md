@@ -1,7 +1,7 @@
 # tester-agent (Legacy)
-This repository was deprecated and moved to https://github.com/easysoft/zagent.
+### This repository was deprecated and moved to https://github.com/easysoft/zagent.
 
-## On-demand VM and Container based software testing environemnt.
+On-demand software testing environemnt based on VM and Container.
 
 Vue.js, Golang, MySQL, KVM, Docker, Proxmox VE, Portainer
 
