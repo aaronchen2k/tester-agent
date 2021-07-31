@@ -1,8 +1,9 @@
-# [Tester.im](http://tester.im)
+# tester-agent (Legacy)
+This repository was deprecated and moved to https://github.com/easysoft/zagent.
 
-## Continuous testing on KVM and Docker instances on-demand.
+## On-demand VM and Container based software testing environemnt.
 
-Vue.js, Golang, MySQL, Proxmox VE, Portainer
+Vue.js, Golang, MySQL, KVM, Docker, Proxmox VE, Portainer
 
 ### Quick start
 TODO
